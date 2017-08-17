@@ -1,0 +1,398 @@
+var _user$project$Main$onMouseUpIsolated = function (tagger) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'mouseup',
+		{stopPropagation: true, preventDefault: true},
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$mouse$Mouse$position));
+};
+var _user$project$Main$onMouseDownIsolated = function (tagger) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'mousedown',
+		{stopPropagation: true, preventDefault: true},
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$mouse$Mouse$position));
+};
+var _user$project$Main$trackPosition = F2(
+	function (cursor, tagger) {
+		var _p0 = cursor;
+		if (_p0.ctor === 'NotTracking') {
+			return _elm_lang$core$Platform_Sub$none;
+		} else {
+			return _elm_lang$mouse$Mouse$moves(tagger);
+		}
+	});
+var _user$project$Main$createRectangle = F3(
+	function (start, end, model) {
+		var commonAttributes = {stroke: 'none', fill: '#666', strokeWidth: '0'};
+		var height = _elm_lang$core$Basics$toFloat(
+			_elm_lang$core$Basics$abs(start.y - end.y));
+		var width = _elm_lang$core$Basics$toFloat(
+			_elm_lang$core$Basics$abs(start.x - end.x));
+		var topLeftY = _elm_lang$core$Basics$toFloat(
+			A2(_elm_lang$core$Basics$min, start.y, end.y));
+		var topLeftX = _elm_lang$core$Basics$toFloat(
+			A2(_elm_lang$core$Basics$min, start.x, end.x));
+		var recAttributes = {x: topLeftX, y: topLeftY, width: width, height: height, rx: 0, ry: 0};
+		return (_elm_lang$core$Native_Utils.eq(height, 0) || _elm_lang$core$Native_Utils.eq(width, 0)) ? {ctor: '[]'} : {
+			ctor: '::',
+			_0: A2(_user$project$Graphic$createRectangle, recAttributes, commonAttributes),
+			_1: {ctor: '[]'}
+		};
+	});
+var _user$project$Main$updatePreviewGraphic = F3(
+	function (drawAction, currentPosition, model) {
+		var _p1 = drawAction;
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				previewGraphic: _elm_lang$core$List$head(
+					A3(_user$project$Main$createRectangle, _p1._0, currentPosition, model))
+			});
+	});
+var _user$project$Main$setWindowSize = F2(
+	function (model, size) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{windowSize: size});
+	});
+var _user$project$Main$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {windowSize: a, cursorPosition: b, mouseDown: c, currentAction: d, activeTool: e, graphics: f, previewGraphic: g};
+	});
+var _user$project$Main$Position = F2(
+	function (a, b) {
+		return {x: a, y: b};
+	});
+var _user$project$Main$System = function (a) {
+	return {ctor: 'System', _0: a};
+};
+var _user$project$Main$MouseMove = function (a) {
+	return {ctor: 'MouseMove', _0: a};
+};
+var _user$project$Main$MouseUp = F2(
+	function (a, b) {
+		return {ctor: 'MouseUp', _0: a, _1: b};
+	});
+var _user$project$Main$MouseDown = F2(
+	function (a, b) {
+		return {ctor: 'MouseDown', _0: a, _1: b};
+	});
+var _user$project$Main$Resize = function (a) {
+	return {ctor: 'Resize', _0: a};
+};
+var _user$project$Main$Pos = function (a) {
+	return {ctor: 'Pos', _0: a};
+};
+var _user$project$Main$NotTracking = {ctor: 'NotTracking'};
+var _user$project$Main$mouseMoveEvent = F2(
+	function (model, position) {
+		var model2 = _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				cursorPosition: _elm_lang$core$Native_Utils.eq(model.cursorPosition, _user$project$Main$NotTracking) ? _user$project$Main$NotTracking : _user$project$Main$Pos(position)
+			});
+		var _p2 = model2.currentAction;
+		if (_p2.ctor === 'None') {
+			return {
+				ctor: '_Tuple2',
+				_0: model2,
+				_1: {ctor: '[]'}
+			};
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: A3(_user$project$Main$updatePreviewGraphic, _p2._0, position, model2),
+				_1: {ctor: '[]'}
+			};
+		}
+	});
+var _user$project$Main$ToolPallet = function (a) {
+	return {ctor: 'ToolPallet', _0: a};
+};
+var _user$project$Main$Screen = {ctor: 'Screen'};
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _elm_lang$window$Window$resizes(
+				function (_p3) {
+					return _user$project$Main$System(
+						_user$project$Main$Resize(_p3));
+				}),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$mouse$Mouse$downs(
+					function (_p4) {
+						return _user$project$Main$System(
+							A2(_user$project$Main$MouseDown, _user$project$Main$Screen, _p4));
+					}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$mouse$Mouse$ups(
+						function (_p5) {
+							return _user$project$Main$System(
+								A2(_user$project$Main$MouseUp, _user$project$Main$Screen, _p5));
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_user$project$Main$trackPosition,
+							model.cursorPosition,
+							function (_p6) {
+								return _user$project$Main$System(
+									_user$project$Main$MouseMove(_p6));
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+};
+var _user$project$Main$view = function (model) {
+	var wWidth = model.windowSize.width;
+	var wHeight = model.windowSize.height;
+	return A2(
+		_elm_lang$svg$Svg$svg,
+		{
+			ctor: '::',
+			_0: _elm_lang$svg$Svg_Attributes$width(
+				_elm_lang$core$Basics$toString(wWidth)),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$height(
+					_elm_lang$core$Basics$toString(wHeight)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$viewBox(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'0 0 ',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(wWidth),
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									' ',
+									_elm_lang$core$Basics$toString(wHeight))))),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Main$onMouseUpIsolated(
+							function (_p7) {
+								return _user$project$Main$System(
+									A2(_user$project$Main$MouseUp, _user$project$Main$Screen, _p7));
+							}),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Main$onMouseDownIsolated(
+								function (_p8) {
+									return _user$project$Main$System(
+										A2(_user$project$Main$MouseDown, _user$project$Main$Screen, _p8));
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		},
+		A2(
+			_elm_lang$core$List$map,
+			_user$project$Graphic$toSvg,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				model.graphics,
+				_user$project$Utilities$maybeToList(model.previewGraphic))));
+};
+var _user$project$Main$Graphic = function (a) {
+	return {ctor: 'Graphic', _0: a};
+};
+var _user$project$Main$Draw = function (a) {
+	return {ctor: 'Draw', _0: a};
+};
+var _user$project$Main$None = {ctor: 'None'};
+var _user$project$Main$initialModel = {
+	windowSize: {width: 0, height: 0},
+	cursorPosition: _user$project$Main$NotTracking,
+	mouseDown: false,
+	currentAction: _user$project$Main$None,
+	activeTool: _user$project$Tool$DrawRectangle,
+	graphics: {ctor: '[]'},
+	previewGraphic: _elm_lang$core$Maybe$Nothing
+};
+var _user$project$Main$init = function (size) {
+	return A2(
+		_elm_lang$core$Platform_Cmd_ops['!'],
+		A2(_user$project$Main$setWindowSize, _user$project$Main$initialModel, size),
+		{ctor: '[]'});
+};
+var _user$project$Main$mouseUpEvent = F3(
+	function (model, clickTarget, position) {
+		var _p9 = model.currentAction;
+		if (_p9.ctor === 'None') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{cursorPosition: _user$project$Main$NotTracking}),
+				_1: {ctor: '[]'}
+			};
+		} else {
+			var _p10 = _p9._0;
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						currentAction: _user$project$Main$None,
+						cursorPosition: _user$project$Main$NotTracking,
+						graphics: A2(
+							_elm_lang$core$Basics_ops['++'],
+							model.graphics,
+							_user$project$Utilities$maybeToList(model.previewGraphic)),
+						previewGraphic: _elm_lang$core$Maybe$Nothing
+					}),
+				_1: {ctor: '[]'}
+			};
+		}
+	});
+var _user$project$Main$DrawRect = function (a) {
+	return {ctor: 'DrawRect', _0: a};
+};
+var _user$project$Main$mouseDownEvent = F3(
+	function (model, clickTarget, position) {
+		var model2 = _elm_lang$core$Native_Utils.update(
+			model,
+			{mouseDown: true});
+		var _p11 = clickTarget;
+		if (_p11.ctor === 'ToolPallet') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model2,
+					{
+						currentAction: _user$project$Main$None,
+						activeTool: _p11._0,
+						cursorPosition: _user$project$Main$Pos(position)
+					}),
+				_1: {ctor: '[]'}
+			};
+		} else {
+			var _p12 = model.activeTool;
+			switch (_p12.ctor) {
+				case 'Select':
+					var _p13 = clickTarget;
+					switch (_p13.ctor) {
+						case 'Screen':
+							return {
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$Native_Utils.update(
+									model2,
+									{cursorPosition: _user$project$Main$NotTracking, currentAction: _user$project$Main$None}),
+								_1: {ctor: '[]'}
+							};
+						case 'Graphic':
+							return _elm_lang$core$Native_Utils.crashCase(
+								'Main',
+								{
+									start: {line: 174, column: 25},
+									end: {line: 187, column: 88}
+								},
+								_p13)('TODO - Selected a Graphic for editing');
+						default:
+							return A2(
+								_elm_lang$core$Debug$log,
+								'Evaluated unreachable branch',
+								{
+									ctor: '_Tuple2',
+									_0: model2,
+									_1: {ctor: '[]'}
+								});
+					}
+				case 'DrawRectangle':
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model2,
+							{
+								cursorPosition: _user$project$Main$Pos(position),
+								currentAction: _user$project$Main$Draw(
+									_user$project$Main$DrawRect(position))
+							}),
+						_1: {ctor: '[]'}
+					};
+				case 'DrawElipse':
+					return _elm_lang$core$Native_Utils.crashCase(
+						'Main',
+						{
+							start: {line: 172, column: 17},
+							end: {line: 201, column: 64}
+						},
+						_p12)('TODO');
+				default:
+					return _elm_lang$core$Native_Utils.crashCase(
+						'Main',
+						{
+							start: {line: 172, column: 17},
+							end: {line: 201, column: 64}
+						},
+						_p12)('TODO - Moving Tool Pallet');
+			}
+		}
+	});
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p17 = msg;
+		var _p18 = _p17._0;
+		switch (_p18.ctor) {
+			case 'Resize':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{windowSize: _p18._0}),
+					{ctor: '[]'});
+			case 'MouseDown':
+				var _p19 = A3(_user$project$Main$mouseDownEvent, model, _p18._0, _p18._1);
+				var modelUpdates = _p19._0;
+				var commands = _p19._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{mouseDown: true, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction}),
+					commands);
+			case 'MouseUp':
+				var _p20 = A3(_user$project$Main$mouseUpEvent, model, _p18._0, _p18._1);
+				var modelUpdates = _p20._0;
+				var commands = _p20._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{mouseDown: false, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, graphics: modelUpdates.graphics}),
+					commands);
+			default:
+				var _p21 = A2(_user$project$Main$mouseMoveEvent, model, _p18._0);
+				var modelUpdates = _p21._0;
+				var commands = _p21._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{cursorPosition: modelUpdates.cursorPosition, previewGraphic: modelUpdates.previewGraphic}),
+					commands);
+		}
+	});
+var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(
+	{init: _user$project$Main$init, update: _user$project$Main$update, view: _user$project$Main$view, subscriptions: _user$project$Main$subscriptions})(
+	A2(
+		_elm_lang$core$Json_Decode$andThen,
+		function (height) {
+			return A2(
+				_elm_lang$core$Json_Decode$andThen,
+				function (width) {
+					return _elm_lang$core$Json_Decode$succeed(
+						{height: height, width: width});
+				},
+				A2(_elm_lang$core$Json_Decode$field, 'width', _elm_lang$core$Json_Decode$int));
+		},
+		A2(_elm_lang$core$Json_Decode$field, 'height', _elm_lang$core$Json_Decode$int)));

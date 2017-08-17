@@ -1,0 +1,96 @@
+var _user$project$Graphic$commonToSvgA = function (common) {
+	return {
+		ctor: '::',
+		_0: _elm_lang$svg$Svg_Attributes$fill(
+			_elm_lang$core$Basics$toString(common.fill)),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$svg$Svg_Attributes$stroke(
+				_elm_lang$core$Basics$toString(common.stroke)),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
+					_elm_lang$core$Basics$toString(common.strokeWidth)),
+				_1: {ctor: '[]'}
+			}
+		}
+	};
+};
+var _user$project$Graphic$toSvg = function (graphic) {
+	var _p0 = graphic;
+	var _p1 = _p0._0;
+	return A2(
+		_elm_lang$svg$Svg$rect,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$x(
+					_elm_lang$core$Basics$toString(_p1.x)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$y(
+						_elm_lang$core$Basics$toString(_p1.y)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$width(
+							_elm_lang$core$Basics$toString(_p1.width)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$height(
+								_elm_lang$core$Basics$toString(_p1.height)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$rx(
+									_elm_lang$core$Basics$toString(_p1.rx)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$ry(
+										_elm_lang$core$Basics$toString(_p1.ry)),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			},
+			_user$project$Graphic$commonToSvgA(_p0._1)),
+		{ctor: '[]'});
+};
+var _user$project$Graphic$RectangleAttributes = F6(
+	function (a, b, c, d, e, f) {
+		return {x: a, y: b, width: c, height: d, rx: e, ry: f};
+	});
+var _user$project$Graphic$CommonAttributes = F3(
+	function (a, b, c) {
+		return {stroke: a, strokeWidth: b, fill: c};
+	});
+var _user$project$Graphic$Rectangle = F2(
+	function (a, b) {
+		return {ctor: 'Rectangle', _0: a, _1: b};
+	});
+var _user$project$Graphic$createRectangle = F2(
+	function (rec, common) {
+		return A2(_user$project$Graphic$Rectangle, rec, common);
+	});
+var _user$project$Graphic$SkewY = F2(
+	function (a, b) {
+		return {ctor: 'SkewY', _0: a, _1: b};
+	});
+var _user$project$Graphic$SkewX = F2(
+	function (a, b) {
+		return {ctor: 'SkewX', _0: a, _1: b};
+	});
+var _user$project$Graphic$Rotate = F4(
+	function (a, b, c, d) {
+		return {ctor: 'Rotate', _0: a, _1: b, _2: c, _3: d};
+	});
+var _user$project$Graphic$Scale = F3(
+	function (a, b, c) {
+		return {ctor: 'Scale', _0: a, _1: b, _2: c};
+	});
+var _user$project$Graphic$Translate = F3(
+	function (a, b, c) {
+		return {ctor: 'Translate', _0: a, _1: b, _2: c};
+	});
+var _user$project$Graphic$None = {ctor: 'None'};

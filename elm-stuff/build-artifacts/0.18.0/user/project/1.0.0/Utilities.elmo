@@ -1,0 +1,38 @@
+var _user$project$Utilities$maybeToList = function (a) {
+	var _p0 = a;
+	if (_p0.ctor === 'Nothing') {
+		return {ctor: '[]'};
+	} else {
+		return {
+			ctor: '::',
+			_0: _p0._0,
+			_1: {ctor: '[]'}
+		};
+	}
+};
+var _user$project$Utilities$until_A = F3(
+	function (predicate, update, state) {
+		return predicate(
+			A2(_elm_lang$core$Debug$log, 'state', state)) ? _elm_lang$core$Task$succeed(state) : A2(
+			_elm_lang$core$Task$andThen,
+			A2(_user$project$Utilities$until_A, predicate, update),
+			_elm_lang$core$Task$succeed(
+				update(state)));
+	});
+var _user$project$Utilities$until = F3(
+	function (predicate, update, state) {
+		until:
+		while (true) {
+			if (predicate(state)) {
+				return state;
+			} else {
+				var _v1 = predicate,
+					_v2 = update,
+					_v3 = update(state);
+				predicate = _v1;
+				update = _v2;
+				state = _v3;
+				continue until;
+			}
+		}
+	});

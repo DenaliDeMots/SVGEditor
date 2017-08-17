@@ -1,0 +1,7 @@
+var _user$project$Reactor$subscriptions = _user$project$Main$subscriptions;
+var _user$project$Reactor$view = _user$project$Main$view;
+var _user$project$Reactor$update = _user$project$Main$update;
+var _user$project$Reactor$flags = {width: 1536, height: 759};
+var _user$project$Reactor$init = _user$project$Main$init(_user$project$Reactor$flags);
+var _user$project$Reactor$main = _elm_lang$html$Html$program(
+	{init: _user$project$Reactor$init, update: _user$project$Reactor$update, view: _user$project$Reactor$view, subscriptions: _user$project$Reactor$subscriptions})();
