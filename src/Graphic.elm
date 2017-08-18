@@ -1,4 +1,4 @@
-module Graphic exposing (Graphic, toSvg, createRectangle)
+module Graphic exposing (Graphic, toSvg, createRectangle, createElipse)
 
 import Svg
 import Svg.Attributes as SvgA
@@ -7,6 +7,7 @@ import Svg.Events as SvgE
 
 type Graphic
     = Rectangle RectangleAttributes CommonAttributes
+    | Elipse ElipseAttributes CommonAttributes
 
 
 type alias RectangleAttributes =
@@ -14,6 +15,14 @@ type alias RectangleAttributes =
     , y : Float
     , width : Float
     , height : Float
+    , rx : Float
+    , ry : Float
+    }
+
+
+type alias ElipseAttributes =
+    { cx : Float
+    , cy : Float
     , rx : Float
     , ry : Float
     }
@@ -41,8 +50,8 @@ type Transform
 --helper functions
 
 
-toSvg : Graphic -> Svg.Svg msg
-toSvg graphic =
+toSvg : List (Svg.Attribute msg) -> Graphic -> Svg.Svg msg
+toSvg extraAttributes graphic =
     case graphic of
         Rectangle rec common ->
             Svg.rect
@@ -54,6 +63,19 @@ toSvg graphic =
                  , SvgA.ry <| toString rec.ry
                  ]
                     ++ commonToSvgA common
+                    ++ extraAttributes
+                )
+                []
+
+        Elipse elipse common ->
+            Svg.ellipse
+                ([ SvgA.cx <| toString elipse.cx
+                 , SvgA.cy <| toString elipse.cy
+                 , SvgA.rx <| toString elipse.rx
+                 , SvgA.ry <| toString elipse.ry
+                 ]
+                    ++ commonToSvgA common
+                    ++ extraAttributes
                 )
                 []
 
@@ -71,3 +93,8 @@ commonToSvgA common =
 createRectangle : RectangleAttributes -> CommonAttributes -> Graphic
 createRectangle rec common =
     Rectangle rec common
+
+
+createElipse : ElipseAttributes -> CommonAttributes -> Graphic
+createElipse rec common =
+    Elipse rec common

@@ -21,19 +21,57 @@ var _user$project$Main$trackPosition = F2(
 			return _elm_lang$mouse$Mouse$moves(tagger);
 		}
 	});
+var _user$project$Main$createElipse = F3(
+	function (startPosition, currentPosition, model) {
+		var commonAttributes = {stroke: 'none', fill: '#666', strokeWidth: '0'};
+		var yRadius = A3(
+			_elm_lang$core$Basics$flip,
+			F2(
+				function (x, y) {
+					return x / y;
+				}),
+			2,
+			_elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Basics$abs(startPosition.y - currentPosition.y)));
+		var xRadius = A3(
+			_elm_lang$core$Basics$flip,
+			F2(
+				function (x, y) {
+					return x / y;
+				}),
+			2,
+			_elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Basics$abs(startPosition.x - currentPosition.x)));
+		var elipseAttributes = {
+			rx: xRadius,
+			ry: yRadius,
+			cx: _elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics$max, startPosition.x, currentPosition.x)) - xRadius,
+			cy: _elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics$max, startPosition.y, currentPosition.y)) - yRadius
+		};
+		return (_elm_lang$core$Native_Utils.eq(elipseAttributes.rx, 0) || _elm_lang$core$Native_Utils.eq(elipseAttributes.ry, 0)) ? {ctor: '[]'} : {
+			ctor: '::',
+			_0: A2(_user$project$Graphic$createElipse, elipseAttributes, commonAttributes),
+			_1: {ctor: '[]'}
+		};
+	});
 var _user$project$Main$createRectangle = F3(
 	function (start, end, model) {
 		var commonAttributes = {stroke: 'none', fill: '#666', strokeWidth: '0'};
-		var height = _elm_lang$core$Basics$toFloat(
-			_elm_lang$core$Basics$abs(start.y - end.y));
-		var width = _elm_lang$core$Basics$toFloat(
-			_elm_lang$core$Basics$abs(start.x - end.x));
-		var topLeftY = _elm_lang$core$Basics$toFloat(
-			A2(_elm_lang$core$Basics$min, start.y, end.y));
-		var topLeftX = _elm_lang$core$Basics$toFloat(
-			A2(_elm_lang$core$Basics$min, start.x, end.x));
-		var recAttributes = {x: topLeftX, y: topLeftY, width: width, height: height, rx: 0, ry: 0};
-		return (_elm_lang$core$Native_Utils.eq(height, 0) || _elm_lang$core$Native_Utils.eq(width, 0)) ? {ctor: '[]'} : {
+		var recAttributes = {
+			x: _elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics$min, start.x, end.x)),
+			y: _elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics$min, start.y, end.y)),
+			width: _elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Basics$abs(start.x - end.x)),
+			height: _elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Basics$abs(start.y - end.y)),
+			rx: 0,
+			ry: 0
+		};
+		return (_elm_lang$core$Native_Utils.eq(recAttributes.height, 0) || _elm_lang$core$Native_Utils.eq(recAttributes.width, 0)) ? {ctor: '[]'} : {
 			ctor: '::',
 			_0: A2(_user$project$Graphic$createRectangle, recAttributes, commonAttributes),
 			_1: {ctor: '[]'}
@@ -42,12 +80,21 @@ var _user$project$Main$createRectangle = F3(
 var _user$project$Main$updatePreviewGraphic = F3(
 	function (drawAction, currentPosition, model) {
 		var _p1 = drawAction;
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{
-				previewGraphic: _elm_lang$core$List$head(
-					A3(_user$project$Main$createRectangle, _p1._0, currentPosition, model))
-			});
+		if (_p1.ctor === 'DrawRect') {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					previewGraphic: _elm_lang$core$List$head(
+						A3(_user$project$Main$createRectangle, _p1._0, currentPosition, model))
+				});
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					previewGraphic: _elm_lang$core$List$head(
+						A3(_user$project$Main$createElipse, _p1._0, currentPosition, model))
+				});
+		}
 	});
 var _user$project$Main$setWindowSize = F2(
 	function (model, size) {
@@ -148,6 +195,9 @@ var _user$project$Main$subscriptions = function (model) {
 			}
 		});
 };
+var _user$project$Main$Graphic = function (a) {
+	return {ctor: 'Graphic', _0: a};
+};
 var _user$project$Main$view = function (model) {
 	var wWidth = model.windowSize.width;
 	var wHeight = model.windowSize.height;
@@ -196,14 +246,34 @@ var _user$project$Main$view = function (model) {
 		},
 		A2(
 			_elm_lang$core$List$map,
-			_user$project$Graphic$toSvg,
+			function (graphic) {
+				return A2(
+					_user$project$Graphic$toSvg,
+					{
+						ctor: '::',
+						_0: _user$project$Main$onMouseUpIsolated(
+							function (_p9) {
+								return _user$project$Main$System(
+									_user$project$Main$MouseUp(
+										_user$project$Main$Graphic(graphic))(_p9));
+							}),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Main$onMouseDownIsolated(
+								function (_p10) {
+									return _user$project$Main$System(
+										_user$project$Main$MouseDown(
+											_user$project$Main$Graphic(graphic))(_p10));
+								}),
+							_1: {ctor: '[]'}
+						}
+					},
+					graphic);
+			},
 			A2(
 				_elm_lang$core$Basics_ops['++'],
 				model.graphics,
 				_user$project$Utilities$maybeToList(model.previewGraphic))));
-};
-var _user$project$Main$Graphic = function (a) {
-	return {ctor: 'Graphic', _0: a};
 };
 var _user$project$Main$Draw = function (a) {
 	return {ctor: 'Draw', _0: a};
@@ -214,7 +284,7 @@ var _user$project$Main$initialModel = {
 	cursorPosition: _user$project$Main$NotTracking,
 	mouseDown: false,
 	currentAction: _user$project$Main$None,
-	activeTool: _user$project$Tool$DrawRectangle,
+	activeTool: _user$project$Tool$DrawElipse,
 	graphics: {ctor: '[]'},
 	previewGraphic: _elm_lang$core$Maybe$Nothing
 };
@@ -226,8 +296,8 @@ var _user$project$Main$init = function (size) {
 };
 var _user$project$Main$mouseUpEvent = F3(
 	function (model, clickTarget, position) {
-		var _p9 = model.currentAction;
-		if (_p9.ctor === 'None') {
+		var _p11 = model.currentAction;
+		if (_p11.ctor === 'None') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
@@ -236,24 +306,45 @@ var _user$project$Main$mouseUpEvent = F3(
 				_1: {ctor: '[]'}
 			};
 		} else {
-			var _p10 = _p9._0;
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						currentAction: _user$project$Main$None,
-						cursorPosition: _user$project$Main$NotTracking,
-						graphics: A2(
-							_elm_lang$core$Basics_ops['++'],
-							model.graphics,
-							_user$project$Utilities$maybeToList(model.previewGraphic)),
-						previewGraphic: _elm_lang$core$Maybe$Nothing
-					}),
-				_1: {ctor: '[]'}
-			};
+			var _p12 = _p11._0;
+			if (_p12.ctor === 'DrawRect') {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							currentAction: _user$project$Main$None,
+							cursorPosition: _user$project$Main$NotTracking,
+							graphics: A2(
+								_elm_lang$core$Basics_ops['++'],
+								model.graphics,
+								_user$project$Utilities$maybeToList(model.previewGraphic)),
+							previewGraphic: _elm_lang$core$Maybe$Nothing
+						}),
+					_1: {ctor: '[]'}
+				};
+			} else {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							currentAction: _user$project$Main$None,
+							cursorPosition: _user$project$Main$NotTracking,
+							graphics: A2(
+								_elm_lang$core$Basics_ops['++'],
+								model.graphics,
+								_user$project$Utilities$maybeToList(model.previewGraphic)),
+							previewGraphic: _elm_lang$core$Maybe$Nothing
+						}),
+					_1: {ctor: '[]'}
+				};
+			}
 		}
 	});
+var _user$project$Main$DrawElipse = function (a) {
+	return {ctor: 'DrawElipse', _0: a};
+};
 var _user$project$Main$DrawRect = function (a) {
 	return {ctor: 'DrawRect', _0: a};
 };
@@ -262,25 +353,25 @@ var _user$project$Main$mouseDownEvent = F3(
 		var model2 = _elm_lang$core$Native_Utils.update(
 			model,
 			{mouseDown: true});
-		var _p11 = clickTarget;
-		if (_p11.ctor === 'ToolPallet') {
+		var _p13 = clickTarget;
+		if (_p13.ctor === 'ToolPallet') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model2,
 					{
 						currentAction: _user$project$Main$None,
-						activeTool: _p11._0,
+						activeTool: _p13._0,
 						cursorPosition: _user$project$Main$Pos(position)
 					}),
 				_1: {ctor: '[]'}
 			};
 		} else {
-			var _p12 = model.activeTool;
-			switch (_p12.ctor) {
+			var _p14 = model.activeTool;
+			switch (_p14.ctor) {
 				case 'Select':
-					var _p13 = clickTarget;
-					switch (_p13.ctor) {
+					var _p15 = clickTarget;
+					switch (_p15.ctor) {
 						case 'Screen':
 							return {
 								ctor: '_Tuple2',
@@ -296,7 +387,7 @@ var _user$project$Main$mouseDownEvent = F3(
 									start: {line: 174, column: 25},
 									end: {line: 187, column: 88}
 								},
-								_p13)('TODO - Selected a Graphic for editing');
+								_p15)('TODO - Selected a Graphic for editing');
 						default:
 							return A2(
 								_elm_lang$core$Debug$log,
@@ -320,40 +411,44 @@ var _user$project$Main$mouseDownEvent = F3(
 						_1: {ctor: '[]'}
 					};
 				case 'DrawElipse':
-					return _elm_lang$core$Native_Utils.crashCase(
-						'Main',
-						{
-							start: {line: 172, column: 17},
-							end: {line: 201, column: 64}
-						},
-						_p12)('TODO');
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model2,
+							{
+								cursorPosition: _user$project$Main$Pos(position),
+								currentAction: _user$project$Main$Draw(
+									_user$project$Main$DrawElipse(position))
+							}),
+						_1: {ctor: '[]'}
+					};
 				default:
 					return _elm_lang$core$Native_Utils.crashCase(
 						'Main',
 						{
 							start: {line: 172, column: 17},
-							end: {line: 201, column: 64}
+							end: {line: 206, column: 64}
 						},
-						_p12)('TODO - Moving Tool Pallet');
+						_p14)('TODO - Moving Tool Pallet');
 			}
 		}
 	});
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p17 = msg;
-		var _p18 = _p17._0;
-		switch (_p18.ctor) {
+		var _p18 = msg;
+		var _p19 = _p18._0;
+		switch (_p19.ctor) {
 			case 'Resize':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{windowSize: _p18._0}),
+						{windowSize: _p19._0}),
 					{ctor: '[]'});
 			case 'MouseDown':
-				var _p19 = A3(_user$project$Main$mouseDownEvent, model, _p18._0, _p18._1);
-				var modelUpdates = _p19._0;
-				var commands = _p19._1;
+				var _p20 = A3(_user$project$Main$mouseDownEvent, model, _p19._0, _p19._1);
+				var modelUpdates = _p20._0;
+				var commands = _p20._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -361,9 +456,9 @@ var _user$project$Main$update = F2(
 						{mouseDown: true, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction}),
 					commands);
 			case 'MouseUp':
-				var _p20 = A3(_user$project$Main$mouseUpEvent, model, _p18._0, _p18._1);
-				var modelUpdates = _p20._0;
-				var commands = _p20._1;
+				var _p21 = A3(_user$project$Main$mouseUpEvent, model, _p19._0, _p19._1);
+				var modelUpdates = _p21._0;
+				var commands = _p21._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -371,9 +466,9 @@ var _user$project$Main$update = F2(
 						{mouseDown: false, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, graphics: modelUpdates.graphics}),
 					commands);
 			default:
-				var _p21 = A2(_user$project$Main$mouseMoveEvent, model, _p18._0);
-				var modelUpdates = _p21._0;
-				var commands = _p21._1;
+				var _p22 = A2(_user$project$Main$mouseMoveEvent, model, _p19._0);
+				var modelUpdates = _p22._0;
+				var commands = _p22._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(

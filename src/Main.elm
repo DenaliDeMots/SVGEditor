@@ -4,7 +4,7 @@ module Main exposing (..)
 
 import Html
 import Html.Events
-import Svg
+import Svg exposing (Svg)
 import Svg.Attributes as SvgA
 import Svg.Events as SvgE
 import Window
@@ -68,7 +68,7 @@ initialModel =
     , cursorPosition = NotTracking
     , mouseDown = False
     , currentAction = None
-    , activeTool = Tool.DrawRectangle
+    , activeTool = Tool.DrawElipse
     , graphics = []
     , previewGraphic = Maybe.Nothing
     }
@@ -195,7 +195,12 @@ mouseDownEvent model clickTarget position =
                         )
 
                     Tool.DrawElipse ->
-                        Debug.crash "TODO"
+                        ( { model2
+                            | cursorPosition = Pos position
+                            , currentAction = Draw (DrawElipse position)
+                          }
+                        , []
+                        )
 
                     Tool.ToolPalletHandle ->
                         Debug.crash "TODO - Moving Tool Pallet"
@@ -213,6 +218,16 @@ mouseUpEvent model clickTarget position =
         Draw drawAction ->
             case drawAction of
                 DrawRect startPosition ->
+                    ( { model
+                        | currentAction = None
+                        , cursorPosition = NotTracking
+                        , graphics = model.graphics ++ Utilities.maybeToList model.previewGraphic
+                        , previewGraphic = Maybe.Nothing
+                      }
+                    , []
+                    )
+
+                DrawElipse startPosition ->
                     ( { model
                         | currentAction = None
                         , cursorPosition = NotTracking
@@ -249,6 +264,11 @@ updatePreviewGraphic drawAction currentPosition model =
                 | previewGraphic = List.head (createRectangle startPosition currentPosition model)
             }
 
+        DrawElipse startPosition ->
+            { model
+                | previewGraphic = List.head (createElipse startPosition currentPosition model)
+            }
+
 
 
 --Create Graphic Functions--
@@ -256,25 +276,13 @@ updatePreviewGraphic drawAction currentPosition model =
 
 createRectangle start end model =
     let
-        topLeftX =
-            toFloat <| min start.x end.x
-
-        topLeftY =
-            toFloat <| min start.y end.y
-
-        width =
-            toFloat <| abs (start.x - end.x)
-
-        height =
-            toFloat <| abs (start.y - end.y)
-
         recAttributes =
-            { x = topLeftX
-            , y = topLeftY
-            , width = width
-            , height = height
-            , rx = 0
-            , ry = 0
+            { x = toFloat <| min start.x end.x -- Upper left x coordinate
+            , y = toFloat <| min start.y end.y -- Upper left y coordinate
+            , width = toFloat <| abs (start.x - end.x)
+            , height = toFloat <| abs (start.y - end.y)
+            , rx = 0 -- Corner x rounding radius
+            , ry = 0 -- Corner y rounding radius
             }
 
         commonAttributes =
@@ -283,10 +291,37 @@ createRectangle start end model =
             , strokeWidth = "0"
             }
     in
-        if height == 0 || width == 0 then
+        if recAttributes.height == 0 || recAttributes.width == 0 then
             []
         else
             [ Graphic.createRectangle recAttributes commonAttributes ]
+
+
+createElipse startPosition currentPosition model =
+    let
+        xRadius =
+            abs (startPosition.x - currentPosition.x) |> toFloat |> flip (/) 2
+
+        yRadius =
+            abs (startPosition.y - currentPosition.y) |> toFloat |> flip (/) 2
+
+        elipseAttributes =
+            { rx = xRadius
+            , ry = yRadius
+            , cx = toFloat (max startPosition.x currentPosition.x) - (xRadius) -- x center coordinate
+            , cy = toFloat (max startPosition.y currentPosition.y) - (yRadius) -- y center coordinate
+            }
+
+        commonAttributes =
+            { stroke = "none"
+            , fill = "#666"
+            , strokeWidth = "0"
+            }
+    in
+        if elipseAttributes.rx == 0 || elipseAttributes.ry == 0 then
+            []
+        else
+            [ Graphic.createElipse elipseAttributes commonAttributes ]
 
 
 
@@ -337,7 +372,17 @@ view model =
             , onMouseUpIsolated (System << MouseUp Screen)
             , onMouseDownIsolated (System << MouseDown Screen)
             ]
-            (List.map Graphic.toSvg <| model.graphics ++ Utilities.maybeToList model.previewGraphic)
+            (model.graphics
+                ++ Utilities.maybeToList model.previewGraphic
+                |> List.map
+                    (\graphic ->
+                        Graphic.toSvg
+                            [ onMouseUpIsolated <| System << (MouseUp <| Graphic graphic)
+                            , onMouseDownIsolated <| System << (MouseDown <| Graphic graphic)
+                            ]
+                            graphic
+                    )
+            )
 
 
 
@@ -374,6 +419,7 @@ type Action
 
 type DrawAction
     = DrawRect Position
+    | DrawElipse Position
 
 
 

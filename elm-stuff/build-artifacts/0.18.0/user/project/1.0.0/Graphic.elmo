@@ -16,54 +16,104 @@ var _user$project$Graphic$commonToSvgA = function (common) {
 		}
 	};
 };
-var _user$project$Graphic$toSvg = function (graphic) {
-	var _p0 = graphic;
-	var _p1 = _p0._0;
-	return A2(
-		_elm_lang$svg$Svg$rect,
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$x(
-					_elm_lang$core$Basics$toString(_p1.x)),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$y(
-						_elm_lang$core$Basics$toString(_p1.y)),
-					_1: {
+var _user$project$Graphic$toSvg = F2(
+	function (extraAttributes, graphic) {
+		var _p0 = graphic;
+		if (_p0.ctor === 'Rectangle') {
+			var _p1 = _p0._0;
+			return A2(
+				_elm_lang$svg$Svg$rect,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
 						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$width(
-							_elm_lang$core$Basics$toString(_p1.width)),
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(_p1.x)),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$height(
-								_elm_lang$core$Basics$toString(_p1.height)),
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(_p1.y)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(_p1.width)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString(_p1.height)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$rx(
+											_elm_lang$core$Basics$toString(_p1.rx)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$ry(
+												_elm_lang$core$Basics$toString(_p1.ry)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					},
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$Graphic$commonToSvgA(_p0._1),
+						extraAttributes)),
+				{ctor: '[]'});
+		} else {
+			var _p2 = _p0._0;
+			return A2(
+				_elm_lang$svg$Svg$ellipse,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$cx(
+							_elm_lang$core$Basics$toString(_p2.cx)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$cy(
+								_elm_lang$core$Basics$toString(_p2.cy)),
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$svg$Svg_Attributes$rx(
-									_elm_lang$core$Basics$toString(_p1.rx)),
+									_elm_lang$core$Basics$toString(_p2.rx)),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$ry(
-										_elm_lang$core$Basics$toString(_p1.ry)),
+										_elm_lang$core$Basics$toString(_p2.ry)),
 									_1: {ctor: '[]'}
 								}
 							}
 						}
-					}
-				}
-			},
-			_user$project$Graphic$commonToSvgA(_p0._1)),
-		{ctor: '[]'});
-};
+					},
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$Graphic$commonToSvgA(_p0._1),
+						extraAttributes)),
+				{ctor: '[]'});
+		}
+	});
 var _user$project$Graphic$RectangleAttributes = F6(
 	function (a, b, c, d, e, f) {
 		return {x: a, y: b, width: c, height: d, rx: e, ry: f};
 	});
+var _user$project$Graphic$ElipseAttributes = F4(
+	function (a, b, c, d) {
+		return {cx: a, cy: b, rx: c, ry: d};
+	});
 var _user$project$Graphic$CommonAttributes = F3(
 	function (a, b, c) {
 		return {stroke: a, strokeWidth: b, fill: c};
+	});
+var _user$project$Graphic$Elipse = F2(
+	function (a, b) {
+		return {ctor: 'Elipse', _0: a, _1: b};
+	});
+var _user$project$Graphic$createElipse = F2(
+	function (rec, common) {
+		return A2(_user$project$Graphic$Elipse, rec, common);
 	});
 var _user$project$Graphic$Rectangle = F2(
 	function (a, b) {
