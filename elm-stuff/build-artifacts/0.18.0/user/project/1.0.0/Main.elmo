@@ -22,59 +22,31 @@ var _user$project$Main$symbols = {
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('none'),
+					_1: {ctor: '[]'}
+				}
 			}
 		},
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$svg$Svg$rect,
+				_elm_lang$svg$Svg$use,
 				{
 					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$fill('#ddeaff'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$x('1'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$y('1'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$width('98'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$height('98'),
-									_1: {ctor: '[]'}
-								}
-							}
-						}
-					}
+					_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#buttonBackground'),
+					_1: {ctor: '[]'}
 				},
 				{ctor: '[]'}),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$svg$Svg$rect,
+					_elm_lang$svg$Svg$use,
 					{
 						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$fill('#1e1e1e'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$x('20'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$y('20'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$width('60'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$height('60'),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
+						_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawRectangleIcon'),
+						_1: {ctor: '[]'}
 					},
 					{ctor: '[]'}),
 				_1: {ctor: '[]'}
@@ -90,65 +62,187 @@ var _user$project$Main$symbols = {
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('none'),
+						_1: {ctor: '[]'}
+					}
 				}
 			},
 			{
 				ctor: '::',
 				_0: A2(
-					_elm_lang$svg$Svg$rect,
+					_elm_lang$svg$Svg$use,
 					{
 						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$fill('#ddeaff'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$x('1'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$y('1'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$width('98'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$height('98'),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
+						_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#buttonBackground'),
+						_1: {ctor: '[]'}
 					},
 					{ctor: '[]'}),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$svg$Svg$ellipse,
+						_elm_lang$svg$Svg$use,
 						{
 							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$fill('#1e1e1e'),
+							_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawElipseIcon'),
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$svg$Svg$symbol,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$id('buttonBackground'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('none'),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$rect,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fill('#ddeaff'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$cx('50'),
+								_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$cy('50'),
+									_0: _elm_lang$svg$Svg_Attributes$x('0'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$rx('30'),
+										_0: _elm_lang$svg$Svg_Attributes$y('0'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$ry('30'),
-											_1: {ctor: '[]'}
+											_0: _elm_lang$svg$Svg_Attributes$width('100'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$height('100'),
+												_1: {ctor: '[]'}
+											}
 										}
 									}
 								}
 							}
 						},
 						{ctor: '[]'}),
-					_1: {ctor: '[]'}
-				}
-			}),
-		_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$svg$Svg$symbol,
+							{
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$id('drawRectangleIcon'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('xMidYMid'),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$svg$Svg$rect,
+									{
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$fill('#1e1e1e'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$x('20'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$y('20'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$width('60'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$height('60'),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$symbol,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$id('drawElipseIcon'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('xMidYMid'),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$svg$Svg$ellipse,
+							{
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$fill('#1e1e1e'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$cx('50'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$cy('50'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$rx('30'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$ry('30'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		}
 	}
 };
 var _user$project$Main$trackPosition = F2(
@@ -297,122 +391,187 @@ var _user$project$Main$ToolPallet = function (a) {
 };
 var _user$project$Main$toolPallet = F5(
 	function (x, y, width, height, activeTool) {
+		var buttonList = {
+			ctor: '::',
+			_0: _user$project$Tool$DrawRectangle,
+			_1: {
+				ctor: '::',
+				_0: _user$project$Tool$DrawElipse,
+				_1: {ctor: '[]'}
+			}
+		};
+		var selectionColor = '#ff5e5e';
+		var selectionBoxThickness = 7;
 		var numberOfButtons = 2;
 		var borderSize = 5;
-		var heightPerButton = _elm_lang$core$Basics$toFloat(height - borderSize) / numberOfButtons;
+		var heightPerButton = (_elm_lang$core$Basics$toFloat(height - borderSize) / numberOfButtons) - borderSize;
 		var yPosition = function (elementNumber) {
-			return ((elementNumber * heightPerButton) + borderSize) + _elm_lang$core$Basics$toFloat(y);
+			return ((elementNumber * (heightPerButton + borderSize)) + _elm_lang$core$Basics$toFloat(y)) + borderSize;
 		};
 		var xWidth = width - (borderSize * 2);
-		var toolType = function (tool) {
-			return _elm_lang$core$Native_Utils.eq(tool, activeTool) ? '#ff5e5e' : 'none';
-		};
-		return A2(
-			_elm_lang$svg$Svg$g,
-			{ctor: '[]'},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$svg$Svg$rect,
-					{
+		var rectangleButton = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$use,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawRectangle'),
+					_1: {
 						ctor: '::',
 						_0: _elm_lang$svg$Svg_Attributes$x(
-							_elm_lang$core$Basics$toString(x)),
+							_elm_lang$core$Basics$toString(x + borderSize)),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$svg$Svg_Attributes$y(
-								_elm_lang$core$Basics$toString(y)),
+								_elm_lang$core$Basics$toString(
+									yPosition(index))),
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$svg$Svg_Attributes$width(
-									_elm_lang$core$Basics$toString(width)),
+									_elm_lang$core$Basics$toString(xWidth)),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$height(
-										_elm_lang$core$Basics$toString(height)),
+										_elm_lang$core$Basics$toString(heightPerButton)),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$fill('#0254d8'),
+										_0: _user$project$Main$onMouseUpIsolated(
+											function (_p3) {
+												return _user$project$Main$System(
+													A2(
+														_user$project$Main$MouseUp,
+														_user$project$Main$ToolPallet(_user$project$Tool$DrawRectangle),
+														_p3));
+											}),
 										_1: {
 											ctor: '::',
-											_0: _user$project$Main$onMouseUpIsolated(
-												function (_p3) {
+											_0: _user$project$Main$onMouseDownIsolated(
+												function (_p4) {
 													return _user$project$Main$System(
 														A2(
-															_user$project$Main$MouseUp,
-															_user$project$Main$ToolPallet(_user$project$Tool$ToolPalletHandle),
-															_p3));
+															_user$project$Main$MouseDown,
+															_user$project$Main$ToolPallet(_user$project$Tool$DrawRectangle),
+															_p4));
 												}),
-											_1: {
-												ctor: '::',
-												_0: _user$project$Main$onMouseDownIsolated(
-													function (_p4) {
-														return _user$project$Main$System(
-															A2(
-																_user$project$Main$MouseDown,
-																_user$project$Main$ToolPallet(_user$project$Tool$ToolPalletHandle),
-																_p4));
-													}),
-												_1: {ctor: '[]'}
-											}
+											_1: {ctor: '[]'}
 										}
 									}
 								}
 							}
 						}
-					},
-					{ctor: '[]'}),
-				_1: {
+					}
+				},
+				{ctor: '[]'});
+		};
+		var elipseButton = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$use,
+				{
 					ctor: '::',
-					_0: A2(
-						_elm_lang$svg$Svg$use,
-						{
+					_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawElipse'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(x + borderSize)),
+						_1: {
 							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawRectangle'),
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(
+									yPosition(index))),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$x(
-									_elm_lang$core$Basics$toString(x + borderSize)),
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(xWidth)),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$y(
-										_elm_lang$core$Basics$toString(
-											yPosition(0))),
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString(heightPerButton)),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$width(
-											_elm_lang$core$Basics$toString(xWidth)),
+										_0: _user$project$Main$onMouseUpIsolated(
+											function (_p5) {
+												return _user$project$Main$System(
+													A2(
+														_user$project$Main$MouseUp,
+														_user$project$Main$ToolPallet(_user$project$Tool$DrawElipse),
+														_p5));
+											}),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$height(
-												_elm_lang$core$Basics$toString(heightPerButton)),
+											_0: _user$project$Main$onMouseDownIsolated(
+												function (_p6) {
+													return _user$project$Main$System(
+														A2(
+															_user$project$Main$MouseDown,
+															_user$project$Main$ToolPallet(_user$project$Tool$DrawElipse),
+															_p6));
+												}),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				{ctor: '[]'});
+		};
+		var getToolFunction = function (tool) {
+			var _p7 = tool;
+			switch (_p7.ctor) {
+				case 'Select':
+					return _elm_lang$core$Native_Utils.crashCase(
+						'Main',
+						{
+							start: {line: 471, column: 13},
+							end: {line: 482, column: 71}
+						},
+						_p7)('TODO implement select button');
+				case 'DrawRectangle':
+					return rectangleButton;
+				case 'DrawElipse':
+					return elipseButton;
+				default:
+					return _elm_lang$core$Native_Utils.crashCase(
+						'Main',
+						{
+							start: {line: 471, column: 13},
+							end: {line: 482, column: 71}
+						},
+						_p7)('TODO implement draggable tool pallet');
+			}
+		};
+		var selectionBox = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$g,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$rect,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x(
+								_elm_lang$core$Basics$toString(x + borderSize)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y(
+									_elm_lang$core$Basics$toString(
+										yPosition(index))),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$width(
+										_elm_lang$core$Basics$toString(xWidth)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$height(
+											_elm_lang$core$Basics$toString(selectionBoxThickness)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$fill(selectionColor),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$stroke(
-													toolType(_user$project$Tool$DrawRectangle)),
-												_1: {
-													ctor: '::',
-													_0: _user$project$Main$onMouseUpIsolated(
-														function (_p5) {
-															return _user$project$Main$System(
-																A2(
-																	_user$project$Main$MouseUp,
-																	_user$project$Main$ToolPallet(_user$project$Tool$DrawRectangle),
-																	_p5));
-														}),
-													_1: {
-														ctor: '::',
-														_0: _user$project$Main$onMouseDownIsolated(
-															function (_p6) {
-																return _user$project$Main$System(
-																	A2(
-																		_user$project$Main$MouseDown,
-																		_user$project$Main$ToolPallet(_user$project$Tool$DrawRectangle),
-																		_p6));
-															}),
-														_1: {ctor: '[]'}
-													}
-												}
+												_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+												_1: {ctor: '[]'}
 											}
 										}
 									}
@@ -423,54 +582,31 @@ var _user$project$Main$toolPallet = F5(
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_elm_lang$svg$Svg$use,
+							_elm_lang$svg$Svg$rect,
 							{
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawElipse'),
+								_0: _elm_lang$svg$Svg_Attributes$x(
+									_elm_lang$core$Basics$toString(x + borderSize)),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$x(
-										_elm_lang$core$Basics$toString(x + borderSize)),
+									_0: _elm_lang$svg$Svg_Attributes$y(
+										_elm_lang$core$Basics$toString(
+											(yPosition(index) + heightPerButton) - selectionBoxThickness)),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$y(
-											_elm_lang$core$Basics$toString(
-												yPosition(1))),
+										_0: _elm_lang$svg$Svg_Attributes$width(
+											_elm_lang$core$Basics$toString(xWidth)),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$width(
-												_elm_lang$core$Basics$toString(xWidth)),
+											_0: _elm_lang$svg$Svg_Attributes$height(
+												_elm_lang$core$Basics$toString(selectionBoxThickness)),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$height(
-													_elm_lang$core$Basics$toString(heightPerButton)),
+												_0: _elm_lang$svg$Svg_Attributes$fill(selectionColor),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$stroke(
-														toolType(_user$project$Tool$DrawElipse)),
-													_1: {
-														ctor: '::',
-														_0: _user$project$Main$onMouseUpIsolated(
-															function (_p7) {
-																return _user$project$Main$System(
-																	A2(
-																		_user$project$Main$MouseUp,
-																		_user$project$Main$ToolPallet(_user$project$Tool$DrawElipse),
-																		_p7));
-															}),
-														_1: {
-															ctor: '::',
-															_0: _user$project$Main$onMouseDownIsolated(
-																function (_p8) {
-																	return _user$project$Main$System(
-																		A2(
-																			_user$project$Main$MouseDown,
-																			_user$project$Main$ToolPallet(_user$project$Tool$DrawElipse),
-																			_p8));
-																}),
-															_1: {ctor: '[]'}
-														}
-													}
+													_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+													_1: {ctor: '[]'}
 												}
 											}
 										}
@@ -478,10 +614,167 @@ var _user$project$Main$toolPallet = F5(
 								}
 							},
 							{ctor: '[]'}),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$rect,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$x(
+										_elm_lang$core$Basics$toString(x + borderSize)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$y(
+											_elm_lang$core$Basics$toString(
+												yPosition(index))),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$width(
+												_elm_lang$core$Basics$toString(selectionBoxThickness)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$height(
+													_elm_lang$core$Basics$toString(heightPerButton)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$fill(selectionColor),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$svg$Svg$rect,
+									{
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$x(
+											_elm_lang$core$Basics$toString(((x + borderSize) + xWidth) - selectionBoxThickness)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$y(
+												_elm_lang$core$Basics$toString(
+													yPosition(index))),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$width(
+													_elm_lang$core$Basics$toString(selectionBoxThickness)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$height(
+														_elm_lang$core$Basics$toString(heightPerButton)),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$fill(selectionColor),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}
+						}
 					}
+				});
+		};
+		var positionButtons = F2(
+			function (buttonList, index) {
+				var _p10 = buttonList;
+				if (_p10.ctor === '[]') {
+					return {ctor: '[]'};
+				} else {
+					var _p12 = _p10._1;
+					var _p11 = _p10._0;
+					var f = getToolFunction(_p11);
+					return _elm_lang$core$Native_Utils.eq(_p11, activeTool) ? {
+						ctor: '::',
+						_0: f(index),
+						_1: {
+							ctor: '::',
+							_0: selectionBox(index),
+							_1: A2(positionButtons, _p12, index + 1)
+						}
+					} : {
+						ctor: '::',
+						_0: f(index),
+						_1: A2(positionButtons, _p12, index + 1)
+					};
 				}
 			});
+		var positionedButtons = A2(positionButtons, buttonList, 0);
+		return A2(
+			_elm_lang$svg$Svg$g,
+			{ctor: '[]'},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$rect,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x(
+								_elm_lang$core$Basics$toString(x)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y(
+									_elm_lang$core$Basics$toString(y)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$width(
+										_elm_lang$core$Basics$toString(width)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$height(
+											_elm_lang$core$Basics$toString(height)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$fill('#0254d8'),
+											_1: {
+												ctor: '::',
+												_0: _user$project$Main$onMouseUpIsolated(
+													function (_p13) {
+														return _user$project$Main$System(
+															A2(
+																_user$project$Main$MouseUp,
+																_user$project$Main$ToolPallet(_user$project$Tool$ToolPalletHandle),
+																_p13));
+													}),
+												_1: {
+													ctor: '::',
+													_0: _user$project$Main$onMouseDownIsolated(
+														function (_p14) {
+															return _user$project$Main$System(
+																A2(
+																	_user$project$Main$MouseDown,
+																	_user$project$Main$ToolPallet(_user$project$Tool$ToolPalletHandle),
+																	_p14));
+														}),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				},
+				positionedButtons));
 	});
 var _user$project$Main$Screen = {ctor: 'Screen'};
 var _user$project$Main$subscriptions = function (model) {
@@ -489,32 +782,32 @@ var _user$project$Main$subscriptions = function (model) {
 		{
 			ctor: '::',
 			_0: _elm_lang$window$Window$resizes(
-				function (_p9) {
+				function (_p15) {
 					return _user$project$Main$System(
-						_user$project$Main$Resize(_p9));
+						_user$project$Main$Resize(_p15));
 				}),
 			_1: {
 				ctor: '::',
 				_0: _elm_lang$mouse$Mouse$downs(
-					function (_p10) {
+					function (_p16) {
 						return _user$project$Main$System(
-							A2(_user$project$Main$MouseDown, _user$project$Main$Screen, _p10));
+							A2(_user$project$Main$MouseDown, _user$project$Main$Screen, _p16));
 					}),
 				_1: {
 					ctor: '::',
 					_0: _elm_lang$mouse$Mouse$ups(
-						function (_p11) {
+						function (_p17) {
 							return _user$project$Main$System(
-								A2(_user$project$Main$MouseUp, _user$project$Main$Screen, _p11));
+								A2(_user$project$Main$MouseUp, _user$project$Main$Screen, _p17));
 						}),
 					_1: {
 						ctor: '::',
 						_0: A2(
 							_user$project$Main$trackPosition,
 							model.cursorPosition,
-							function (_p12) {
+							function (_p18) {
 								return _user$project$Main$System(
-									_user$project$Main$MouseMove(_p12));
+									_user$project$Main$MouseMove(_p18));
 							}),
 						_1: {ctor: '[]'}
 					}
@@ -554,16 +847,16 @@ var _user$project$Main$view = function (model) {
 					_1: {
 						ctor: '::',
 						_0: _user$project$Main$onMouseUpIsolated(
-							function (_p13) {
+							function (_p19) {
 								return _user$project$Main$System(
-									A2(_user$project$Main$MouseUp, _user$project$Main$Screen, _p13));
+									A2(_user$project$Main$MouseUp, _user$project$Main$Screen, _p19));
 							}),
 						_1: {
 							ctor: '::',
 							_0: _user$project$Main$onMouseDownIsolated(
-								function (_p14) {
+								function (_p20) {
 									return _user$project$Main$System(
-										A2(_user$project$Main$MouseDown, _user$project$Main$Screen, _p14));
+										A2(_user$project$Main$MouseDown, _user$project$Main$Screen, _p20));
 								}),
 							_1: {ctor: '[]'}
 						}
@@ -593,18 +886,18 @@ var _user$project$Main$view = function (model) {
 							{
 								ctor: '::',
 								_0: _user$project$Main$onMouseUpIsolated(
-									function (_p15) {
+									function (_p21) {
 										return _user$project$Main$System(
 											_user$project$Main$MouseUp(
-												_user$project$Main$Graphic(graphic))(_p15));
+												_user$project$Main$Graphic(graphic))(_p21));
 									}),
 								_1: {
 									ctor: '::',
 									_0: _user$project$Main$onMouseDownIsolated(
-										function (_p16) {
+										function (_p22) {
 											return _user$project$Main$System(
 												_user$project$Main$MouseDown(
-													_user$project$Main$Graphic(graphic))(_p16));
+													_user$project$Main$Graphic(graphic))(_p22));
 										}),
 									_1: {ctor: '[]'}
 								}
@@ -637,8 +930,8 @@ var _user$project$Main$init = function (size) {
 };
 var _user$project$Main$mouseUpEvent = F3(
 	function (model, clickTarget, position) {
-		var _p17 = model.currentAction;
-		if (_p17.ctor === 'None') {
+		var _p23 = model.currentAction;
+		if (_p23.ctor === 'None') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
@@ -647,8 +940,8 @@ var _user$project$Main$mouseUpEvent = F3(
 				_1: {ctor: '[]'}
 			};
 		} else {
-			var _p18 = _p17._0;
-			if (_p18.ctor === 'DrawRect') {
+			var _p24 = _p23._0;
+			if (_p24.ctor === 'DrawRect') {
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -694,21 +987,21 @@ var _user$project$Main$mouseDownEvent = F3(
 		var model2 = _elm_lang$core$Native_Utils.update(
 			model,
 			{mouseDown: true});
-		var _p19 = A2(_elm_lang$core$Debug$log, 'mouseDown click target', clickTarget);
-		if (_p19.ctor === 'ToolPallet') {
+		var _p25 = A2(_elm_lang$core$Debug$log, 'mouseDown click target', clickTarget);
+		if (_p25.ctor === 'ToolPallet') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model2,
-					{currentAction: _user$project$Main$None, activeTool: _p19._0, cursorPosition: _user$project$Main$NotTracking}),
+					{currentAction: _user$project$Main$None, activeTool: _p25._0, cursorPosition: _user$project$Main$NotTracking}),
 				_1: {ctor: '[]'}
 			};
 		} else {
-			var _p20 = model.activeTool;
-			switch (_p20.ctor) {
+			var _p26 = model.activeTool;
+			switch (_p26.ctor) {
 				case 'Select':
-					var _p21 = clickTarget;
-					switch (_p21.ctor) {
+					var _p27 = clickTarget;
+					switch (_p27.ctor) {
 						case 'Screen':
 							return {
 								ctor: '_Tuple2',
@@ -724,7 +1017,7 @@ var _user$project$Main$mouseDownEvent = F3(
 									start: {line: 175, column: 25},
 									end: {line: 188, column: 88}
 								},
-								_p21)('TODO - Selected a Graphic for editing');
+								_p27)('TODO - Selected a Graphic for editing');
 						default:
 							return A2(
 								_elm_lang$core$Debug$log,
@@ -766,26 +1059,26 @@ var _user$project$Main$mouseDownEvent = F3(
 							start: {line: 173, column: 17},
 							end: {line: 207, column: 64}
 						},
-						_p20)('TODO - Moving Tool Pallet');
+						_p26)('TODO - Moving Tool Pallet');
 			}
 		}
 	});
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p24 = msg;
-		var _p25 = _p24._0;
-		switch (_p25.ctor) {
+		var _p30 = msg;
+		var _p31 = _p30._0;
+		switch (_p31.ctor) {
 			case 'Resize':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{windowSize: _p25._0}),
+						{windowSize: _p31._0}),
 					{ctor: '[]'});
 			case 'MouseDown':
-				var _p26 = A3(_user$project$Main$mouseDownEvent, model, _p25._0, _p25._1);
-				var modelUpdates = _p26._0;
-				var commands = _p26._1;
+				var _p32 = A3(_user$project$Main$mouseDownEvent, model, _p31._0, _p31._1);
+				var modelUpdates = _p32._0;
+				var commands = _p32._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -793,9 +1086,9 @@ var _user$project$Main$update = F2(
 						{mouseDown: true, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, activeTool: modelUpdates.activeTool}),
 					commands);
 			case 'MouseUp':
-				var _p27 = A3(_user$project$Main$mouseUpEvent, model, _p25._0, _p25._1);
-				var modelUpdates = _p27._0;
-				var commands = _p27._1;
+				var _p33 = A3(_user$project$Main$mouseUpEvent, model, _p31._0, _p31._1);
+				var modelUpdates = _p33._0;
+				var commands = _p33._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -803,9 +1096,9 @@ var _user$project$Main$update = F2(
 						{mouseDown: false, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, graphics: modelUpdates.graphics}),
 					commands);
 			default:
-				var _p28 = A2(_user$project$Main$mouseMoveEvent, model, _p25._0);
-				var modelUpdates = _p28._0;
-				var commands = _p28._1;
+				var _p34 = A2(_user$project$Main$mouseMoveEvent, model, _p31._0);
+				var modelUpdates = _p34._0;
+				var commands = _p34._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
