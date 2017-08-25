@@ -1,0 +1,22 @@
+var _user$project$Events$onMouseUpIsolated = function (tagger) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'mouseup',
+		{stopPropagation: true, preventDefault: true},
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$mouse$Mouse$position));
+};
+var _user$project$Events$onMouseDownIsolated = function (tagger) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'mousedown',
+		{stopPropagation: true, preventDefault: true},
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$mouse$Mouse$position));
+};
+var _user$project$Events$mouseUpWithClickTarget = function (clickTarget) {
+	return _user$project$Events$onMouseUpIsolated(
+		_user$project$Messages$MouseUp(clickTarget));
+};
+var _user$project$Events$mouseDownWithClickTarget = function (clickTarget) {
+	return _user$project$Events$onMouseDownIsolated(
+		_user$project$Messages$MouseDown(clickTarget));
+};

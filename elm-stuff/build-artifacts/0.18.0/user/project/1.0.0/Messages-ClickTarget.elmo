@@ -1,0 +1,7 @@
+var _user$project$Messages_ClickTarget$ToolPallet = function (a) {
+	return {ctor: 'ToolPallet', _0: a};
+};
+var _user$project$Messages_ClickTarget$Screen = {ctor: 'Screen'};
+var _user$project$Messages_ClickTarget$Graphic = function (a) {
+	return {ctor: 'Graphic', _0: a};
+};

@@ -1,0 +1,14 @@
+var _user$project$Messages$MouseMove = function (a) {
+	return {ctor: 'MouseMove', _0: a};
+};
+var _user$project$Messages$MouseUp = F2(
+	function (a, b) {
+		return {ctor: 'MouseUp', _0: a, _1: b};
+	});
+var _user$project$Messages$MouseDown = F2(
+	function (a, b) {
+		return {ctor: 'MouseDown', _0: a, _1: b};
+	});
+var _user$project$Messages$Resize = function (a) {
+	return {ctor: 'Resize', _0: a};
+};

@@ -17,7 +17,11 @@ import Json.Decode
 
 import Graphic exposing (Graphic)
 import Tool exposing (Tool)
+import Tool.Render
 import Utilities
+import Events
+import Messages as Msg exposing (Msg)
+import Messages.ClickTarget as ClickTarget exposing (ClickTarget)
 
 
 --import DrawingTools exposing (Tool)
@@ -85,20 +89,6 @@ setWindowSize model size =
 ----------------------------------------------------------------
 ---------------------------------------------------------------
 --Messeges--
-
-
-type Msg
-    = System SystemMsg
-
-
-type SystemMsg
-    = Resize Window.Size
-    | MouseDown ClickTarget Mouse.Position
-    | MouseUp ClickTarget Mouse.Position
-    | MouseMove Mouse.Position
-
-
-
 --Messeges--
 ----------------------------------------------------------------
 ----------------------------------------------------------------
@@ -108,50 +98,48 @@ type SystemMsg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        System sysMsg ->
-            case sysMsg of
-                Resize size ->
-                    { model | windowSize = size } ! []
+        Msg.Resize size ->
+            { model | windowSize = size } ! []
 
-                MouseDown clickTarget position ->
-                    let
-                        ( modelUpdates, commands ) =
-                            mouseDownEvent model clickTarget position
-                    in
-                        { model
-                            | mouseDown = True
-                            , cursorPosition = modelUpdates.cursorPosition
-                            , currentAction = modelUpdates.currentAction
-                            , activeTool = modelUpdates.activeTool
-                        }
-                            ! commands
+        Msg.MouseDown clickTarget position ->
+            let
+                ( modelUpdates, commands ) =
+                    mouseDownEvent model clickTarget position
+            in
+                { model
+                    | mouseDown = True
+                    , cursorPosition = modelUpdates.cursorPosition
+                    , currentAction = modelUpdates.currentAction
+                    , activeTool = modelUpdates.activeTool
+                }
+                    ! commands
 
-                MouseUp clickTarget position ->
-                    let
-                        ( modelUpdates, commands ) =
-                            mouseUpEvent model clickTarget position
-                    in
-                        { model
-                            | mouseDown = False
-                            , cursorPosition = modelUpdates.cursorPosition
-                            , currentAction = modelUpdates.currentAction
-                            , graphics = modelUpdates.graphics
-                        }
-                            ! commands
+        Msg.MouseUp clickTarget position ->
+            let
+                ( modelUpdates, commands ) =
+                    mouseUpEvent model clickTarget position
+            in
+                { model
+                    | mouseDown = False
+                    , cursorPosition = modelUpdates.cursorPosition
+                    , currentAction = modelUpdates.currentAction
+                    , graphics = modelUpdates.graphics
+                }
+                    ! commands
 
-                MouseMove position ->
-                    let
-                        ( modelUpdates, commands ) =
-                            mouseMoveEvent model position
-                    in
-                        { model
-                            | cursorPosition = modelUpdates.cursorPosition
-                            , previewGraphic = modelUpdates.previewGraphic
+        Msg.MouseMove position ->
+            let
+                ( modelUpdates, commands ) =
+                    mouseMoveEvent model position
+            in
+                { model
+                    | cursorPosition = modelUpdates.cursorPosition
+                    , previewGraphic = modelUpdates.previewGraphic
 
-                            -- , currentAction = modelUpdates.currentAction
-                            -- , graphics = modelUpdates.graphics
-                        }
-                            ! commands
+                    -- , currentAction = modelUpdates.currentAction
+                    -- , graphics = modelUpdates.graphics
+                }
+                    ! commands
 
 
 mouseDownEvent model clickTarget position =
@@ -159,8 +147,8 @@ mouseDownEvent model clickTarget position =
         model2 =
             { model | mouseDown = True }
     in
-        case Debug.log "mouseDown click target" clickTarget of
-            ToolPallet tool ->
+        case clickTarget of
+            ClickTarget.ToolPallet tool ->
                 ( { model2
                     | currentAction = None
                     , activeTool = tool
@@ -173,7 +161,7 @@ mouseDownEvent model clickTarget position =
                 case model.activeTool of
                     Tool.Select ->
                         case clickTarget of
-                            Screen ->
+                            ClickTarget.Screen ->
                                 ( { model2
                                     | cursorPosition = NotTracking
                                     , currentAction = None
@@ -181,7 +169,7 @@ mouseDownEvent model clickTarget position =
                                 , []
                                 )
 
-                            Graphic graphic ->
+                            ClickTarget.Graphic graphic ->
                                 Debug.crash "TODO - Selected a Graphic for editing"
 
                             _ ->
@@ -333,10 +321,10 @@ createElipse startPosition currentPosition model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    [ Window.resizes (System << Resize)
-    , Mouse.downs (System << MouseDown Screen)
-    , Mouse.ups (System << MouseUp Screen)
-    , trackPosition model.cursorPosition (System << MouseMove)
+    [ Window.resizes (Msg.Resize)
+    , Mouse.downs (Msg.MouseDown ClickTarget.Screen)
+    , Mouse.ups (Msg.MouseUp ClickTarget.Screen)
+    , trackPosition model.cursorPosition (Msg.MouseMove)
     ]
         |> Sub.batch
 
@@ -370,8 +358,8 @@ view model =
             [ SvgA.width <| toString wWidth
             , SvgA.height <| toString wHeight
             , SvgA.viewBox <| "0 0 " ++ toString wWidth ++ " " ++ toString wHeight
-            , onMouseUpIsolated (System << MouseUp Screen)
-            , onMouseDownIsolated (System << MouseDown Screen)
+            , Events.mouseUpWithClickTarget <| ClickTarget.Screen
+            , Events.mouseDownWithClickTarget <| ClickTarget.Screen
             ]
         <|
             symbols
@@ -380,218 +368,24 @@ view model =
                         |> List.map
                             (\graphic ->
                                 Graphic.toSvg
-                                    [ onMouseUpIsolated <| System << (MouseUp <| Graphic graphic)
-                                    , onMouseDownIsolated <| System << (MouseDown <| Graphic graphic)
+                                    [ Events.mouseDownWithClickTarget <| ClickTarget.Graphic graphic
+                                    , Events.mouseUpWithClickTarget <| ClickTarget.Graphic graphic
                                     ]
                                     graphic
                             )
-                        |> flip (++) [ toolPallet 50 50 80 160 model.activeTool ]
+                        |> flip (++) [ Tool.Render.toolPallet 50 50 80 160 model.activeTool ]
                    )
 
 
 
---Interface Elements--
+--SVG Symbol Elements
 
 
 symbols =
-    [ --Tool Pallet Symbols
-      Svg.symbol [ SvgA.id "drawRectangle", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "none" ]
-        [ Svg.use [ SvgA.xlinkHref "#buttonBackground" ] []
-        , Svg.use [ SvgA.xlinkHref "#drawRectangleIcon" ] []
-        ]
-    , Svg.symbol [ SvgA.id "drawElipse", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "none" ]
-        [ Svg.use [ SvgA.xlinkHref "#buttonBackground" ] []
-        , Svg.use [ SvgA.xlinkHref "#drawElipseIcon" ] []
-        ]
-    , Svg.symbol [ SvgA.id "buttonBackground", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "none" ]
-        [ Svg.rect
-            [ SvgA.fill "#ddeaff"
-            , SvgA.stroke "none"
-            , SvgA.x "0"
-            , SvgA.y "0"
-            , SvgA.width "100"
-            , SvgA.height "100"
-            ]
-            []
-        , Svg.symbol [ SvgA.id "drawRectangleIcon", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "xMidYMid" ]
-            [ Svg.rect
-                [ SvgA.fill "#1e1e1e"
-                , SvgA.stroke "none"
-                , SvgA.x "20"
-                , SvgA.y "20"
-                , SvgA.width "60"
-                , SvgA.height "60"
-                ]
-                []
-            ]
-        ]
-    , Svg.symbol [ SvgA.id "drawElipseIcon", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "xMidYMid" ]
-        [ Svg.ellipse
-            [ SvgA.fill "#1e1e1e"
-            , SvgA.stroke "none"
-            , SvgA.cx "50"
-            , SvgA.cy "50"
-            , SvgA.rx "30"
-            , SvgA.ry "30"
-            ]
-            []
-        ]
-    ]
-
-
-toolPallet : Int -> Int -> Int -> Int -> Tool -> Svg Msg
-toolPallet x y width height activeTool =
-    let
-        borderSize =
-            5
-
-        numberOfButtons =
-            2
-
-        heightPerButton =
-            toFloat (height - borderSize) / numberOfButtons - borderSize
-
-        yPosition elementNumber =
-            elementNumber * (heightPerButton + borderSize) + toFloat y + borderSize
-
-        xWidth =
-            width - borderSize * 2
-
-        selectionBoxThickness =
-            7
-
-        selectionColor =
-            "#ff5e5e"
-
-        buttonList =
-            --Determines which buttons appear and in what order
-            [ Tool.DrawRectangle, Tool.DrawElipse ]
-
-        getToolFunction tool =
-            case tool of
-                Tool.Select ->
-                    Debug.crash "TODO implement select button"
-
-                Tool.DrawRectangle ->
-                    rectangleButton
-
-                Tool.DrawElipse ->
-                    elipseButton
-
-                Tool.ToolPalletHandle ->
-                    Debug.crash "TODO implement draggable tool pallet"
-
-        positionedButtons =
-            positionButtons buttonList 0
-
-        positionButtons buttonList index =
-            case buttonList of
-                [] ->
-                    []
-
-                tool :: tools ->
-                    let
-                        f =
-                            getToolFunction tool
-                    in
-                        if tool == activeTool then
-                            f index
-                                :: selectionBox index
-                                :: (positionButtons tools <| index + 1)
-                        else
-                            f index :: (positionButtons tools <| index + 1)
-
-        rectangleButton index =
-            Svg.use
-                [ SvgA.xlinkHref "#drawRectangle"
-                , SvgA.x <| toString (x + borderSize)
-                , SvgA.y <| toString (yPosition index)
-                , SvgA.width <| toString xWidth
-                , SvgA.height <| toString heightPerButton
-                , onMouseUpIsolated (System << MouseUp (ToolPallet Tool.DrawRectangle))
-                , onMouseDownIsolated (System << MouseDown (ToolPallet Tool.DrawRectangle))
-                ]
-                []
-
-        elipseButton index =
-            Svg.use
-                [ SvgA.xlinkHref "#drawElipse"
-                , SvgA.x <| toString (x + borderSize)
-                , SvgA.y <| toString (yPosition index)
-                , SvgA.width <| toString xWidth
-                , SvgA.height <| toString heightPerButton
-                , onMouseUpIsolated (System << MouseUp (ToolPallet Tool.DrawElipse))
-                , onMouseDownIsolated (System << MouseDown (ToolPallet Tool.DrawElipse))
-                ]
-                []
-
-        selectionBox index =
-            Svg.g []
-                --Selection icon to draw on top of selected tool button
-                [ Svg.rect
-                    --Top Line
-                    [ SvgA.x <| toString (x + borderSize)
-                    , SvgA.y <| toString (yPosition index)
-                    , SvgA.width <| toString xWidth
-                    , SvgA.height <| toString selectionBoxThickness
-                    , SvgA.fill selectionColor
-                    , SvgA.stroke "none"
-                    ]
-                    []
-                , Svg.rect
-                    --Bottom Line
-                    [ SvgA.x <| toString (x + borderSize)
-                    , SvgA.y <| toString (yPosition index + heightPerButton - selectionBoxThickness)
-                    , SvgA.width <| toString xWidth
-                    , SvgA.height <| toString selectionBoxThickness
-                    , SvgA.fill selectionColor
-                    , SvgA.stroke "none"
-                    ]
-                    []
-                , Svg.rect
-                    --Left Line
-                    [ SvgA.x <| toString (x + borderSize)
-                    , SvgA.y <| toString (yPosition index)
-                    , SvgA.width <| toString selectionBoxThickness
-                    , SvgA.height <| toString heightPerButton
-                    , SvgA.fill selectionColor
-                    , SvgA.stroke "none"
-                    ]
-                    []
-                , Svg.rect
-                    --Right Line
-                    [ SvgA.x <| toString (x + borderSize + xWidth - selectionBoxThickness)
-                    , SvgA.y <| toString (yPosition index)
-                    , SvgA.width <| toString selectionBoxThickness
-                    , SvgA.height <| toString heightPerButton
-                    , SvgA.fill selectionColor
-                    , SvgA.stroke "none"
-                    ]
-                    []
-                ]
-    in
-        Svg.g [] <|
-            [ Svg.rect
-                --background
-                [ SvgA.x <| toString x
-                , SvgA.y <| toString y
-                , SvgA.width <| toString width
-                , SvgA.height <| toString height
-                , SvgA.fill "#0254d8"
-                , onMouseUpIsolated (System << MouseUp (ToolPallet Tool.ToolPalletHandle))
-                , onMouseDownIsolated (System << MouseDown (ToolPallet Tool.ToolPalletHandle))
-                ]
-                []
-            ]
-                ++ positionedButtons
+    Tool.Render.symbols
 
 
 
---onMouseUpIsolated (System << MouseUp Screen)
---onMouseDownIsolated (System << MouseDown Screen)
---onMouseUpIsolated <| System << (MouseUp <| Graphic graphic)
---onMouseDownIsolated <| System << (MouseDown <| Graphic graphic)
---View--
 ----------------------------------------------------------------------
 -----------------------------------------------------------------------
 --Other Code--
@@ -607,12 +401,6 @@ type alias Position =
     { x : Int, y : Int }
 
 
-type ClickTarget
-    = Graphic Graphic.Graphic
-    | Screen
-    | ToolPallet Tool
-
-
 type Action
     = None
     | Draw DrawAction
@@ -625,17 +413,3 @@ type DrawAction
 
 
 --Custom Events--
-
-
-onMouseDownIsolated tagger =
-    Html.Events.onWithOptions
-        "mousedown"
-        { stopPropagation = True, preventDefault = True }
-        (Json.Decode.map tagger Mouse.position)
-
-
-onMouseUpIsolated tagger =
-    Html.Events.onWithOptions
-        "mouseup"
-        { stopPropagation = True, preventDefault = True }
-        (Json.Decode.map tagger Mouse.position)
