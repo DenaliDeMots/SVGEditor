@@ -48,31 +48,42 @@ var _user$project$Main$view = function (model) {
 					}),
 				{
 					ctor: '::',
-					_0: A5(_user$project$Tool_Render$toolPallet, 50, 50, 80, 160, model.activeTool),
+					_0: A4(_user$project$Properties_Render$propertiesPallet, 400, 50, 150, model.propertyPalletState),
 					_1: {ctor: '[]'}
 				},
-				A2(
-					_elm_lang$core$List$map,
-					function (graphic) {
-						return A2(
-							_user$project$Graphic$toSvg,
-							{
-								ctor: '::',
-								_0: _user$project$Events$mouseDownWithClickTarget(
-									_user$project$Messages_ClickTarget$Graphic(graphic)),
-								_1: {
-									ctor: '::',
-									_0: _user$project$Events$mouseUpWithClickTarget(
-										_user$project$Messages_ClickTarget$Graphic(graphic)),
-									_1: {ctor: '[]'}
-								}
-							},
-							graphic);
+				A3(
+					_elm_lang$core$Basics$flip,
+					F2(
+						function (x, y) {
+							return A2(_elm_lang$core$Basics_ops['++'], x, y);
+						}),
+					{
+						ctor: '::',
+						_0: A4(_user$project$Tool_Render$toolPallet, 50, 50, 130, model.activeTool),
+						_1: {ctor: '[]'}
 					},
 					A2(
-						_elm_lang$core$Basics_ops['++'],
-						model.graphics,
-						_user$project$Utilities$maybeToList(model.previewGraphic))))));
+						_elm_lang$core$List$map,
+						function (graphic) {
+							return A2(
+								_user$project$Graphic$toSvg,
+								{
+									ctor: '::',
+									_0: _user$project$Events$mouseDownWithClickTarget(
+										_user$project$Messages_ClickTarget$Graphic(graphic)),
+									_1: {
+										ctor: '::',
+										_0: _user$project$Events$mouseUpWithClickTarget(
+											_user$project$Messages_ClickTarget$Graphic(graphic)),
+										_1: {ctor: '[]'}
+									}
+								},
+								graphic);
+						},
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							model.graphics,
+							_user$project$Utilities$maybeToList(model.previewGraphic)))))));
 };
 var _user$project$Main$trackPosition = F2(
 	function (cursor, tagger) {
@@ -180,15 +191,16 @@ var _user$project$Main$updatePreviewGraphic = F3(
 				});
 		}
 	});
+var _user$project$Main$initialPropertyPalletState = {fillColor: _elm_lang$core$Color$green, strokeColor: _elm_lang$core$Color$green, strokeWidth: 4};
 var _user$project$Main$setWindowSize = F2(
 	function (model, size) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{windowSize: size});
 	});
-var _user$project$Main$Model = F7(
-	function (a, b, c, d, e, f, g) {
-		return {windowSize: a, cursorPosition: b, mouseDown: c, currentAction: d, activeTool: e, graphics: f, previewGraphic: g};
+var _user$project$Main$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {windowSize: a, cursorPosition: b, mouseDown: c, currentAction: d, activeTool: e, propertyPalletState: f, graphics: g, previewGraphic: h};
 	});
 var _user$project$Main$Position = F2(
 	function (a, b) {
@@ -230,6 +242,7 @@ var _user$project$Main$initialModel = {
 	mouseDown: false,
 	currentAction: _user$project$Main$None,
 	activeTool: _user$project$Tool$DrawRectangle,
+	propertyPalletState: _user$project$Main$initialPropertyPalletState,
 	graphics: {ctor: '[]'},
 	previewGraphic: _elm_lang$core$Maybe$Nothing
 };
@@ -325,8 +338,8 @@ var _user$project$Main$mouseDownEvent = F3(
 							return _elm_lang$core$Native_Utils.crashCase(
 								'Main',
 								{
-									start: {line: 163, column: 25},
-									end: {line: 176, column: 88}
+									start: {line: 175, column: 25},
+									end: {line: 188, column: 88}
 								},
 								_p7)('TODO - Selected a Graphic for editing');
 						default:
@@ -367,8 +380,8 @@ var _user$project$Main$mouseDownEvent = F3(
 					return _elm_lang$core$Native_Utils.crashCase(
 						'Main',
 						{
-							start: {line: 161, column: 17},
-							end: {line: 195, column: 64}
+							start: {line: 173, column: 17},
+							end: {line: 207, column: 64}
 						},
 						_p6)('TODO - Moving Tool Pallet');
 			}

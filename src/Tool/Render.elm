@@ -64,33 +64,36 @@ symbols =
 --
 
 
-toolPallet : Int -> Int -> Int -> Int -> Tool -> Svg Msg
-toolPallet x y width height activeTool =
+toolPallet : Int -> Int -> Float -> Tool -> Svg Msg
+toolPallet x y height activeTool =
     let
+        buttonList =
+            --Determines which buttons appear and in what order
+            [ DrawRectangle, DrawElipse ]
+
+        numberOfButtons =
+            List.length buttonList
+
         borderSize =
             5
 
-        numberOfButtons =
-            2
-
         heightPerButton =
-            toFloat (height - borderSize) / numberOfButtons - borderSize
+            (height - borderSize) / toFloat numberOfButtons - borderSize
+
+        width =
+            heightPerButton + borderSize * 2
 
         yPosition elementNumber =
             elementNumber * (heightPerButton + borderSize) + toFloat y + borderSize
 
-        xWidth =
-            width - borderSize * 2
+        buttonWidth =
+            heightPerButton
 
         selectionBoxThickness =
             7
 
         selectionColor =
             "#ff5e5e"
-
-        buttonList =
-            --Determines which buttons appear and in what order
-            [ DrawRectangle, DrawElipse ]
 
         getToolFunction tool =
             case tool of
@@ -131,7 +134,7 @@ toolPallet x y width height activeTool =
                 [ SvgA.xlinkHref "#drawRectangle"
                 , SvgA.x <| toString (x + borderSize)
                 , SvgA.y <| toString (yPosition index)
-                , SvgA.width <| toString xWidth
+                , SvgA.width <| toString buttonWidth
                 , SvgA.height <| toString heightPerButton
                 , Events.mouseUpWithClickTarget <| ClickTarget.ToolPallet DrawRectangle
                 , Events.mouseDownWithClickTarget <| ClickTarget.ToolPallet DrawRectangle
@@ -143,7 +146,7 @@ toolPallet x y width height activeTool =
                 [ SvgA.xlinkHref "#drawElipse"
                 , SvgA.x <| toString (x + borderSize)
                 , SvgA.y <| toString (yPosition index)
-                , SvgA.width <| toString xWidth
+                , SvgA.width <| toString buttonWidth
                 , SvgA.height <| toString heightPerButton
                 , Events.mouseUpWithClickTarget <| ClickTarget.ToolPallet DrawElipse
                 , Events.mouseDownWithClickTarget <| ClickTarget.ToolPallet DrawElipse
@@ -157,7 +160,7 @@ toolPallet x y width height activeTool =
                     --Top Line
                     [ SvgA.x <| toString (x + borderSize)
                     , SvgA.y <| toString (yPosition index)
-                    , SvgA.width <| toString xWidth
+                    , SvgA.width <| toString buttonWidth
                     , SvgA.height <| toString selectionBoxThickness
                     , SvgA.fill selectionColor
                     , SvgA.stroke "none"
@@ -167,7 +170,7 @@ toolPallet x y width height activeTool =
                     --Bottom Line
                     [ SvgA.x <| toString (x + borderSize)
                     , SvgA.y <| toString (yPosition index + heightPerButton - selectionBoxThickness)
-                    , SvgA.width <| toString xWidth
+                    , SvgA.width <| toString buttonWidth
                     , SvgA.height <| toString selectionBoxThickness
                     , SvgA.fill selectionColor
                     , SvgA.stroke "none"
@@ -185,7 +188,7 @@ toolPallet x y width height activeTool =
                     []
                 , Svg.rect
                     --Right Line
-                    [ SvgA.x <| toString (x + borderSize + xWidth - selectionBoxThickness)
+                    [ SvgA.x <| toString (toFloat (x + borderSize) + buttonWidth - selectionBoxThickness)
                     , SvgA.y <| toString (yPosition index)
                     , SvgA.width <| toString selectionBoxThickness
                     , SvgA.height <| toString heightPerButton

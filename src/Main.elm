@@ -11,6 +11,7 @@ import Window
 import Mouse
 import Platform
 import Json.Decode
+import Color
 
 
 --internal modules
@@ -18,6 +19,8 @@ import Json.Decode
 import Graphic exposing (Graphic)
 import Tool exposing (Tool)
 import Tool.Render
+import Properties exposing (PropertyWidget, PropertyPalletState)
+import Properties.Render
 import Utilities
 import Events
 import Messages as Msg exposing (Msg)
@@ -48,6 +51,7 @@ type alias Model =
     , mouseDown : Bool
     , currentAction : Action
     , activeTool : Tool
+    , propertyPalletState : PropertyPalletState
     , graphics : List Graphic.Graphic -- The svg elements on the canvas
     , previewGraphic : Maybe Graphic
 
@@ -73,6 +77,7 @@ initialModel =
     , mouseDown = False
     , currentAction = None
     , activeTool = Tool.DrawRectangle
+    , propertyPalletState = initialPropertyPalletState
     , graphics = []
     , previewGraphic = Maybe.Nothing
     }
@@ -81,6 +86,13 @@ initialModel =
 setWindowSize model size =
     { model
         | windowSize = size
+    }
+
+
+initialPropertyPalletState =
+    { fillColor = Color.green
+    , strokeColor = Color.green
+    , strokeWidth = 4
     }
 
 
@@ -373,7 +385,8 @@ view model =
                                     ]
                                     graphic
                             )
-                        |> flip (++) [ Tool.Render.toolPallet 50 50 80 160 model.activeTool ]
+                        |> flip (++) [ Tool.Render.toolPallet 50 50 130 model.activeTool ]
+                        |> flip (++) [ Properties.Render.propertiesPallet 400 50 150 model.propertyPalletState ]
                    )
 
 

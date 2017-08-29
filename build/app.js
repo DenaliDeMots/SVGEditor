@@ -5523,6 +5523,172 @@ var _elm_lang$core$Array$repeat = F2(
 	});
 var _elm_lang$core$Array$Array = {ctor: 'Array'};
 
+var _elm_lang$core$Color$fmod = F2(
+	function (f, n) {
+		var integer = _elm_lang$core$Basics$floor(f);
+		return (_elm_lang$core$Basics$toFloat(
+			A2(_elm_lang$core$Basics_ops['%'], integer, n)) + f) - _elm_lang$core$Basics$toFloat(integer);
+	});
+var _elm_lang$core$Color$rgbToHsl = F3(
+	function (red, green, blue) {
+		var b = _elm_lang$core$Basics$toFloat(blue) / 255;
+		var g = _elm_lang$core$Basics$toFloat(green) / 255;
+		var r = _elm_lang$core$Basics$toFloat(red) / 255;
+		var cMax = A2(
+			_elm_lang$core$Basics$max,
+			A2(_elm_lang$core$Basics$max, r, g),
+			b);
+		var cMin = A2(
+			_elm_lang$core$Basics$min,
+			A2(_elm_lang$core$Basics$min, r, g),
+			b);
+		var c = cMax - cMin;
+		var lightness = (cMax + cMin) / 2;
+		var saturation = _elm_lang$core$Native_Utils.eq(lightness, 0) ? 0 : (c / (1 - _elm_lang$core$Basics$abs((2 * lightness) - 1)));
+		var hue = _elm_lang$core$Basics$degrees(60) * (_elm_lang$core$Native_Utils.eq(cMax, r) ? A2(_elm_lang$core$Color$fmod, (g - b) / c, 6) : (_elm_lang$core$Native_Utils.eq(cMax, g) ? (((b - r) / c) + 2) : (((r - g) / c) + 4)));
+		return {ctor: '_Tuple3', _0: hue, _1: saturation, _2: lightness};
+	});
+var _elm_lang$core$Color$hslToRgb = F3(
+	function (hue, saturation, lightness) {
+		var normHue = hue / _elm_lang$core$Basics$degrees(60);
+		var chroma = (1 - _elm_lang$core$Basics$abs((2 * lightness) - 1)) * saturation;
+		var x = chroma * (1 - _elm_lang$core$Basics$abs(
+			A2(_elm_lang$core$Color$fmod, normHue, 2) - 1));
+		var _p0 = (_elm_lang$core$Native_Utils.cmp(normHue, 0) < 0) ? {ctor: '_Tuple3', _0: 0, _1: 0, _2: 0} : ((_elm_lang$core$Native_Utils.cmp(normHue, 1) < 0) ? {ctor: '_Tuple3', _0: chroma, _1: x, _2: 0} : ((_elm_lang$core$Native_Utils.cmp(normHue, 2) < 0) ? {ctor: '_Tuple3', _0: x, _1: chroma, _2: 0} : ((_elm_lang$core$Native_Utils.cmp(normHue, 3) < 0) ? {ctor: '_Tuple3', _0: 0, _1: chroma, _2: x} : ((_elm_lang$core$Native_Utils.cmp(normHue, 4) < 0) ? {ctor: '_Tuple3', _0: 0, _1: x, _2: chroma} : ((_elm_lang$core$Native_Utils.cmp(normHue, 5) < 0) ? {ctor: '_Tuple3', _0: x, _1: 0, _2: chroma} : ((_elm_lang$core$Native_Utils.cmp(normHue, 6) < 0) ? {ctor: '_Tuple3', _0: chroma, _1: 0, _2: x} : {ctor: '_Tuple3', _0: 0, _1: 0, _2: 0}))))));
+		var r = _p0._0;
+		var g = _p0._1;
+		var b = _p0._2;
+		var m = lightness - (chroma / 2);
+		return {ctor: '_Tuple3', _0: r + m, _1: g + m, _2: b + m};
+	});
+var _elm_lang$core$Color$toRgb = function (color) {
+	var _p1 = color;
+	if (_p1.ctor === 'RGBA') {
+		return {red: _p1._0, green: _p1._1, blue: _p1._2, alpha: _p1._3};
+	} else {
+		var _p2 = A3(_elm_lang$core$Color$hslToRgb, _p1._0, _p1._1, _p1._2);
+		var r = _p2._0;
+		var g = _p2._1;
+		var b = _p2._2;
+		return {
+			red: _elm_lang$core$Basics$round(255 * r),
+			green: _elm_lang$core$Basics$round(255 * g),
+			blue: _elm_lang$core$Basics$round(255 * b),
+			alpha: _p1._3
+		};
+	}
+};
+var _elm_lang$core$Color$toHsl = function (color) {
+	var _p3 = color;
+	if (_p3.ctor === 'HSLA') {
+		return {hue: _p3._0, saturation: _p3._1, lightness: _p3._2, alpha: _p3._3};
+	} else {
+		var _p4 = A3(_elm_lang$core$Color$rgbToHsl, _p3._0, _p3._1, _p3._2);
+		var h = _p4._0;
+		var s = _p4._1;
+		var l = _p4._2;
+		return {hue: h, saturation: s, lightness: l, alpha: _p3._3};
+	}
+};
+var _elm_lang$core$Color$HSLA = F4(
+	function (a, b, c, d) {
+		return {ctor: 'HSLA', _0: a, _1: b, _2: c, _3: d};
+	});
+var _elm_lang$core$Color$hsla = F4(
+	function (hue, saturation, lightness, alpha) {
+		return A4(
+			_elm_lang$core$Color$HSLA,
+			hue - _elm_lang$core$Basics$turns(
+				_elm_lang$core$Basics$toFloat(
+					_elm_lang$core$Basics$floor(hue / (2 * _elm_lang$core$Basics$pi)))),
+			saturation,
+			lightness,
+			alpha);
+	});
+var _elm_lang$core$Color$hsl = F3(
+	function (hue, saturation, lightness) {
+		return A4(_elm_lang$core$Color$hsla, hue, saturation, lightness, 1);
+	});
+var _elm_lang$core$Color$complement = function (color) {
+	var _p5 = color;
+	if (_p5.ctor === 'HSLA') {
+		return A4(
+			_elm_lang$core$Color$hsla,
+			_p5._0 + _elm_lang$core$Basics$degrees(180),
+			_p5._1,
+			_p5._2,
+			_p5._3);
+	} else {
+		var _p6 = A3(_elm_lang$core$Color$rgbToHsl, _p5._0, _p5._1, _p5._2);
+		var h = _p6._0;
+		var s = _p6._1;
+		var l = _p6._2;
+		return A4(
+			_elm_lang$core$Color$hsla,
+			h + _elm_lang$core$Basics$degrees(180),
+			s,
+			l,
+			_p5._3);
+	}
+};
+var _elm_lang$core$Color$grayscale = function (p) {
+	return A4(_elm_lang$core$Color$HSLA, 0, 0, 1 - p, 1);
+};
+var _elm_lang$core$Color$greyscale = function (p) {
+	return A4(_elm_lang$core$Color$HSLA, 0, 0, 1 - p, 1);
+};
+var _elm_lang$core$Color$RGBA = F4(
+	function (a, b, c, d) {
+		return {ctor: 'RGBA', _0: a, _1: b, _2: c, _3: d};
+	});
+var _elm_lang$core$Color$rgba = _elm_lang$core$Color$RGBA;
+var _elm_lang$core$Color$rgb = F3(
+	function (r, g, b) {
+		return A4(_elm_lang$core$Color$RGBA, r, g, b, 1);
+	});
+var _elm_lang$core$Color$lightRed = A4(_elm_lang$core$Color$RGBA, 239, 41, 41, 1);
+var _elm_lang$core$Color$red = A4(_elm_lang$core$Color$RGBA, 204, 0, 0, 1);
+var _elm_lang$core$Color$darkRed = A4(_elm_lang$core$Color$RGBA, 164, 0, 0, 1);
+var _elm_lang$core$Color$lightOrange = A4(_elm_lang$core$Color$RGBA, 252, 175, 62, 1);
+var _elm_lang$core$Color$orange = A4(_elm_lang$core$Color$RGBA, 245, 121, 0, 1);
+var _elm_lang$core$Color$darkOrange = A4(_elm_lang$core$Color$RGBA, 206, 92, 0, 1);
+var _elm_lang$core$Color$lightYellow = A4(_elm_lang$core$Color$RGBA, 255, 233, 79, 1);
+var _elm_lang$core$Color$yellow = A4(_elm_lang$core$Color$RGBA, 237, 212, 0, 1);
+var _elm_lang$core$Color$darkYellow = A4(_elm_lang$core$Color$RGBA, 196, 160, 0, 1);
+var _elm_lang$core$Color$lightGreen = A4(_elm_lang$core$Color$RGBA, 138, 226, 52, 1);
+var _elm_lang$core$Color$green = A4(_elm_lang$core$Color$RGBA, 115, 210, 22, 1);
+var _elm_lang$core$Color$darkGreen = A4(_elm_lang$core$Color$RGBA, 78, 154, 6, 1);
+var _elm_lang$core$Color$lightBlue = A4(_elm_lang$core$Color$RGBA, 114, 159, 207, 1);
+var _elm_lang$core$Color$blue = A4(_elm_lang$core$Color$RGBA, 52, 101, 164, 1);
+var _elm_lang$core$Color$darkBlue = A4(_elm_lang$core$Color$RGBA, 32, 74, 135, 1);
+var _elm_lang$core$Color$lightPurple = A4(_elm_lang$core$Color$RGBA, 173, 127, 168, 1);
+var _elm_lang$core$Color$purple = A4(_elm_lang$core$Color$RGBA, 117, 80, 123, 1);
+var _elm_lang$core$Color$darkPurple = A4(_elm_lang$core$Color$RGBA, 92, 53, 102, 1);
+var _elm_lang$core$Color$lightBrown = A4(_elm_lang$core$Color$RGBA, 233, 185, 110, 1);
+var _elm_lang$core$Color$brown = A4(_elm_lang$core$Color$RGBA, 193, 125, 17, 1);
+var _elm_lang$core$Color$darkBrown = A4(_elm_lang$core$Color$RGBA, 143, 89, 2, 1);
+var _elm_lang$core$Color$black = A4(_elm_lang$core$Color$RGBA, 0, 0, 0, 1);
+var _elm_lang$core$Color$white = A4(_elm_lang$core$Color$RGBA, 255, 255, 255, 1);
+var _elm_lang$core$Color$lightGrey = A4(_elm_lang$core$Color$RGBA, 238, 238, 236, 1);
+var _elm_lang$core$Color$grey = A4(_elm_lang$core$Color$RGBA, 211, 215, 207, 1);
+var _elm_lang$core$Color$darkGrey = A4(_elm_lang$core$Color$RGBA, 186, 189, 182, 1);
+var _elm_lang$core$Color$lightGray = A4(_elm_lang$core$Color$RGBA, 238, 238, 236, 1);
+var _elm_lang$core$Color$gray = A4(_elm_lang$core$Color$RGBA, 211, 215, 207, 1);
+var _elm_lang$core$Color$darkGray = A4(_elm_lang$core$Color$RGBA, 186, 189, 182, 1);
+var _elm_lang$core$Color$lightCharcoal = A4(_elm_lang$core$Color$RGBA, 136, 138, 133, 1);
+var _elm_lang$core$Color$charcoal = A4(_elm_lang$core$Color$RGBA, 85, 87, 83, 1);
+var _elm_lang$core$Color$darkCharcoal = A4(_elm_lang$core$Color$RGBA, 46, 52, 54, 1);
+var _elm_lang$core$Color$Radial = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'Radial', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _elm_lang$core$Color$radial = _elm_lang$core$Color$Radial;
+var _elm_lang$core$Color$Linear = F3(
+	function (a, b, c) {
+		return {ctor: 'Linear', _0: a, _1: b, _2: c};
+	});
+var _elm_lang$core$Color$linear = _elm_lang$core$Color$Linear;
+
 //import Maybe, Native.Array, Native.List, Native.Utils, Result //
 
 var _elm_lang$core$Native_Json = function() {
@@ -9204,54 +9370,104 @@ var _user$project$Graphic$commonToSvgA = function (common) {
 		}
 	};
 };
-var _user$project$Graphic$toSvg = function (graphic) {
-	var _p0 = graphic;
-	var _p1 = _p0._0;
-	return A2(
-		_elm_lang$svg$Svg$rect,
-		A2(
-			_elm_lang$core$Basics_ops['++'],
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$x(
-					_elm_lang$core$Basics$toString(_p1.x)),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$y(
-						_elm_lang$core$Basics$toString(_p1.y)),
-					_1: {
+var _user$project$Graphic$toSvg = F2(
+	function (extraAttributes, graphic) {
+		var _p0 = graphic;
+		if (_p0.ctor === 'Rectangle') {
+			var _p1 = _p0._0;
+			return A2(
+				_elm_lang$svg$Svg$rect,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
 						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$width(
-							_elm_lang$core$Basics$toString(_p1.width)),
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(_p1.x)),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$height(
-								_elm_lang$core$Basics$toString(_p1.height)),
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(_p1.y)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(_p1.width)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString(_p1.height)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$rx(
+											_elm_lang$core$Basics$toString(_p1.rx)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$ry(
+												_elm_lang$core$Basics$toString(_p1.ry)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					},
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$Graphic$commonToSvgA(_p0._1),
+						extraAttributes)),
+				{ctor: '[]'});
+		} else {
+			var _p2 = _p0._0;
+			return A2(
+				_elm_lang$svg$Svg$ellipse,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$cx(
+							_elm_lang$core$Basics$toString(_p2.cx)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$cy(
+								_elm_lang$core$Basics$toString(_p2.cy)),
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$svg$Svg_Attributes$rx(
-									_elm_lang$core$Basics$toString(_p1.rx)),
+									_elm_lang$core$Basics$toString(_p2.rx)),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$ry(
-										_elm_lang$core$Basics$toString(_p1.ry)),
+										_elm_lang$core$Basics$toString(_p2.ry)),
 									_1: {ctor: '[]'}
 								}
 							}
 						}
-					}
-				}
-			},
-			_user$project$Graphic$commonToSvgA(_p0._1)),
-		{ctor: '[]'});
-};
+					},
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$Graphic$commonToSvgA(_p0._1),
+						extraAttributes)),
+				{ctor: '[]'});
+		}
+	});
 var _user$project$Graphic$RectangleAttributes = F6(
 	function (a, b, c, d, e, f) {
 		return {x: a, y: b, width: c, height: d, rx: e, ry: f};
 	});
+var _user$project$Graphic$ElipseAttributes = F4(
+	function (a, b, c, d) {
+		return {cx: a, cy: b, rx: c, ry: d};
+	});
 var _user$project$Graphic$CommonAttributes = F3(
 	function (a, b, c) {
 		return {stroke: a, strokeWidth: b, fill: c};
+	});
+var _user$project$Graphic$Elipse = F2(
+	function (a, b) {
+		return {ctor: 'Elipse', _0: a, _1: b};
+	});
+var _user$project$Graphic$createElipse = F2(
+	function (rec, common) {
+		return A2(_user$project$Graphic$Elipse, rec, common);
 	});
 var _user$project$Graphic$Rectangle = F2(
 	function (a, b) {
@@ -9283,125 +9499,933 @@ var _user$project$Graphic$Translate = F3(
 	});
 var _user$project$Graphic$None = {ctor: 'None'};
 
+var _user$project$Tool$ToolPalletHandle = {ctor: 'ToolPalletHandle'};
+var _user$project$Tool$DrawElipse = {ctor: 'DrawElipse'};
 var _user$project$Tool$DrawRectangle = {ctor: 'DrawRectangle'};
 var _user$project$Tool$Select = {ctor: 'Select'};
 
-var _user$project$Main$onMouseUpIsolated = function (tagger) {
+var _user$project$Properties$colorToString = function (color) {
+	var _p0 = _elm_lang$core$Color$toRgb(color);
+	var red = _p0.red;
+	var green = _p0.green;
+	var blue = _p0.blue;
+	var alpha = _p0.alpha;
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'#',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(red),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(blue),
+				_elm_lang$core$Basics$toString(green))));
+};
+var _user$project$Properties$toCommonProperties = function (properties) {
+	return {
+		stroke: _user$project$Properties$colorToString(properties.strokeColor),
+		strokeWidth: _elm_lang$core$Basics$toString(properties.strokeWidth),
+		fill: _user$project$Properties$colorToString(properties.fillColor)
+	};
+};
+var _user$project$Properties$PropertyPalletState = F3(
+	function (a, b, c) {
+		return {fillColor: a, strokeColor: b, strokeWidth: c};
+	});
+var _user$project$Properties$PropertyPalletHandle = {ctor: 'PropertyPalletHandle'};
+var _user$project$Properties$StrokeWidth = function (a) {
+	return {ctor: 'StrokeWidth', _0: a};
+};
+var _user$project$Properties$StrokeColorPicker = function (a) {
+	return {ctor: 'StrokeColorPicker', _0: a};
+};
+var _user$project$Properties$FillColorPicker = function (a) {
+	return {ctor: 'FillColorPicker', _0: a};
+};
+
+var _user$project$Messages_ClickTarget$PropertiesPallet = function (a) {
+	return {ctor: 'PropertiesPallet', _0: a};
+};
+var _user$project$Messages_ClickTarget$ToolPallet = function (a) {
+	return {ctor: 'ToolPallet', _0: a};
+};
+var _user$project$Messages_ClickTarget$Screen = {ctor: 'Screen'};
+var _user$project$Messages_ClickTarget$Graphic = function (a) {
+	return {ctor: 'Graphic', _0: a};
+};
+
+var _user$project$Messages$MouseMove = function (a) {
+	return {ctor: 'MouseMove', _0: a};
+};
+var _user$project$Messages$MouseUp = F2(
+	function (a, b) {
+		return {ctor: 'MouseUp', _0: a, _1: b};
+	});
+var _user$project$Messages$MouseDown = F2(
+	function (a, b) {
+		return {ctor: 'MouseDown', _0: a, _1: b};
+	});
+var _user$project$Messages$Resize = function (a) {
+	return {ctor: 'Resize', _0: a};
+};
+
+var _user$project$Events$onMouseUpIsolated = function (tagger) {
 	return A3(
 		_elm_lang$html$Html_Events$onWithOptions,
 		'mouseup',
 		{stopPropagation: true, preventDefault: true},
 		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$mouse$Mouse$position));
 };
-var _user$project$Main$onMouseDownIsolated = function (tagger) {
+var _user$project$Events$onMouseDownIsolated = function (tagger) {
 	return A3(
 		_elm_lang$html$Html_Events$onWithOptions,
 		'mousedown',
 		{stopPropagation: true, preventDefault: true},
 		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$mouse$Mouse$position));
 };
-var _user$project$Main$trackPosition = F2(
-	function (model, tagger) {
-		var _p0 = model.cursorPosition;
-		if (_p0.ctor === 'NotTracking') {
-			return _elm_lang$core$Platform_Sub$none;
-		} else {
-			return _elm_lang$mouse$Mouse$moves(tagger);
-		}
-	});
-var _user$project$Main$createRectangle = F2(
-	function (start, end) {
-		var commonAttributes = {stroke: 'none', fill: 'black', strokeWidth: '0'};
-		var height = _elm_lang$core$Basics$toFloat(
-			_elm_lang$core$Basics$abs(start.y - end.y));
-		var width = _elm_lang$core$Basics$toFloat(
-			_elm_lang$core$Basics$abs(start.x - end.x));
-		var topLeftY = _elm_lang$core$Basics$toFloat(
-			A2(_elm_lang$core$Basics$min, start.y, end.y));
-		var topLeftX = _elm_lang$core$Basics$toFloat(
-			A2(_elm_lang$core$Basics$min, start.x, end.x));
-		var recAttributes = {x: topLeftX, y: topLeftY, width: width, height: height, rx: 0, ry: 0};
-		return (_elm_lang$core$Native_Utils.eq(height, 0) || _elm_lang$core$Native_Utils.eq(width, 0)) ? {ctor: '[]'} : {
+var _user$project$Events$mouseUpWithClickTarget = function (clickTarget) {
+	return _user$project$Events$onMouseUpIsolated(
+		_user$project$Messages$MouseUp(clickTarget));
+};
+var _user$project$Events$mouseDownWithClickTarget = function (clickTarget) {
+	return _user$project$Events$onMouseDownIsolated(
+		_user$project$Messages$MouseDown(clickTarget));
+};
+
+var _user$project$Tool_Render$toolPallet = F4(
+	function (x, y, height, activeTool) {
+		var selectionColor = '#ff5e5e';
+		var selectionBoxThickness = 7;
+		var borderSize = 5;
+		var buttonList = {
 			ctor: '::',
-			_0: A2(_user$project$Graphic$createRectangle, recAttributes, commonAttributes),
-			_1: {ctor: '[]'}
-		};
-	});
-var _user$project$Main$setWindowSize = F2(
-	function (model, size) {
-		return _elm_lang$core$Native_Utils.update(
-			model,
-			{windowSize: size});
-	});
-var _user$project$Main$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {windowSize: a, cursorPosition: b, mouseDown: c, currentAction: d, activeTool: e, graphics: f};
-	});
-var _user$project$Main$Position = F2(
-	function (a, b) {
-		return {x: a, y: b};
-	});
-var _user$project$Main$System = function (a) {
-	return {ctor: 'System', _0: a};
-};
-var _user$project$Main$MouseMove = function (a) {
-	return {ctor: 'MouseMove', _0: a};
-};
-var _user$project$Main$MouseUp = F2(
-	function (a, b) {
-		return {ctor: 'MouseUp', _0: a, _1: b};
-	});
-var _user$project$Main$MouseDown = F2(
-	function (a, b) {
-		return {ctor: 'MouseDown', _0: a, _1: b};
-	});
-var _user$project$Main$Resize = function (a) {
-	return {ctor: 'Resize', _0: a};
-};
-var _user$project$Main$Pos = function (a) {
-	return {ctor: 'Pos', _0: a};
-};
-var _user$project$Main$NotTracking = {ctor: 'NotTracking'};
-var _user$project$Main$ToolPallet = {ctor: 'ToolPallet'};
-var _user$project$Main$Screen = {ctor: 'Screen'};
-var _user$project$Main$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$batch(
-		{
-			ctor: '::',
-			_0: _elm_lang$window$Window$resizes(
-				function (_p1) {
-					return _user$project$Main$System(
-						_user$project$Main$Resize(_p1));
-				}),
+			_0: _user$project$Tool$DrawRectangle,
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$mouse$Mouse$downs(
-					function (_p2) {
-						return _user$project$Main$System(
-							A2(_user$project$Main$MouseDown, _user$project$Main$Screen, _p2));
-					}),
-				_1: {
+				_0: _user$project$Tool$DrawElipse,
+				_1: {ctor: '[]'}
+			}
+		};
+		var numberOfButtons = _elm_lang$core$List$length(buttonList);
+		var heightPerButton = ((height - borderSize) / _elm_lang$core$Basics$toFloat(numberOfButtons)) - borderSize;
+		var width = heightPerButton + (borderSize * 2);
+		var yPosition = function (elementNumber) {
+			return ((elementNumber * (heightPerButton + borderSize)) + _elm_lang$core$Basics$toFloat(y)) + borderSize;
+		};
+		var buttonWidth = heightPerButton;
+		var rectangleButton = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$use,
+				{
 					ctor: '::',
-					_0: _elm_lang$mouse$Mouse$ups(
-						function (_p3) {
-							return _user$project$Main$System(
-								A2(_user$project$Main$MouseUp, _user$project$Main$Screen, _p3));
-						}),
+					_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawRectangle'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(x + borderSize)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(
+									yPosition(index))),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(buttonWidth)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString(heightPerButton)),
+									_1: {
+										ctor: '::',
+										_0: _user$project$Events$mouseUpWithClickTarget(
+											_user$project$Messages_ClickTarget$ToolPallet(_user$project$Tool$DrawRectangle)),
+										_1: {
+											ctor: '::',
+											_0: _user$project$Events$mouseDownWithClickTarget(
+												_user$project$Messages_ClickTarget$ToolPallet(_user$project$Tool$DrawRectangle)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				{ctor: '[]'});
+		};
+		var elipseButton = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$use,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawElipse'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(x + borderSize)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(
+									yPosition(index))),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(buttonWidth)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString(heightPerButton)),
+									_1: {
+										ctor: '::',
+										_0: _user$project$Events$mouseUpWithClickTarget(
+											_user$project$Messages_ClickTarget$ToolPallet(_user$project$Tool$DrawElipse)),
+										_1: {
+											ctor: '::',
+											_0: _user$project$Events$mouseDownWithClickTarget(
+												_user$project$Messages_ClickTarget$ToolPallet(_user$project$Tool$DrawElipse)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				{ctor: '[]'});
+		};
+		var getToolFunction = function (tool) {
+			var _p0 = tool;
+			switch (_p0.ctor) {
+				case 'Select':
+					return _elm_lang$core$Native_Utils.crashCase(
+						'Tool.Render',
+						{
+							start: {line: 99, column: 13},
+							end: {line: 110, column: 71}
+						},
+						_p0)('TODO implement select button');
+				case 'DrawRectangle':
+					return rectangleButton;
+				case 'DrawElipse':
+					return elipseButton;
+				default:
+					return _elm_lang$core$Native_Utils.crashCase(
+						'Tool.Render',
+						{
+							start: {line: 99, column: 13},
+							end: {line: 110, column: 71}
+						},
+						_p0)('TODO implement draggable tool pallet');
+			}
+		};
+		var selectionBox = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$g,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$rect,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x(
+								_elm_lang$core$Basics$toString(x + borderSize)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y(
+									_elm_lang$core$Basics$toString(
+										yPosition(index))),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$width(
+										_elm_lang$core$Basics$toString(buttonWidth)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$height(
+											_elm_lang$core$Basics$toString(selectionBoxThickness)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$fill(selectionColor),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
 						_0: A2(
-							_user$project$Main$trackPosition,
-							model,
-							function (_p4) {
-								return _user$project$Main$System(
-									_user$project$Main$MouseMove(_p4));
-							}),
+							_elm_lang$svg$Svg$rect,
+							{
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$x(
+									_elm_lang$core$Basics$toString(x + borderSize)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$y(
+										_elm_lang$core$Basics$toString(
+											(yPosition(index) + heightPerButton) - selectionBoxThickness)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$width(
+											_elm_lang$core$Basics$toString(buttonWidth)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$height(
+												_elm_lang$core$Basics$toString(selectionBoxThickness)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$fill(selectionColor),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$rect,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$x(
+										_elm_lang$core$Basics$toString(x + borderSize)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$y(
+											_elm_lang$core$Basics$toString(
+												yPosition(index))),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$width(
+												_elm_lang$core$Basics$toString(selectionBoxThickness)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$height(
+													_elm_lang$core$Basics$toString(heightPerButton)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$fill(selectionColor),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$svg$Svg$rect,
+									{
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$x(
+											_elm_lang$core$Basics$toString(
+												(_elm_lang$core$Basics$toFloat(x + borderSize) + buttonWidth) - selectionBoxThickness)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$y(
+												_elm_lang$core$Basics$toString(
+													yPosition(index))),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$width(
+													_elm_lang$core$Basics$toString(selectionBoxThickness)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$height(
+														_elm_lang$core$Basics$toString(heightPerButton)),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$fill(selectionColor),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				});
+		};
+		var positionButtons = F2(
+			function (buttonList, index) {
+				var _p3 = buttonList;
+				if (_p3.ctor === '[]') {
+					return {ctor: '[]'};
+				} else {
+					var _p5 = _p3._1;
+					var _p4 = _p3._0;
+					var f = getToolFunction(_p4);
+					return _elm_lang$core$Native_Utils.eq(_p4, activeTool) ? {
+						ctor: '::',
+						_0: f(index),
+						_1: {
+							ctor: '::',
+							_0: selectionBox(index),
+							_1: A2(positionButtons, _p5, index + 1)
+						}
+					} : {
+						ctor: '::',
+						_0: f(index),
+						_1: A2(positionButtons, _p5, index + 1)
+					};
+				}
+			});
+		var positionedButtons = A2(positionButtons, buttonList, 0);
+		return A2(
+			_elm_lang$svg$Svg$g,
+			{ctor: '[]'},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$rect,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x(
+								_elm_lang$core$Basics$toString(x)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y(
+									_elm_lang$core$Basics$toString(y)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$width(
+										_elm_lang$core$Basics$toString(width)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$height(
+											_elm_lang$core$Basics$toString(height)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$fill('#0254d8'),
+											_1: {
+												ctor: '::',
+												_0: _user$project$Events$mouseUpWithClickTarget(
+													_user$project$Messages_ClickTarget$ToolPallet(_user$project$Tool$ToolPalletHandle)),
+												_1: {
+													ctor: '::',
+													_0: _user$project$Events$mouseDownWithClickTarget(
+														_user$project$Messages_ClickTarget$ToolPallet(_user$project$Tool$DrawElipse)),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				},
+				positionedButtons));
+	});
+var _user$project$Tool_Render$symbols = {
+	ctor: '::',
+	_0: A2(
+		_elm_lang$svg$Svg$symbol,
+		{
+			ctor: '::',
+			_0: _elm_lang$svg$Svg_Attributes$id('drawRectangle'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('none'),
+					_1: {ctor: '[]'}
+				}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$svg$Svg$use,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#buttonBackground'),
+					_1: {ctor: '[]'}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$use,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawRectangleIcon'),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {ctor: '[]'}
+			}
+		}),
+	_1: {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$svg$Svg$symbol,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$id('drawElipse'),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('none'),
 						_1: {ctor: '[]'}
 					}
 				}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$use,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#buttonBackground'),
+						_1: {ctor: '[]'}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$use,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawElipseIcon'),
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$svg$Svg$symbol,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$id('buttonBackground'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('none'),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$rect,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fill('#ddeaff'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$x('0'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$y('0'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$width('100'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$height('100'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$svg$Svg$symbol,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$id('drawRectangleIcon'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('xMidYMid'),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$svg$Svg$rect,
+							{
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$fill('#1e1e1e'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$x('20'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$y('20'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$width('60'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$height('60'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$symbol,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$id('drawElipseIcon'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('xMidYMid'),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$ellipse,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$fill('#1e1e1e'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$cx('50'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$cy('50'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$rx('30'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$ry('30'),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
 			}
-		});
+		}
+	}
 };
+
+var _user$project$Properties_Render$propertiesPallet = F4(
+	function (x, y, height, palletState) {
+		var positionWidgets = F2(
+			function (widgetList, index) {
+				var _p0 = widgetList;
+				if (_p0.ctor === '[]') {
+					return {ctor: '[]'};
+				} else {
+					return {
+						ctor: '::',
+						_0: _p0._0(index),
+						_1: A2(positionWidgets, _p0._1, index + 1)
+					};
+				}
+			});
+		var labelFontColor = '#000000';
+		var labelFontSize = 14;
+		var borderSize = 5;
+		var widgetX = _elm_lang$core$Basics$toFloat(x + borderSize);
+		var widgetList = {
+			ctor: '::',
+			_0: strokeColorWidget,
+			_1: {ctor: '[]'}
+		};
+		var strokeColorWidget = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$g,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: widgetBackgroundBox(index),
+					_1: {
+						ctor: '::',
+						_0: A2(label, 'Stroke', index),
+						_1: {
+							ctor: '::',
+							_0: A2(colorBox, index, palletState.strokeColor),
+							_1: {ctor: '[]'}
+						}
+					}
+				});
+		};
+		var colorBox = F2(
+			function (index, color) {
+				return A2(
+					_elm_lang$svg$Svg$rect,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(widgetX + (widgetWidth * 0.9))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$width(
+								_elm_lang$core$Basics$toString(widgetWidth * 0.8)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y(
+									_elm_lang$core$Basics$toString(
+										((yPosFromIndex(index) + widgetHeight) - labelFontSize) - borderSize)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString((widgetHeight - labelFontSize) - borderSize)),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					},
+					{ctor: '[]'});
+			});
+		var widgetHeight = A3(
+			_elm_lang$core$Basics$flip,
+			F2(
+				function (x, y) {
+					return x - y;
+				}),
+			borderSize,
+			A2(
+				F2(
+					function (x, y) {
+						return x / y;
+					}),
+				height - borderSize,
+				_elm_lang$core$Basics$toFloat(
+					_elm_lang$core$List$length(widgetList))));
+		var widgetWidth = widgetHeight * 1.5;
+		var yPosFromIndex = function (index) {
+			return ((_elm_lang$core$Basics$toFloat(index) * (widgetHeight + borderSize)) + _elm_lang$core$Basics$toFloat(y)) + borderSize;
+		};
+		var label = F2(
+			function (labelText, index) {
+				return A2(
+					_elm_lang$svg$Svg$text_,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(widgetX + (widgetWidth / 2))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(
+									yPosFromIndex(index) + labelFontSize)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$fontSize(
+									_elm_lang$core$Basics$toString(labelFontSize)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$textAnchor('middle'),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg$text(labelText),
+						_1: {ctor: '[]'}
+					});
+			});
+		var widgetBackgroundBox = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$rect,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$fill('#ffffff'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x(
+								_elm_lang$core$Basics$toString(widgetX)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y(
+									_elm_lang$core$Basics$toString(
+										yPosFromIndex(index))),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$width(
+										_elm_lang$core$Basics$toString(widgetWidth)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$height(
+											_elm_lang$core$Basics$toString(widgetHeight)),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				},
+				{ctor: '[]'});
+		};
+		var width = widgetWidth + (borderSize * 2);
+		var positionedWidgets = A2(positionWidgets, widgetList, 0);
+		return A2(
+			_elm_lang$svg$Svg$g,
+			{ctor: '[]'},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$rect,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x(
+								_elm_lang$core$Basics$toString(x)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y(
+									_elm_lang$core$Basics$toString(y)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$width(
+										_elm_lang$core$Basics$toString(width)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$height(
+											_elm_lang$core$Basics$toString(height)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$fill('#0254d8'),
+											_1: {
+												ctor: '::',
+												_0: _user$project$Events$mouseUpWithClickTarget(
+													_user$project$Messages_ClickTarget$PropertiesPallet(_user$project$Properties$PropertyPalletHandle)),
+												_1: {
+													ctor: '::',
+													_0: _user$project$Events$mouseDownWithClickTarget(
+														_user$project$Messages_ClickTarget$PropertiesPallet(_user$project$Properties$PropertyPalletHandle)),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				},
+				positionedWidgets));
+	});
+
+var _user$project$Utilities$maybeToList = function (a) {
+	var _p0 = a;
+	if (_p0.ctor === 'Nothing') {
+		return {ctor: '[]'};
+	} else {
+		return {
+			ctor: '::',
+			_0: _p0._0,
+			_1: {ctor: '[]'}
+		};
+	}
+};
+var _user$project$Utilities$until_A = F3(
+	function (predicate, update, state) {
+		return predicate(
+			A2(_elm_lang$core$Debug$log, 'state', state)) ? _elm_lang$core$Task$succeed(state) : A2(
+			_elm_lang$core$Task$andThen,
+			A2(_user$project$Utilities$until_A, predicate, update),
+			_elm_lang$core$Task$succeed(
+				update(state)));
+	});
+var _user$project$Utilities$until = F3(
+	function (predicate, update, state) {
+		until:
+		while (true) {
+			if (predicate(state)) {
+				return state;
+			} else {
+				var _v1 = predicate,
+					_v2 = update,
+					_v3 = update(state);
+				predicate = _v1;
+				update = _v2;
+				state = _v3;
+				continue until;
+			}
+		}
+	});
+
+var _user$project$Main$symbols = _user$project$Tool_Render$symbols;
 var _user$project$Main$view = function (model) {
 	var wWidth = model.windowSize.width;
 	var wHeight = model.windowSize.height;
@@ -9430,29 +10454,211 @@ var _user$project$Main$view = function (model) {
 									_elm_lang$core$Basics$toString(wHeight))))),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$onMouseUpIsolated(
-							function (_p5) {
-								return _user$project$Main$System(
-									A2(_user$project$Main$MouseUp, _user$project$Main$Screen, _p5));
-							}),
+						_0: _user$project$Events$mouseUpWithClickTarget(_user$project$Messages_ClickTarget$Screen),
 						_1: {
 							ctor: '::',
-							_0: _user$project$Main$onMouseDownIsolated(
-								function (_p6) {
-									return _user$project$Main$System(
-										A2(_user$project$Main$MouseUp, _user$project$Main$Screen, _p6));
-								}),
+							_0: _user$project$Events$mouseDownWithClickTarget(_user$project$Messages_ClickTarget$Screen),
 							_1: {ctor: '[]'}
 						}
 					}
 				}
 			}
 		},
-		A2(_elm_lang$core$List$map, _user$project$Graphic$toSvg, model.graphics));
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			_user$project$Main$symbols,
+			A3(
+				_elm_lang$core$Basics$flip,
+				F2(
+					function (x, y) {
+						return A2(_elm_lang$core$Basics_ops['++'], x, y);
+					}),
+				{
+					ctor: '::',
+					_0: A4(_user$project$Properties_Render$propertiesPallet, 400, 50, 160, model.propertyPalletState),
+					_1: {ctor: '[]'}
+				},
+				A3(
+					_elm_lang$core$Basics$flip,
+					F2(
+						function (x, y) {
+							return A2(_elm_lang$core$Basics_ops['++'], x, y);
+						}),
+					{
+						ctor: '::',
+						_0: A4(_user$project$Tool_Render$toolPallet, 50, 50, 130, model.activeTool),
+						_1: {ctor: '[]'}
+					},
+					A2(
+						_elm_lang$core$List$map,
+						function (graphic) {
+							return A2(
+								_user$project$Graphic$toSvg,
+								{
+									ctor: '::',
+									_0: _user$project$Events$mouseDownWithClickTarget(
+										_user$project$Messages_ClickTarget$Graphic(graphic)),
+									_1: {
+										ctor: '::',
+										_0: _user$project$Events$mouseUpWithClickTarget(
+											_user$project$Messages_ClickTarget$Graphic(graphic)),
+										_1: {ctor: '[]'}
+									}
+								},
+								graphic);
+						},
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							model.graphics,
+							_user$project$Utilities$maybeToList(model.previewGraphic)))))));
 };
-var _user$project$Main$Graphic = function (a) {
-	return {ctor: 'Graphic', _0: a};
+var _user$project$Main$trackPosition = F2(
+	function (cursor, tagger) {
+		var _p0 = cursor;
+		if (_p0.ctor === 'NotTracking') {
+			return _elm_lang$core$Platform_Sub$none;
+		} else {
+			return _elm_lang$mouse$Mouse$moves(tagger);
+		}
+	});
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _elm_lang$window$Window$resizes(_user$project$Messages$Resize),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$mouse$Mouse$downs(
+					_user$project$Messages$MouseDown(_user$project$Messages_ClickTarget$Screen)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$mouse$Mouse$ups(
+						_user$project$Messages$MouseUp(_user$project$Messages_ClickTarget$Screen)),
+					_1: {
+						ctor: '::',
+						_0: A2(_user$project$Main$trackPosition, model.cursorPosition, _user$project$Messages$MouseMove),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
 };
+var _user$project$Main$createElipse = F3(
+	function (startPosition, currentPosition, model) {
+		var commonAttributes = {stroke: 'none', fill: '#666', strokeWidth: '0'};
+		var yRadius = A3(
+			_elm_lang$core$Basics$flip,
+			F2(
+				function (x, y) {
+					return x / y;
+				}),
+			2,
+			_elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Basics$abs(startPosition.y - currentPosition.y)));
+		var xRadius = A3(
+			_elm_lang$core$Basics$flip,
+			F2(
+				function (x, y) {
+					return x / y;
+				}),
+			2,
+			_elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Basics$abs(startPosition.x - currentPosition.x)));
+		var elipseAttributes = {
+			rx: xRadius,
+			ry: yRadius,
+			cx: _elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics$max, startPosition.x, currentPosition.x)) - xRadius,
+			cy: _elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics$max, startPosition.y, currentPosition.y)) - yRadius
+		};
+		return (_elm_lang$core$Native_Utils.eq(elipseAttributes.rx, 0) || _elm_lang$core$Native_Utils.eq(elipseAttributes.ry, 0)) ? {ctor: '[]'} : {
+			ctor: '::',
+			_0: A2(_user$project$Graphic$createElipse, elipseAttributes, commonAttributes),
+			_1: {ctor: '[]'}
+		};
+	});
+var _user$project$Main$createRectangle = F3(
+	function (start, end, model) {
+		var commonAttributes = {stroke: 'none', fill: '#666', strokeWidth: '0'};
+		var recAttributes = {
+			x: _elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics$min, start.x, end.x)),
+			y: _elm_lang$core$Basics$toFloat(
+				A2(_elm_lang$core$Basics$min, start.y, end.y)),
+			width: _elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Basics$abs(start.x - end.x)),
+			height: _elm_lang$core$Basics$toFloat(
+				_elm_lang$core$Basics$abs(start.y - end.y)),
+			rx: 0,
+			ry: 0
+		};
+		return (_elm_lang$core$Native_Utils.eq(recAttributes.height, 0) || _elm_lang$core$Native_Utils.eq(recAttributes.width, 0)) ? {ctor: '[]'} : {
+			ctor: '::',
+			_0: A2(_user$project$Graphic$createRectangle, recAttributes, commonAttributes),
+			_1: {ctor: '[]'}
+		};
+	});
+var _user$project$Main$updatePreviewGraphic = F3(
+	function (drawAction, currentPosition, model) {
+		var _p1 = drawAction;
+		if (_p1.ctor === 'DrawRect') {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					previewGraphic: _elm_lang$core$List$head(
+						A3(_user$project$Main$createRectangle, _p1._0, currentPosition, model))
+				});
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					previewGraphic: _elm_lang$core$List$head(
+						A3(_user$project$Main$createElipse, _p1._0, currentPosition, model))
+				});
+		}
+	});
+var _user$project$Main$initialPropertyPalletState = {fillColor: _elm_lang$core$Color$white, strokeColor: _elm_lang$core$Color$white, strokeWidth: 4};
+var _user$project$Main$setWindowSize = F2(
+	function (model, size) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{windowSize: size});
+	});
+var _user$project$Main$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {windowSize: a, cursorPosition: b, mouseDown: c, currentAction: d, activeTool: e, propertyPalletState: f, graphics: g, previewGraphic: h};
+	});
+var _user$project$Main$Position = F2(
+	function (a, b) {
+		return {x: a, y: b};
+	});
+var _user$project$Main$Pos = function (a) {
+	return {ctor: 'Pos', _0: a};
+};
+var _user$project$Main$NotTracking = {ctor: 'NotTracking'};
+var _user$project$Main$mouseMoveEvent = F2(
+	function (model, position) {
+		var model2 = _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				cursorPosition: _elm_lang$core$Native_Utils.eq(model.cursorPosition, _user$project$Main$NotTracking) ? _user$project$Main$NotTracking : _user$project$Main$Pos(position)
+			});
+		var _p2 = model2.currentAction;
+		if (_p2.ctor === 'None') {
+			return {
+				ctor: '_Tuple2',
+				_0: model2,
+				_1: {ctor: '[]'}
+			};
+		} else {
+			return {
+				ctor: '_Tuple2',
+				_0: A3(_user$project$Main$updatePreviewGraphic, _p2._0, position, model2),
+				_1: {ctor: '[]'}
+			};
+		}
+	});
 var _user$project$Main$Draw = function (a) {
 	return {ctor: 'Draw', _0: a};
 };
@@ -9463,7 +10669,9 @@ var _user$project$Main$initialModel = {
 	mouseDown: false,
 	currentAction: _user$project$Main$None,
 	activeTool: _user$project$Tool$DrawRectangle,
-	graphics: {ctor: '[]'}
+	propertyPalletState: _user$project$Main$initialPropertyPalletState,
+	graphics: {ctor: '[]'},
+	previewGraphic: _elm_lang$core$Maybe$Nothing
 };
 var _user$project$Main$init = function (size) {
 	return A2(
@@ -9471,97 +10679,182 @@ var _user$project$Main$init = function (size) {
 		A2(_user$project$Main$setWindowSize, _user$project$Main$initialModel, size),
 		{ctor: '[]'});
 };
+var _user$project$Main$mouseUpEvent = F3(
+	function (model, clickTarget, position) {
+		var _p3 = model.currentAction;
+		if (_p3.ctor === 'None') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{cursorPosition: _user$project$Main$NotTracking}),
+				_1: {ctor: '[]'}
+			};
+		} else {
+			var _p4 = _p3._0;
+			if (_p4.ctor === 'DrawRect') {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							currentAction: _user$project$Main$None,
+							cursorPosition: _user$project$Main$NotTracking,
+							graphics: A2(
+								_elm_lang$core$Basics_ops['++'],
+								model.graphics,
+								_user$project$Utilities$maybeToList(model.previewGraphic)),
+							previewGraphic: _elm_lang$core$Maybe$Nothing
+						}),
+					_1: {ctor: '[]'}
+				};
+			} else {
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							currentAction: _user$project$Main$None,
+							cursorPosition: _user$project$Main$NotTracking,
+							graphics: A2(
+								_elm_lang$core$Basics_ops['++'],
+								model.graphics,
+								_user$project$Utilities$maybeToList(model.previewGraphic)),
+							previewGraphic: _elm_lang$core$Maybe$Nothing
+						}),
+					_1: {ctor: '[]'}
+				};
+			}
+		}
+	});
+var _user$project$Main$DrawElipse = function (a) {
+	return {ctor: 'DrawElipse', _0: a};
+};
 var _user$project$Main$DrawRect = function (a) {
 	return {ctor: 'DrawRect', _0: a};
 };
+var _user$project$Main$mouseDownEvent = F3(
+	function (model, clickTarget, position) {
+		var model2 = _elm_lang$core$Native_Utils.update(
+			model,
+			{mouseDown: true});
+		var _p5 = clickTarget;
+		if (_p5.ctor === 'ToolPallet') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model2,
+					{currentAction: _user$project$Main$None, activeTool: _p5._0, cursorPosition: _user$project$Main$NotTracking}),
+				_1: {ctor: '[]'}
+			};
+		} else {
+			var _p6 = model.activeTool;
+			switch (_p6.ctor) {
+				case 'Select':
+					var _p7 = clickTarget;
+					switch (_p7.ctor) {
+						case 'Screen':
+							return {
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$Native_Utils.update(
+									model2,
+									{cursorPosition: _user$project$Main$NotTracking, currentAction: _user$project$Main$None}),
+								_1: {ctor: '[]'}
+							};
+						case 'Graphic':
+							return _elm_lang$core$Native_Utils.crashCase(
+								'Main',
+								{
+									start: {line: 175, column: 25},
+									end: {line: 188, column: 88}
+								},
+								_p7)('TODO - Selected a Graphic for editing');
+						default:
+							return A2(
+								_elm_lang$core$Debug$log,
+								'Evaluated unreachable branch',
+								{
+									ctor: '_Tuple2',
+									_0: model2,
+									_1: {ctor: '[]'}
+								});
+					}
+				case 'DrawRectangle':
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model2,
+							{
+								cursorPosition: _user$project$Main$Pos(position),
+								currentAction: _user$project$Main$Draw(
+									_user$project$Main$DrawRect(position))
+							}),
+						_1: {ctor: '[]'}
+					};
+				case 'DrawElipse':
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model2,
+							{
+								cursorPosition: _user$project$Main$Pos(position),
+								currentAction: _user$project$Main$Draw(
+									_user$project$Main$DrawElipse(position))
+							}),
+						_1: {ctor: '[]'}
+					};
+				default:
+					return _elm_lang$core$Native_Utils.crashCase(
+						'Main',
+						{
+							start: {line: 173, column: 17},
+							end: {line: 207, column: 64}
+						},
+						_p6)('TODO - Moving Tool Pallet');
+			}
+		}
+	});
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p7 = msg;
-		var _p8 = _p7._0;
-		switch (_p8.ctor) {
+		var _p10 = msg;
+		switch (_p10.ctor) {
 			case 'Resize':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{windowSize: _p8._0}),
+						{windowSize: _p10._0}),
 					{ctor: '[]'});
 			case 'MouseDown':
-				var _p14 = _p8._1;
-				var _p9 = model.currentAction;
-				if (_p9.ctor === 'None') {
-					var _p10 = _p8._0;
-					switch (_p10.ctor) {
-						case 'Screen':
-							return A2(
-								_elm_lang$core$Platform_Cmd_ops['!'],
-								_elm_lang$core$Native_Utils.update(
-									model,
-									{
-										cursorPosition: _user$project$Main$Pos(_p14),
-										mouseDown: true,
-										currentAction: _user$project$Main$Draw(
-											_user$project$Main$DrawRect(_p14))
-									}),
-								{ctor: '[]'});
-						case 'Graphic':
-							return _elm_lang$core$Native_Utils.crashCase(
-								'Main',
-								{
-									start: {line: 116, column: 29},
-									end: {line: 129, column: 55}
-								},
-								_p10)('TODO');
-						default:
-							return _elm_lang$core$Native_Utils.crashCase(
-								'Main',
-								{
-									start: {line: 116, column: 29},
-									end: {line: 129, column: 55}
-								},
-								_p10)('TODO');
-					}
-				} else {
-					return _elm_lang$core$Native_Utils.crashCase(
-						'Main',
-						{
-							start: {line: 114, column: 21},
-							end: {line: 132, column: 47}
-						},
-						_p9)('TODO');
-				}
-			case 'MouseUp':
-				var _p15 = model.currentAction;
-				if (_p15.ctor === 'None') {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{cursorPosition: _user$project$Main$NotTracking, mouseDown: false}),
-						{ctor: '[]'});
-				} else {
-					var _p16 = _p15._0;
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								graphics: A2(
-									_elm_lang$core$Basics_ops['++'],
-									model.graphics,
-									A2(_user$project$Main$createRectangle, _p16._0, _p8._1))
-							}),
-						{ctor: '[]'});
-				}
-			default:
+				var _p11 = A3(_user$project$Main$mouseDownEvent, model, _p10._0, _p10._1);
+				var modelUpdates = _p11._0;
+				var commands = _p11._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{
-							cursorPosition: _user$project$Main$Pos(_p8._0)
-						}),
-					{ctor: '[]'});
+						{mouseDown: true, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, activeTool: modelUpdates.activeTool}),
+					commands);
+			case 'MouseUp':
+				var _p12 = A3(_user$project$Main$mouseUpEvent, model, _p10._0, _p10._1);
+				var modelUpdates = _p12._0;
+				var commands = _p12._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{mouseDown: false, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, graphics: modelUpdates.graphics}),
+					commands);
+			default:
+				var _p13 = A2(_user$project$Main$mouseMoveEvent, model, _p10._0);
+				var modelUpdates = _p13._0;
+				var commands = _p13._1;
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{cursorPosition: modelUpdates.cursorPosition, previewGraphic: modelUpdates.previewGraphic}),
+					commands);
 		}
 	});
 var _user$project$Main$main = _elm_lang$html$Html$programWithFlags(

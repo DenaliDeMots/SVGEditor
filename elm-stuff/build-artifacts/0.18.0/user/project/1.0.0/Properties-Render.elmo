@@ -1,0 +1,266 @@
+var _user$project$Properties_Render$propertiesPallet = F4(
+	function (x, y, height, palletState) {
+		var labelFontColor = '#000000';
+		var labelFontSize = 18;
+		var borderSize = 5;
+		var widgetX = _elm_lang$core$Basics$toFloat(x + borderSize);
+		var widgetList = {
+			ctor: '::',
+			_0: _user$project$Properties$StrokeColorPicker,
+			_1: {
+				ctor: '::',
+				_0: _user$project$Properties$FillColorPicker,
+				_1: {ctor: '[]'}
+			}
+		};
+		var widgetHeight = A3(
+			_elm_lang$core$Basics$flip,
+			F2(
+				function (x, y) {
+					return x - y;
+				}),
+			borderSize,
+			A2(
+				F2(
+					function (x, y) {
+						return x / y;
+					}),
+				height - borderSize,
+				_elm_lang$core$Basics$toFloat(
+					_elm_lang$core$List$length(widgetList))));
+		var widgetWidth = widgetHeight * 1.5;
+		var width = widgetWidth + (borderSize * 2);
+		var yPosFromIndex = function (index) {
+			return ((_elm_lang$core$Basics$toFloat(index) * (widgetHeight + borderSize)) + _elm_lang$core$Basics$toFloat(y)) + borderSize;
+		};
+		var label = F2(
+			function (labelText, index) {
+				return A2(
+					_elm_lang$svg$Svg$text_,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(widgetX + (widgetWidth / 2))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(
+									yPosFromIndex(index) + labelFontSize)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$fontSize(
+									_elm_lang$core$Basics$toString(labelFontSize)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$textAnchor('middle'),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg$text(labelText),
+						_1: {ctor: '[]'}
+					});
+			});
+		var colorBox = F2(
+			function (index, color) {
+				return A2(
+					_elm_lang$svg$Svg$rect,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(widgetX + (widgetWidth * 0.1))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$width(
+								_elm_lang$core$Basics$toString(widgetWidth * 0.8)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y(
+									_elm_lang$core$Basics$toString(
+										(yPosFromIndex(index) + labelFontSize) + borderSize)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString((widgetHeight - labelFontSize) - (borderSize * 2))),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$fill(
+											_eskimoblood$elm_color_extra$Color_Convert$colorToHex(color)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$stroke('#000000'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
+													_elm_lang$core$Basics$toString(borderSize / 2)),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					{ctor: '[]'});
+			});
+		var widgetBackgroundBox = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$rect,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$fill('#ffffff'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x(
+								_elm_lang$core$Basics$toString(widgetX)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y(
+									_elm_lang$core$Basics$toString(
+										yPosFromIndex(index))),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$width(
+										_elm_lang$core$Basics$toString(widgetWidth)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$height(
+											_elm_lang$core$Basics$toString(widgetHeight)),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				},
+				{ctor: '[]'});
+		};
+		var strokeColorWidget = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$g,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: widgetBackgroundBox(index),
+					_1: {
+						ctor: '::',
+						_0: A2(label, 'Stroke', index),
+						_1: {
+							ctor: '::',
+							_0: A2(colorBox, index, palletState.strokeColor),
+							_1: {ctor: '[]'}
+						}
+					}
+				});
+		};
+		var fillColorWidget = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$g,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: widgetBackgroundBox(index),
+					_1: {
+						ctor: '::',
+						_0: A2(label, 'Fill', index),
+						_1: {
+							ctor: '::',
+							_0: A2(colorBox, index, palletState.fillColor),
+							_1: {ctor: '[]'}
+						}
+					}
+				});
+		};
+		var getWidgetFunction = function (widget) {
+			var _p0 = widget;
+			switch (_p0.ctor) {
+				case 'FillColorPicker':
+					return fillColorWidget;
+				case 'StrokeColorPicker':
+					return strokeColorWidget;
+				case 'StrokeWidth':
+					return _elm_lang$core$Native_Utils.crashCase(
+						'Properties.Render',
+						{
+							start: {line: 83, column: 13},
+							end: {line: 94, column: 40}
+						},
+						_p0)('TODO implement Stroke Width widget');
+				default:
+					return function (_p2) {
+						return A2(
+							_elm_lang$svg$Svg$g,
+							{ctor: '[]'},
+							{ctor: '[]'});
+					};
+			}
+		};
+		var positionWidgets = F2(
+			function (widgetList, index) {
+				var _p3 = widgetList;
+				if (_p3.ctor === '[]') {
+					return {ctor: '[]'};
+				} else {
+					return {
+						ctor: '::',
+						_0: A2(getWidgetFunction, _p3._0, index),
+						_1: A2(positionWidgets, _p3._1, index + 1)
+					};
+				}
+			});
+		var positionedWidgets = A2(positionWidgets, widgetList, 0);
+		return A2(
+			_elm_lang$svg$Svg$g,
+			{ctor: '[]'},
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$rect,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$x(
+								_elm_lang$core$Basics$toString(x)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$y(
+									_elm_lang$core$Basics$toString(y)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$width(
+										_elm_lang$core$Basics$toString(width)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$height(
+											_elm_lang$core$Basics$toString(height)),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$fill('#0254d8'),
+											_1: {
+												ctor: '::',
+												_0: _user$project$Events$mouseUpWithClickTarget(
+													_user$project$Messages_ClickTarget$PropertiesPallet(_user$project$Properties$PropertyPalletHandle)),
+												_1: {
+													ctor: '::',
+													_0: _user$project$Events$mouseDownWithClickTarget(
+														_user$project$Messages_ClickTarget$PropertiesPallet(_user$project$Properties$PropertyPalletHandle)),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				},
+				positionedWidgets));
+	});

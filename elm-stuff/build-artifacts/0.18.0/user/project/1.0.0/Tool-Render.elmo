@@ -1,5 +1,8 @@
-var _user$project$Tool_Render$toolPallet = F5(
-	function (x, y, width, height, activeTool) {
+var _user$project$Tool_Render$toolPallet = F4(
+	function (x, y, height, activeTool) {
+		var selectionColor = '#ff5e5e';
+		var selectionBoxThickness = 7;
+		var borderSize = 5;
 		var buttonList = {
 			ctor: '::',
 			_0: _user$project$Tool$DrawRectangle,
@@ -9,15 +12,13 @@ var _user$project$Tool_Render$toolPallet = F5(
 				_1: {ctor: '[]'}
 			}
 		};
-		var selectionColor = '#ff5e5e';
-		var selectionBoxThickness = 7;
-		var numberOfButtons = 2;
-		var borderSize = 5;
-		var heightPerButton = (_elm_lang$core$Basics$toFloat(height - borderSize) / numberOfButtons) - borderSize;
+		var numberOfButtons = _elm_lang$core$List$length(buttonList);
+		var heightPerButton = ((height - borderSize) / _elm_lang$core$Basics$toFloat(numberOfButtons)) - borderSize;
+		var width = heightPerButton + (borderSize * 2);
 		var yPosition = function (elementNumber) {
 			return ((elementNumber * (heightPerButton + borderSize)) + _elm_lang$core$Basics$toFloat(y)) + borderSize;
 		};
-		var xWidth = width - (borderSize * 2);
+		var buttonWidth = heightPerButton;
 		var rectangleButton = function (index) {
 			return A2(
 				_elm_lang$svg$Svg$use,
@@ -36,7 +37,7 @@ var _user$project$Tool_Render$toolPallet = F5(
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$svg$Svg_Attributes$width(
-									_elm_lang$core$Basics$toString(xWidth)),
+									_elm_lang$core$Basics$toString(buttonWidth)),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$height(
@@ -77,7 +78,7 @@ var _user$project$Tool_Render$toolPallet = F5(
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$svg$Svg_Attributes$width(
-									_elm_lang$core$Basics$toString(xWidth)),
+									_elm_lang$core$Basics$toString(buttonWidth)),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$height(
@@ -107,8 +108,8 @@ var _user$project$Tool_Render$toolPallet = F5(
 					return _elm_lang$core$Native_Utils.crashCase(
 						'Tool.Render',
 						{
-							start: {line: 96, column: 13},
-							end: {line: 107, column: 71}
+							start: {line: 99, column: 13},
+							end: {line: 110, column: 71}
 						},
 						_p0)('TODO implement select button');
 				case 'DrawRectangle':
@@ -119,8 +120,8 @@ var _user$project$Tool_Render$toolPallet = F5(
 					return _elm_lang$core$Native_Utils.crashCase(
 						'Tool.Render',
 						{
-							start: {line: 96, column: 13},
-							end: {line: 107, column: 71}
+							start: {line: 99, column: 13},
+							end: {line: 110, column: 71}
 						},
 						_p0)('TODO implement draggable tool pallet');
 			}
@@ -145,7 +146,7 @@ var _user$project$Tool_Render$toolPallet = F5(
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$width(
-										_elm_lang$core$Basics$toString(xWidth)),
+										_elm_lang$core$Basics$toString(buttonWidth)),
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$svg$Svg_Attributes$height(
@@ -180,7 +181,7 @@ var _user$project$Tool_Render$toolPallet = F5(
 									_1: {
 										ctor: '::',
 										_0: _elm_lang$svg$Svg_Attributes$width(
-											_elm_lang$core$Basics$toString(xWidth)),
+											_elm_lang$core$Basics$toString(buttonWidth)),
 										_1: {
 											ctor: '::',
 											_0: _elm_lang$svg$Svg_Attributes$height(
@@ -241,7 +242,8 @@ var _user$project$Tool_Render$toolPallet = F5(
 									{
 										ctor: '::',
 										_0: _elm_lang$svg$Svg_Attributes$x(
-											_elm_lang$core$Basics$toString(((x + borderSize) + xWidth) - selectionBoxThickness)),
+											_elm_lang$core$Basics$toString(
+												(_elm_lang$core$Basics$toFloat(x + borderSize) + buttonWidth) - selectionBoxThickness)),
 										_1: {
 											ctor: '::',
 											_0: _elm_lang$svg$Svg_Attributes$y(

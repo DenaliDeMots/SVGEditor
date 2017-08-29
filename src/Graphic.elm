@@ -1,4 +1,4 @@
-module Graphic exposing (Graphic, toSvg, createRectangle, createElipse)
+module Graphic exposing (Graphic, toSvg, createRectangle, createElipse, CommonAttributes)
 
 import Svg
 import Svg.Attributes as SvgA
