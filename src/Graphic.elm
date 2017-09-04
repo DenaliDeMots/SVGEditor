@@ -81,7 +81,7 @@ toSvg extraAttributes graphic =
                 []
 
         Polygon points common ->
-            Svg.polygon <| pointListToString points ++ commonAttributes ++ extraAttributes []
+            Svg.polygon ([ SvgA.points <| pointListToString points ] ++ commonToSvgA common ++ extraAttributes) []
 
 
 pointListToString pList =
