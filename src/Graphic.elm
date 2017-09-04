@@ -8,7 +8,7 @@ import Svg.Events as SvgE
 type Graphic
     = Rectangle RectangleAttributes CommonAttributes
     | Elipse ElipseAttributes CommonAttributes
-    | Polygon (List ( Float, Float )) CommonAttributes
+    | Polygon (List { Float, Float }) CommonAttributes
 
 
 type alias RectangleAttributes =
@@ -90,10 +90,10 @@ pointListToString pList =
             ""
 
         --unreachable unless the list is empty
-        ( x, y ) :: [] ->
+        { x, y } :: [] ->
             toString x ++ " " ++ toString y
 
-        ( x, y ) :: ps ->
+        { x, y } :: ps ->
             toString x ++ " " ++ toString y ++ ", " ++ pointListToString ps
 
 
