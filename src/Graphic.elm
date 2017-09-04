@@ -8,6 +8,7 @@ import Svg.Events as SvgE
 type Graphic
     = Rectangle RectangleAttributes CommonAttributes
     | Elipse ElipseAttributes CommonAttributes
+    | Polygon (List ( Float, Float )) CommonAttributes
 
 
 type alias RectangleAttributes =
@@ -78,6 +79,22 @@ toSvg extraAttributes graphic =
                     ++ extraAttributes
                 )
                 []
+
+        Polygon points common ->
+            Svg.polygon <| pointListToString points ++ commonAttributes ++ extraAttributes []
+
+
+pointListToString pList =
+    case pList of
+        [] ->
+            ""
+
+        --unreachable unless the list is empty
+        ( x, y ) :: [] ->
+            toString x ++ " " ++ toString y
+
+        ( x, y ) :: ps ->
+            toString x ++ " " ++ toString y ++ ", " ++ pointListToString ps
 
 
 commonToSvgA : CommonAttributes -> List (Svg.Attribute msg)
