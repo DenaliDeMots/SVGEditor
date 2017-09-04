@@ -48,7 +48,7 @@ var _user$project$Main$view = function (model) {
 					}),
 				{
 					ctor: '::',
-					_0: A4(_user$project$Properties_Render$propertiesPallet, 400, 50, 150, model.propertyPalletState),
+					_0: A4(_user$project$Properties_Render$propertiesPallet, 400, 50, 170, model.propertyPalletState),
 					_1: {ctor: '[]'}
 				},
 				A3(
@@ -118,7 +118,11 @@ var _user$project$Main$subscriptions = function (model) {
 };
 var _user$project$Main$createElipse = F3(
 	function (startPosition, currentPosition, model) {
-		var commonAttributes = {stroke: 'none', fill: '#666', strokeWidth: '0'};
+		var commonAttributes = {
+			stroke: _eskimoblood$elm_color_extra$Color_Convert$colorToHex(model.propertyPalletState.strokeColor),
+			fill: _eskimoblood$elm_color_extra$Color_Convert$colorToHex(model.propertyPalletState.fillColor),
+			strokeWidth: _elm_lang$core$Basics$toString(model.propertyPalletState.strokeWidth)
+		};
 		var yRadius = A3(
 			_elm_lang$core$Basics$flip,
 			F2(
@@ -153,7 +157,11 @@ var _user$project$Main$createElipse = F3(
 	});
 var _user$project$Main$createRectangle = F3(
 	function (start, end, model) {
-		var commonAttributes = {stroke: 'none', fill: '#666', strokeWidth: '0'};
+		var commonAttributes = {
+			stroke: _eskimoblood$elm_color_extra$Color_Convert$colorToHex(model.propertyPalletState.strokeColor),
+			fill: _eskimoblood$elm_color_extra$Color_Convert$colorToHex(model.propertyPalletState.fillColor),
+			strokeWidth: _elm_lang$core$Basics$toString(model.propertyPalletState.strokeWidth)
+		};
 		var recAttributes = {
 			x: _elm_lang$core$Basics$toFloat(
 				A2(_elm_lang$core$Basics$min, start.x, end.x)),
@@ -191,7 +199,7 @@ var _user$project$Main$updatePreviewGraphic = F3(
 				});
 		}
 	});
-var _user$project$Main$initialPropertyPalletState = {fillColor: _elm_lang$core$Color$green, strokeColor: _elm_lang$core$Color$green, strokeWidth: 4};
+var _user$project$Main$initialPropertyPalletState = {fillColor: _elm_lang$core$Color$green, strokeColor: _elm_lang$core$Color$blue, strokeWidth: 4};
 var _user$project$Main$setWindowSize = F2(
 	function (model, size) {
 		return _elm_lang$core$Native_Utils.update(
@@ -338,8 +346,8 @@ var _user$project$Main$mouseDownEvent = F3(
 							return _elm_lang$core$Native_Utils.crashCase(
 								'Main',
 								{
-									start: {line: 175, column: 25},
-									end: {line: 188, column: 88}
+									start: {line: 196, column: 25},
+									end: {line: 209, column: 88}
 								},
 								_p7)('TODO - Selected a Graphic for editing');
 						default:
@@ -380,8 +388,8 @@ var _user$project$Main$mouseDownEvent = F3(
 					return _elm_lang$core$Native_Utils.crashCase(
 						'Main',
 						{
-							start: {line: 173, column: 17},
-							end: {line: 207, column: 64}
+							start: {line: 194, column: 17},
+							end: {line: 228, column: 64}
 						},
 						_p6)('TODO - Moving Tool Pallet');
 			}
@@ -398,10 +406,58 @@ var _user$project$Main$update = F2(
 						model,
 						{windowSize: _p10._0}),
 					{ctor: '[]'});
+			case 'UpdatePropertyPalletState':
+				var nextModel = function (state) {
+					return _elm_lang$core$Native_Utils.update(
+						model,
+						{propertyPalletState: state});
+				};
+				var palletState = model.propertyPalletState;
+				var _p11 = _p10._0;
+				switch (_p11.ctor) {
+					case 'FillColor':
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							nextModel(
+								_elm_lang$core$Native_Utils.update(
+									palletState,
+									{fillColor: _p11._0})),
+							{
+								ctor: '::',
+								_0: _elm_lang$core$Platform_Cmd$none,
+								_1: {ctor: '[]'}
+							});
+					case 'StrokeColor':
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							nextModel(
+								_elm_lang$core$Native_Utils.update(
+									palletState,
+									{strokeColor: _p11._0})),
+							{
+								ctor: '::',
+								_0: _elm_lang$core$Platform_Cmd$none,
+								_1: {ctor: '[]'}
+							});
+					default:
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							nextModel(
+								_elm_lang$core$Native_Utils.update(
+									palletState,
+									{
+										strokeWidth: A2(_elm_lang$core$Result$withDefault, palletState.strokeWidth, _p11._0)
+									})),
+							{
+								ctor: '::',
+								_0: _elm_lang$core$Platform_Cmd$none,
+								_1: {ctor: '[]'}
+							});
+				}
 			case 'MouseDown':
-				var _p11 = A3(_user$project$Main$mouseDownEvent, model, _p10._0, _p10._1);
-				var modelUpdates = _p11._0;
-				var commands = _p11._1;
+				var _p12 = A3(_user$project$Main$mouseDownEvent, model, _p10._0, _p10._1);
+				var modelUpdates = _p12._0;
+				var commands = _p12._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -409,9 +465,9 @@ var _user$project$Main$update = F2(
 						{mouseDown: true, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, activeTool: modelUpdates.activeTool}),
 					commands);
 			case 'MouseUp':
-				var _p12 = A3(_user$project$Main$mouseUpEvent, model, _p10._0, _p10._1);
-				var modelUpdates = _p12._0;
-				var commands = _p12._1;
+				var _p13 = A3(_user$project$Main$mouseUpEvent, model, _p10._0, _p10._1);
+				var modelUpdates = _p13._0;
+				var commands = _p13._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -419,9 +475,9 @@ var _user$project$Main$update = F2(
 						{mouseDown: false, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, graphics: modelUpdates.graphics}),
 					commands);
 			default:
-				var _p13 = A2(_user$project$Main$mouseMoveEvent, model, _p10._0);
-				var modelUpdates = _p13._0;
-				var commands = _p13._1;
+				var _p14 = A2(_user$project$Main$mouseMoveEvent, model, _p10._0);
+				var modelUpdates = _p14._0;
+				var commands = _p14._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(

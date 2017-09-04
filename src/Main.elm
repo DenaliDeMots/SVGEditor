@@ -12,6 +12,8 @@ import Mouse
 import Platform
 import Json.Decode
 import Color
+import Color.Convert as CC
+import Result
 
 
 --internal modules
@@ -25,6 +27,7 @@ import Utilities
 import Events
 import Messages as Msg exposing (Msg)
 import Messages.ClickTarget as ClickTarget exposing (ClickTarget)
+import Messages.UpdatePropertyPallet as PPS
 
 
 --import DrawingTools exposing (Tool)
@@ -91,7 +94,7 @@ setWindowSize model size =
 
 initialPropertyPalletState =
     { fillColor = Color.green
-    , strokeColor = Color.green
+    , strokeColor = Color.blue
     , strokeWidth = 4
     }
 
@@ -112,6 +115,24 @@ update msg model =
     case msg of
         Msg.Resize size ->
             { model | windowSize = size } ! []
+
+        Msg.UpdatePropertyPalletState stateMsg ->
+            let
+                palletState =
+                    model.propertyPalletState
+
+                nextModel state =
+                    { model | propertyPalletState = state }
+            in
+                case stateMsg of
+                    PPS.FillColor color ->
+                        nextModel { palletState | fillColor = color } ! [ Cmd.none ]
+
+                    PPS.StrokeColor color ->
+                        nextModel { palletState | strokeColor = color } ! [ Cmd.none ]
+
+                    PPS.StrokeWidth result ->
+                        nextModel { palletState | strokeWidth = Result.withDefault palletState.strokeWidth result } ! [ Cmd.none ]
 
         Msg.MouseDown clickTarget position ->
             let
@@ -287,9 +308,9 @@ createRectangle start end model =
             }
 
         commonAttributes =
-            { stroke = "none"
-            , fill = "#666"
-            , strokeWidth = "0"
+            { stroke = CC.colorToHex model.propertyPalletState.strokeColor
+            , fill = CC.colorToHex model.propertyPalletState.fillColor
+            , strokeWidth = toString model.propertyPalletState.strokeWidth
             }
     in
         if recAttributes.height == 0 || recAttributes.width == 0 then
@@ -314,9 +335,9 @@ createElipse startPosition currentPosition model =
             }
 
         commonAttributes =
-            { stroke = "none"
-            , fill = "#666"
-            , strokeWidth = "0"
+            { stroke = CC.colorToHex model.propertyPalletState.strokeColor
+            , fill = CC.colorToHex model.propertyPalletState.fillColor
+            , strokeWidth = toString model.propertyPalletState.strokeWidth
             }
     in
         if elipseAttributes.rx == 0 || elipseAttributes.ry == 0 then
@@ -386,7 +407,7 @@ view model =
                                     graphic
                             )
                         |> flip (++) [ Tool.Render.toolPallet 50 50 130 model.activeTool ]
-                        |> flip (++) [ Properties.Render.propertiesPallet 400 50 150 model.propertyPalletState ]
+                        |> flip (++) [ Properties.Render.propertiesPallet 400 50 170 model.propertyPalletState ]
                    )
 
 

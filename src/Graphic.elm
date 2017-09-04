@@ -82,9 +82,9 @@ toSvg extraAttributes graphic =
 
 commonToSvgA : CommonAttributes -> List (Svg.Attribute msg)
 commonToSvgA common =
-    [ SvgA.fill <| toString common.fill
-    , SvgA.stroke <| toString common.stroke
-    , SvgA.strokeWidth <| toString common.strokeWidth
+    [ SvgA.fill common.fill
+    , SvgA.stroke common.stroke
+    , SvgA.strokeWidth common.strokeWidth
 
     --   , SvgA.transform <| toString common.transform
     ]

@@ -10,7 +10,11 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 			_1: {
 				ctor: '::',
 				_0: _user$project$Properties$FillColorPicker,
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _user$project$Properties$StrokeWidth,
+					_1: {ctor: '[]'}
+				}
 			}
 		};
 		var widgetHeight = A3(
@@ -64,6 +68,147 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 						_1: {ctor: '[]'}
 					});
 			});
+		var decrementButton = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$svg,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(widgetX + (widgetWidth * 5.0e-2))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(
+									(yPosFromIndex(index) + labelFontSize) + borderSize)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(widgetWidth * 0.3)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString((widgetHeight - labelFontSize) - (borderSize * 2))),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$polygon,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$points('0 50, 100 0, 100 100'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$fill('gold'),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				});
+		};
+		var incrementButton = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$svg,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(widgetX + (widgetWidth * 0.6))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(
+									(yPosFromIndex(index) + labelFontSize) + borderSize)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(widgetWidth * 0.3)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString((widgetHeight - labelFontSize) - (borderSize * 2))),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$polygon,
+						{
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$points('0 0, 100 50, 0 100'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$fill('gold'),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				});
+		};
+		var strokeWidthNumber = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$text_,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$x(
+						_elm_lang$core$Basics$toString(widgetX + (widgetWidth / 2))),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$y(
+							_elm_lang$core$Basics$toString(
+								yPosFromIndex(index) + ((widgetHeight - borderSize) * 0.92))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$fontSize(
+								_elm_lang$core$Basics$toString(labelFontSize)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$textAnchor('middle'),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg$text(
+						_elm_lang$core$Basics$toString(palletState.strokeWidth)),
+					_1: {ctor: '[]'}
+				});
+		};
+		var numberControls = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$g,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: decrementButton(index),
+					_1: {
+						ctor: '::',
+						_0: strokeWidthNumber(index),
+						_1: {
+							ctor: '::',
+							_0: incrementButton(index),
+							_1: {ctor: '[]'}
+						}
+					}
+				});
+		};
 		var colorBox = F2(
 			function (index, color) {
 				return A2(
@@ -177,6 +322,24 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 					}
 				});
 		};
+		var strokeWidthWidget = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$g,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: widgetBackgroundBox(index),
+					_1: {
+						ctor: '::',
+						_0: A2(label, 'Line Size', index),
+						_1: {
+							ctor: '::',
+							_0: numberControls(index),
+							_1: {ctor: '[]'}
+						}
+					}
+				});
+		};
 		var getWidgetFunction = function (widget) {
 			var _p0 = widget;
 			switch (_p0.ctor) {
@@ -185,15 +348,9 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 				case 'StrokeColorPicker':
 					return strokeColorWidget;
 				case 'StrokeWidth':
-					return _elm_lang$core$Native_Utils.crashCase(
-						'Properties.Render',
-						{
-							start: {line: 83, column: 13},
-							end: {line: 94, column: 40}
-						},
-						_p0)('TODO implement Stroke Width widget');
+					return strokeWidthWidget;
 				default:
-					return function (_p2) {
+					return function (_p1) {
 						return A2(
 							_elm_lang$svg$Svg$g,
 							{ctor: '[]'},
@@ -203,14 +360,14 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 		};
 		var positionWidgets = F2(
 			function (widgetList, index) {
-				var _p3 = widgetList;
-				if (_p3.ctor === '[]') {
+				var _p2 = widgetList;
+				if (_p2.ctor === '[]') {
 					return {ctor: '[]'};
 				} else {
 					return {
 						ctor: '::',
-						_0: A2(getWidgetFunction, _p3._0, index),
-						_1: A2(positionWidgets, _p3._1, index + 1)
+						_0: A2(getWidgetFunction, _p2._0, index),
+						_1: A2(positionWidgets, _p2._1, index + 1)
 					};
 				}
 			});

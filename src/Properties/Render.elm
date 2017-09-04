@@ -3,6 +3,9 @@ module Properties.Render exposing (propertiesPallet)
 --external modules
 
 import Svg exposing (Svg)
+import Html
+import Html.Attributes as HtmlA
+import Html.Events as HtmlE
 import Svg.Attributes as SvgA
 import Color exposing (Color)
 import Color.Convert as CC
@@ -12,28 +15,9 @@ import Color.Convert as CC
 
 import Properties exposing (..)
 import Messages.ClickTarget
+import Messages.UpdatePropertyPallet as PPS
 import Events
 import Messages exposing (Msg)
-
-
-{- }
-   symbols =
-       [ --Property Pallet Symbols
-       , Svg.symbol [ SvgA.id "strokeColorWidget", SvgA.viewBox "0 0 150 100", SvgA.preserveAspectRatio "none" ]
-           [ Svg.rect
-               [ SvgA.fill "#ffffff"
-               , SvgA.stroke "none"
-               , SvgA.x "0"
-               , SvgA.y "0"
-               , SvgA.width "150"
-               , SvgA.height "100"
-               ]
-               []
-           , Svg.text_ [SvgA.x "75", SvgA.y widgetLabelSize, SvgA.fontSize widgetLabelSize, SvgA.textAnchor "middle"]
-               [Svg.text "Stroke"]
-           ]
-       ]
--}
 
 
 propertiesPallet : Int -> Int -> Float -> PropertyPalletState -> Svg Msg
@@ -41,7 +25,7 @@ propertiesPallet x y height palletState =
     --All widgets have a width 50% larger then their height
     let
         widgetList =
-            [ StrokeColorPicker, FillColorPicker ]
+            [ StrokeColorPicker, FillColorPicker, StrokeWidth ]
 
         widgetHeight =
             List.length widgetList
@@ -88,7 +72,7 @@ propertiesPallet x y height palletState =
                     strokeColorWidget
 
                 StrokeWidth ->
-                    Debug.crash "TODO implement Stroke Width widget"
+                    strokeWidthWidget
 
                 PropertyPalletHandle ->
                     (\_ -> Svg.g [] [])
@@ -112,6 +96,15 @@ propertiesPallet x y height palletState =
                 , colorBox index palletState.fillColor
                 ]
 
+        strokeWidthWidget : Int -> Svg Msg
+        strokeWidthWidget index =
+            Svg.g []
+                [ widgetBackgroundBox index
+                , label "Line Size" index
+                , numberControls index
+                ]
+
+        --helper functions
         label labelText index =
             Svg.text_
                 [ SvgA.x <| toString (widgetX + widgetWidth / 2)
@@ -120,6 +113,52 @@ propertiesPallet x y height palletState =
                 , SvgA.textAnchor "middle"
                 ]
                 [ Svg.text labelText ]
+
+        numberControls index =
+            Svg.g []
+                [ decrementButton index
+                , strokeWidthNumber index
+                , incrementButton index
+                ]
+
+        decrementButton index =
+            Svg.svg
+                [ SvgA.viewBox "0 0 100 100"
+                , SvgA.x <| toString (widgetX + widgetWidth * 0.05)
+                , SvgA.y <| toString (yPosFromIndex index + labelFontSize + borderSize)
+                , SvgA.width <| toString (widgetWidth * 0.3)
+                , SvgA.height <| toString (widgetHeight - labelFontSize - borderSize * 2)
+                ]
+                [ Svg.polygon
+                    [ SvgA.points "0 50, 100 0, 100 100"
+                    , SvgA.fill "gold"
+                    ]
+                    []
+                ]
+
+        incrementButton index =
+            Svg.svg
+                [ SvgA.viewBox "0 0 100 100"
+                , SvgA.x <| toString (widgetX + widgetWidth * 0.6)
+                , SvgA.y <| toString (yPosFromIndex index + labelFontSize + borderSize)
+                , SvgA.width <| toString (widgetWidth * 0.3)
+                , SvgA.height <| toString (widgetHeight - labelFontSize - borderSize * 2)
+                ]
+                [ Svg.polygon
+                    [ SvgA.points "0 0, 100 50, 0 100"
+                    , SvgA.fill "gold"
+                    ]
+                    []
+                ]
+
+        strokeWidthNumber index =
+            Svg.text_
+                [ SvgA.x <| toString (widgetX + widgetWidth / 2)
+                , SvgA.y <| toString <| yPosFromIndex index + (widgetHeight - borderSize) * 0.92
+                , SvgA.fontSize <| toString labelFontSize
+                , SvgA.textAnchor "middle"
+                ]
+                [ Svg.text <| toString palletState.strokeWidth ]
 
         colorBox : Int -> Color -> Svg Msg
         colorBox index color =
