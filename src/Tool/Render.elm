@@ -106,6 +106,9 @@ toolPallet x y height activeTool =
                 DrawElipse ->
                     elipseButton
 
+                DrawPolygon ->
+                    Debug.crash "TODO implement polygon tool icon"
+
                 ToolPalletHandle ->
                     Debug.crash "TODO implement draggable tool pallet"
 

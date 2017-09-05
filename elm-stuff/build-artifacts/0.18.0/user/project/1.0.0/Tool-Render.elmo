@@ -109,19 +109,27 @@ var _user$project$Tool_Render$toolPallet = F4(
 						'Tool.Render',
 						{
 							start: {line: 99, column: 13},
-							end: {line: 110, column: 71}
+							end: {line: 113, column: 71}
 						},
 						_p0)('TODO implement select button');
 				case 'DrawRectangle':
 					return rectangleButton;
 				case 'DrawElipse':
 					return elipseButton;
+				case 'DrawPolygon':
+					return _elm_lang$core$Native_Utils.crashCase(
+						'Tool.Render',
+						{
+							start: {line: 99, column: 13},
+							end: {line: 113, column: 71}
+						},
+						_p0)('TODO implement polygon tool icon');
 				default:
 					return _elm_lang$core$Native_Utils.crashCase(
 						'Tool.Render',
 						{
 							start: {line: 99, column: 13},
-							end: {line: 110, column: 71}
+							end: {line: 113, column: 71}
 						},
 						_p0)('TODO implement draggable tool pallet');
 			}
@@ -279,25 +287,25 @@ var _user$project$Tool_Render$toolPallet = F4(
 		};
 		var positionButtons = F2(
 			function (buttonList, index) {
-				var _p3 = buttonList;
-				if (_p3.ctor === '[]') {
+				var _p4 = buttonList;
+				if (_p4.ctor === '[]') {
 					return {ctor: '[]'};
 				} else {
-					var _p5 = _p3._1;
-					var _p4 = _p3._0;
-					var f = getToolFunction(_p4);
-					return _elm_lang$core$Native_Utils.eq(_p4, activeTool) ? {
+					var _p6 = _p4._1;
+					var _p5 = _p4._0;
+					var f = getToolFunction(_p5);
+					return _elm_lang$core$Native_Utils.eq(_p5, activeTool) ? {
 						ctor: '::',
 						_0: f(index),
 						_1: {
 							ctor: '::',
 							_0: selectionBox(index),
-							_1: A2(positionButtons, _p5, index + 1)
+							_1: A2(positionButtons, _p6, index + 1)
 						}
 					} : {
 						ctor: '::',
 						_0: f(index),
-						_1: A2(positionButtons, _p5, index + 1)
+						_1: A2(positionButtons, _p6, index + 1)
 					};
 				}
 			});

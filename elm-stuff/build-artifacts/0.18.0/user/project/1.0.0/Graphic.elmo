@@ -21,21 +21,21 @@ var _user$project$Graphic$pointListToString = function (pList) {
 		if (_p0._1.ctor === '[]') {
 			return A2(
 				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(_p0._0._0),
+				_elm_lang$core$Basics$toString(_p0._0.x),
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					' ',
-					_elm_lang$core$Basics$toString(_p0._0._1)));
+					_elm_lang$core$Basics$toString(_p0._0.y)));
 		} else {
 			return A2(
 				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(_p0._0._0),
+				_elm_lang$core$Basics$toString(_p0._0.x),
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					' ',
 					A2(
 						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(_p0._0._1),
+						_elm_lang$core$Basics$toString(_p0._0.y),
 						A2(
 							_elm_lang$core$Basics_ops['++'],
 							', ',
@@ -129,15 +129,21 @@ var _user$project$Graphic$toSvg = F2(
 						{
 							ctor: '::',
 							_0: _elm_lang$svg$Svg_Attributes$points(
-								_user$project$Graphic$pointListToString(_p1._0)),
+								_user$project$Graphic$pointListToString(
+									{ctor: '::', _0: _p1._0, _1: _p1._1})),
 							_1: {ctor: '[]'}
 						},
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							_user$project$Graphic$commonToSvgA(_p1._1),
+							_user$project$Graphic$commonToSvgA(_p1._2),
 							extraAttributes)),
 					{ctor: '[]'});
 		}
+	});
+var _user$project$Graphic$polygonSnapDistance = 4;
+var _user$project$Graphic$StartPosition = F2(
+	function (a, b) {
+		return {x: a, y: b};
 	});
 var _user$project$Graphic$RectangleAttributes = F6(
 	function (a, b, c, d, e, f) {
@@ -151,9 +157,13 @@ var _user$project$Graphic$CommonAttributes = F3(
 	function (a, b, c) {
 		return {stroke: a, strokeWidth: b, fill: c};
 	});
-var _user$project$Graphic$Polygon = F2(
-	function (a, b) {
-		return {ctor: 'Polygon', _0: a, _1: b};
+var _user$project$Graphic$Polygon = F3(
+	function (a, b, c) {
+		return {ctor: 'Polygon', _0: a, _1: b, _2: c};
+	});
+var _user$project$Graphic$createPolygon = F2(
+	function (polyList, common) {
+		return A2(_user$project$Graphic$Polygon, polyList, common);
 	});
 var _user$project$Graphic$Elipse = F2(
 	function (a, b) {

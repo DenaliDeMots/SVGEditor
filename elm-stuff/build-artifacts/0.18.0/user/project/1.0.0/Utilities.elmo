@@ -1,11 +1,47 @@
+var _user$project$Utilities$distance = F2(
+	function (start, end) {
+		return _elm_lang$core$Basics$sqrt(
+			Math.pow(
+				_elm_lang$core$Basics$abs(start.x - end.x),
+				2) + Math.pow(
+				_elm_lang$core$Basics$abs(start.y - end.y),
+				2));
+	});
+var _user$project$Utilities$intPositionToFloat = function (pos) {
+	return {
+		x: _elm_lang$core$Basics$toFloat(pos.x),
+		y: _elm_lang$core$Basics$toFloat(pos.y)
+	};
+};
+var _user$project$Utilities$lastInList = function (list) {
+	lastInList:
+	while (true) {
+		var _p0 = list;
+		if (_p0.ctor === '[]') {
+			return {ctor: '[]'};
+		} else {
+			if (_p0._1.ctor === '[]') {
+				return {
+					ctor: '::',
+					_0: _p0._0,
+					_1: {ctor: '[]'}
+				};
+			} else {
+				var _v1 = _p0._1;
+				list = _v1;
+				continue lastInList;
+			}
+		}
+	}
+};
 var _user$project$Utilities$maybeToList = function (a) {
-	var _p0 = a;
-	if (_p0.ctor === 'Nothing') {
+	var _p1 = a;
+	if (_p1.ctor === 'Nothing') {
 		return {ctor: '[]'};
 	} else {
 		return {
 			ctor: '::',
-			_0: _p0._0,
+			_0: _p1._0,
 			_1: {ctor: '[]'}
 		};
 	}
@@ -26,12 +62,12 @@ var _user$project$Utilities$until = F3(
 			if (predicate(state)) {
 				return state;
 			} else {
-				var _v1 = predicate,
-					_v2 = update,
-					_v3 = update(state);
-				predicate = _v1;
-				update = _v2;
-				state = _v3;
+				var _v3 = predicate,
+					_v4 = update,
+					_v5 = update(state);
+				predicate = _v3;
+				update = _v4;
+				state = _v5;
 				continue until;
 			}
 		}

@@ -79,7 +79,7 @@ initialModel =
     , cursorPosition = NotTracking
     , mouseDown = False
     , currentAction = None
-    , activeTool = Tool.DrawRectangle
+    , activeTool = Tool.DrawPolygon
     , propertyPalletState = initialPropertyPalletState
     , graphics = []
     , previewGraphic = Maybe.Nothing
@@ -157,6 +157,7 @@ update msg model =
                     , cursorPosition = modelUpdates.cursorPosition
                     , currentAction = modelUpdates.currentAction
                     , graphics = modelUpdates.graphics
+                    , previewGraphic = modelUpdates.previewGraphic
                 }
                     ! commands
 
@@ -224,10 +225,29 @@ mouseDownEvent model clickTarget position =
                         , []
                         )
 
+                    Tool.DrawPolygon ->
+                        let
+                            ( startPoint, posList ) =
+                                case model2.currentAction of
+                                    Draw (DrawPolygon start list) ->
+                                        ( start, list )
+
+                                    _ ->
+                                        ( Utilities.intPositionToFloat position, [] )
+                        in
+                            ( { model2
+                                | cursorPosition = Pos position
+                                , currentAction = Draw (DrawPolygon startPoint posList)
+                                , previewGraphic = List.head <| createPolygon startPoint posList model
+                              }
+                            , []
+                            )
+
                     Tool.ToolPalletHandle ->
                         Debug.crash "TODO - Moving Tool Pallet"
 
 
+mouseUpEvent : Model -> ClickTarget -> Position -> ( Model, List (Cmd Msg) )
 mouseUpEvent model clickTarget position =
     case model.currentAction of
         None ->
@@ -258,6 +278,47 @@ mouseUpEvent model clickTarget position =
                       }
                     , []
                     )
+
+                DrawPolygon startPoint posList ->
+                    let
+                        floatPosition =
+                            Utilities.intPositionToFloat position
+
+                        distanceFromStartPoint =
+                            Utilities.distance startPoint floatPosition
+
+                        numberOfPoints =
+                            List.length posList
+
+                        --ignore creating a point if this is the upstroke of the initial click
+                        firstPoint =
+                            floatPosition == startPoint && posList == []
+
+                        completedPolygon =
+                            numberOfPoints >= 2 && distanceFromStartPoint <= Graphic.polygonSnapDistance
+                    in
+                        if completedPolygon then
+                            ( { model
+                                | currentAction = None
+                                , cursorPosition = NotTracking
+                                , graphics = model.graphics ++ createPolygon startPoint posList model
+                                , previewGraphic = Maybe.Nothing
+                              }
+                            , []
+                            )
+                        else
+                            ( { model
+                                | currentAction =
+                                    Draw <|
+                                        DrawPolygon startPoint
+                                            (if firstPoint then
+                                                posList
+                                             else
+                                                floatPosition :: posList
+                                            )
+                              }
+                            , []
+                            )
 
 
 mouseMoveEvent model position =
@@ -290,6 +351,26 @@ updatePreviewGraphic drawAction currentPosition model =
             { model
                 | previewGraphic = List.head (createElipse startPosition currentPosition model)
             }
+
+        DrawPolygon startPoint posList ->
+            let
+                floatPosition =
+                    Utilities.intPositionToFloat currentPosition
+
+                snapToStart =
+                    Utilities.distance startPoint floatPosition <= Graphic.polygonSnapDistance && List.length posList >= 2
+            in
+                { model
+                    | previewGraphic =
+                        List.head <|
+                            createPolygon startPoint
+                                (if snapToStart then
+                                    posList
+                                 else
+                                    floatPosition :: posList
+                                )
+                                model
+                }
 
 
 
@@ -344,6 +425,18 @@ createElipse startPosition currentPosition model =
             []
         else
             [ Graphic.createElipse elipseAttributes commonAttributes ]
+
+
+createPolygon : { x : Float, y : Float } -> List { x : Float, y : Float } -> Model -> List Graphic
+createPolygon startPoint polyList model =
+    let
+        commonAttributes =
+            { stroke = CC.colorToHex model.propertyPalletState.strokeColor
+            , fill = CC.colorToHex model.propertyPalletState.fillColor
+            , strokeWidth = toString model.propertyPalletState.strokeWidth
+            }
+    in
+        [ Graphic.createPolygon startPoint polyList commonAttributes ]
 
 
 
@@ -443,7 +536,4 @@ type Action
 type DrawAction
     = DrawRect Position
     | DrawElipse Position
-
-
-
---Custom Events--
+    | DrawPolygon { x : Float, y : Float } (List { x : Float, y : Float })

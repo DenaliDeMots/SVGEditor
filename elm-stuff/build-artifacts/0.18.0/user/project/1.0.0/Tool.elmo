@@ -1,4 +1,5 @@
 var _user$project$Tool$ToolPalletHandle = {ctor: 'ToolPalletHandle'};
+var _user$project$Tool$DrawPolygon = {ctor: 'DrawPolygon'};
 var _user$project$Tool$DrawElipse = {ctor: 'DrawElipse'};
 var _user$project$Tool$DrawRectangle = {ctor: 'DrawRectangle'};
 var _user$project$Tool$Select = {ctor: 'Select'};

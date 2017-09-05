@@ -5,4 +5,5 @@ type Tool
     = Select
     | DrawRectangle
     | DrawElipse
+    | DrawPolygon
     | ToolPalletHandle

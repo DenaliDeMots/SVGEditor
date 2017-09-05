@@ -1,4 +1,4 @@
-module Utilities exposing (until, maybeToList)
+module Utilities exposing (until, maybeToList, lastInList, intPositionToFloat, distance)
 
 import Task exposing (Task)
 
@@ -26,3 +26,30 @@ maybeToList a =
 
         Just x ->
             [ x ]
+
+
+lastInList : List a -> List a
+lastInList list =
+    case list of
+        [] ->
+            []
+
+        x :: [] ->
+            [ x ]
+
+        x :: xs ->
+            lastInList xs
+
+
+intPositionToFloat : { x : Int, y : Int } -> { x : Float, y : Float }
+intPositionToFloat pos =
+    { x = toFloat pos.x, y = toFloat pos.y }
+
+
+distance : { x : Float, y : Float } -> { x : Float, y : Float } -> Float
+distance start end =
+    sqrt <|
+        (abs <| start.x - end.x)
+            ^ 2
+            + (abs <| start.y - end.y)
+            ^ 2

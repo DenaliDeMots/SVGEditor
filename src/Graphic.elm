@@ -1,4 +1,4 @@
-module Graphic exposing (Graphic, toSvg, createRectangle, createElipse, CommonAttributes)
+module Graphic exposing (Graphic, toSvg, createRectangle, createElipse, createPolygon, polygonSnapDistance, CommonAttributes)
 
 import Svg
 import Svg.Attributes as SvgA
@@ -8,7 +8,19 @@ import Svg.Events as SvgE
 type Graphic
     = Rectangle RectangleAttributes CommonAttributes
     | Elipse ElipseAttributes CommonAttributes
-    | Polygon (List { Float, Float }) CommonAttributes
+    | Polygon StartPosition PositionList CommonAttributes
+
+
+type alias PositionList =
+    List { x : Float, y : Float }
+
+
+type alias StartPosition =
+    { x : Float, y : Float }
+
+
+polygonSnapDistance =
+    4
 
 
 type alias RectangleAttributes =
@@ -80,8 +92,8 @@ toSvg extraAttributes graphic =
                 )
                 []
 
-        Polygon points common ->
-            Svg.polygon ([ SvgA.points <| pointListToString points ] ++ commonToSvgA common ++ extraAttributes) []
+        Polygon startPoint pointList common ->
+            Svg.polygon ([ SvgA.points <| pointListToString (startPoint :: pointList) ] ++ commonToSvgA common ++ extraAttributes) []
 
 
 pointListToString pList =
@@ -115,3 +127,7 @@ createRectangle rec common =
 createElipse : ElipseAttributes -> CommonAttributes -> Graphic
 createElipse rec common =
     Elipse rec common
+
+
+createPolygon polyList common =
+    Polygon polyList common
