@@ -79,7 +79,7 @@ initialModel =
     , cursorPosition = NotTracking
     , mouseDown = False
     , currentAction = None
-    , activeTool = Tool.DrawPolygon
+    , activeTool = Tool.DrawRectangle
     , propertyPalletState = initialPropertyPalletState
     , graphics = []
     , previewGraphic = Maybe.Nothing
@@ -499,7 +499,7 @@ view model =
                                     ]
                                     graphic
                             )
-                        |> flip (++) [ Tool.Render.toolPallet 50 50 130 model.activeTool ]
+                        |> flip (++) [ Tool.Render.toolPallet 50 50 190 model.activeTool ]
                         |> flip (++) [ Properties.Render.propertiesPallet 400 50 170 model.propertyPalletState ]
                    )
 

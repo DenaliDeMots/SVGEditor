@@ -24,6 +24,10 @@ symbols =
         [ Svg.use [ SvgA.xlinkHref "#buttonBackground" ] []
         , Svg.use [ SvgA.xlinkHref "#drawElipseIcon" ] []
         ]
+    , Svg.symbol [ SvgA.id "drawPolygon", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "none" ]
+        [ Svg.use [ SvgA.xlinkHref "#buttonBackground" ] []
+        , Svg.use [ SvgA.xlinkHref "#drawPolygonIcon" ] []
+        ]
     , Svg.symbol [ SvgA.id "buttonBackground", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "none" ]
         [ Svg.rect
             [ SvgA.fill "#ddeaff"
@@ -57,6 +61,14 @@ symbols =
             ]
             []
         ]
+    , Svg.symbol [ SvgA.id "drawPolygonIcon", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "xMidYMid" ]
+        [ Svg.polygon
+            [ SvgA.fill "#1e1e1e"
+            , SvgA.stroke "none"
+            , SvgA.points "50 20, 80 45, 68 80, 32 80, 20 45"
+            ]
+            []
+        ]
     ]
 
 
@@ -69,7 +81,7 @@ toolPallet x y height activeTool =
     let
         buttonList =
             --Determines which buttons appear and in what order
-            [ DrawRectangle, DrawElipse ]
+            [ DrawRectangle, DrawElipse, DrawPolygon ]
 
         numberOfButtons =
             List.length buttonList
@@ -107,7 +119,7 @@ toolPallet x y height activeTool =
                     elipseButton
 
                 DrawPolygon ->
-                    Debug.crash "TODO implement polygon tool icon"
+                    polygonButton
 
                 ToolPalletHandle ->
                     Debug.crash "TODO implement draggable tool pallet"
@@ -153,6 +165,18 @@ toolPallet x y height activeTool =
                 , SvgA.height <| toString heightPerButton
                 , Events.mouseUpWithClickTarget <| ClickTarget.ToolPallet DrawElipse
                 , Events.mouseDownWithClickTarget <| ClickTarget.ToolPallet DrawElipse
+                ]
+                []
+
+        polygonButton index =
+            Svg.use
+                [ SvgA.xlinkHref "#drawPolygon"
+                , SvgA.x <| toString (x + borderSize)
+                , SvgA.y <| toString (yPosition index)
+                , SvgA.width <| toString buttonWidth
+                , SvgA.height <| toString heightPerButton
+                , Events.mouseUpWithClickTarget <| ClickTarget.ToolPallet DrawPolygon
+                , Events.mouseDownWithClickTarget <| ClickTarget.ToolPallet DrawPolygon
                 ]
                 []
 

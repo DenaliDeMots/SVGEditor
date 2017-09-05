@@ -9,7 +9,11 @@ var _user$project$Tool_Render$toolPallet = F4(
 			_1: {
 				ctor: '::',
 				_0: _user$project$Tool$DrawElipse,
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _user$project$Tool$DrawPolygon,
+					_1: {ctor: '[]'}
+				}
 			}
 		};
 		var numberOfButtons = _elm_lang$core$List$length(buttonList);
@@ -101,6 +105,47 @@ var _user$project$Tool_Render$toolPallet = F4(
 				},
 				{ctor: '[]'});
 		};
+		var polygonButton = function (index) {
+			return A2(
+				_elm_lang$svg$Svg$use,
+				{
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawPolygon'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(x + borderSize)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(
+									yPosition(index))),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(buttonWidth)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString(heightPerButton)),
+									_1: {
+										ctor: '::',
+										_0: _user$project$Events$mouseUpWithClickTarget(
+											_user$project$Messages_ClickTarget$ToolPallet(_user$project$Tool$DrawPolygon)),
+										_1: {
+											ctor: '::',
+											_0: _user$project$Events$mouseDownWithClickTarget(
+												_user$project$Messages_ClickTarget$ToolPallet(_user$project$Tool$DrawPolygon)),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				{ctor: '[]'});
+		};
 		var getToolFunction = function (tool) {
 			var _p0 = tool;
 			switch (_p0.ctor) {
@@ -108,8 +153,8 @@ var _user$project$Tool_Render$toolPallet = F4(
 					return _elm_lang$core$Native_Utils.crashCase(
 						'Tool.Render',
 						{
-							start: {line: 99, column: 13},
-							end: {line: 113, column: 71}
+							start: {line: 111, column: 13},
+							end: {line: 125, column: 71}
 						},
 						_p0)('TODO implement select button');
 				case 'DrawRectangle':
@@ -117,19 +162,13 @@ var _user$project$Tool_Render$toolPallet = F4(
 				case 'DrawElipse':
 					return elipseButton;
 				case 'DrawPolygon':
-					return _elm_lang$core$Native_Utils.crashCase(
-						'Tool.Render',
-						{
-							start: {line: 99, column: 13},
-							end: {line: 113, column: 71}
-						},
-						_p0)('TODO implement polygon tool icon');
+					return polygonButton;
 				default:
 					return _elm_lang$core$Native_Utils.crashCase(
 						'Tool.Render',
 						{
-							start: {line: 99, column: 13},
-							end: {line: 113, column: 71}
+							start: {line: 111, column: 13},
+							end: {line: 125, column: 71}
 						},
 						_p0)('TODO implement draggable tool pallet');
 			}
@@ -287,25 +326,25 @@ var _user$project$Tool_Render$toolPallet = F4(
 		};
 		var positionButtons = F2(
 			function (buttonList, index) {
-				var _p4 = buttonList;
-				if (_p4.ctor === '[]') {
+				var _p3 = buttonList;
+				if (_p3.ctor === '[]') {
 					return {ctor: '[]'};
 				} else {
-					var _p6 = _p4._1;
-					var _p5 = _p4._0;
-					var f = getToolFunction(_p5);
-					return _elm_lang$core$Native_Utils.eq(_p5, activeTool) ? {
+					var _p5 = _p3._1;
+					var _p4 = _p3._0;
+					var f = getToolFunction(_p4);
+					return _elm_lang$core$Native_Utils.eq(_p4, activeTool) ? {
 						ctor: '::',
 						_0: f(index),
 						_1: {
 							ctor: '::',
 							_0: selectionBox(index),
-							_1: A2(positionButtons, _p6, index + 1)
+							_1: A2(positionButtons, _p5, index + 1)
 						}
 					} : {
 						ctor: '::',
 						_0: f(index),
-						_1: A2(positionButtons, _p6, index + 1)
+						_1: A2(positionButtons, _p5, index + 1)
 					};
 				}
 			});
@@ -445,7 +484,7 @@ var _user$project$Tool_Render$symbols = {
 				_elm_lang$svg$Svg$symbol,
 				{
 					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$id('buttonBackground'),
+					_0: _elm_lang$svg$Svg_Attributes$id('drawPolygon'),
 					_1: {
 						ctor: '::',
 						_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
@@ -459,34 +498,25 @@ var _user$project$Tool_Render$symbols = {
 				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$svg$Svg$rect,
+						_elm_lang$svg$Svg$use,
 						{
 							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$fill('#ddeaff'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$x('0'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$y('0'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$width('100'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$height('100'),
-												_1: {ctor: '[]'}
-											}
-										}
-									}
-								}
-							}
+							_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#buttonBackground'),
+							_1: {ctor: '[]'}
 						},
 						{ctor: '[]'}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$svg$Svg$use,
+							{
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$xlinkHref('#drawPolygonIcon'),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
 				}),
 			_1: {
 				ctor: '::',
@@ -494,13 +524,13 @@ var _user$project$Tool_Render$symbols = {
 					_elm_lang$svg$Svg$symbol,
 					{
 						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$id('drawRectangleIcon'),
+						_0: _elm_lang$svg$Svg_Attributes$id('buttonBackground'),
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('xMidYMid'),
+								_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('none'),
 								_1: {ctor: '[]'}
 							}
 						}
@@ -511,22 +541,22 @@ var _user$project$Tool_Render$symbols = {
 							_elm_lang$svg$Svg$rect,
 							{
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$fill('#1e1e1e'),
+								_0: _elm_lang$svg$Svg_Attributes$fill('#ddeaff'),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$x('20'),
+										_0: _elm_lang$svg$Svg_Attributes$x('0'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$y('20'),
+											_0: _elm_lang$svg$Svg_Attributes$y('0'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$width('60'),
+												_0: _elm_lang$svg$Svg_Attributes$width('100'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$height('60'),
+													_0: _elm_lang$svg$Svg_Attributes$height('100'),
 													_1: {ctor: '[]'}
 												}
 											}
@@ -543,7 +573,7 @@ var _user$project$Tool_Render$symbols = {
 						_elm_lang$svg$Svg$symbol,
 						{
 							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$id('drawElipseIcon'),
+							_0: _elm_lang$svg$Svg_Attributes$id('drawRectangleIcon'),
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
@@ -557,7 +587,7 @@ var _user$project$Tool_Render$symbols = {
 						{
 							ctor: '::',
 							_0: A2(
-								_elm_lang$svg$Svg$ellipse,
+								_elm_lang$svg$Svg$rect,
 								{
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$fill('#1e1e1e'),
@@ -566,16 +596,16 @@ var _user$project$Tool_Render$symbols = {
 										_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$cx('50'),
+											_0: _elm_lang$svg$Svg_Attributes$x('20'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$cy('50'),
+												_0: _elm_lang$svg$Svg_Attributes$y('20'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$rx('30'),
+													_0: _elm_lang$svg$Svg_Attributes$width('60'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$ry('30'),
+														_0: _elm_lang$svg$Svg_Attributes$height('60'),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -586,7 +616,95 @@ var _user$project$Tool_Render$symbols = {
 								{ctor: '[]'}),
 							_1: {ctor: '[]'}
 						}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$svg$Svg$symbol,
+							{
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$id('drawElipseIcon'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('xMidYMid'),
+										_1: {ctor: '[]'}
+									}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$svg$Svg$ellipse,
+									{
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$fill('#1e1e1e'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$cx('50'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$cy('50'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$rx('30'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$ry('30'),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$symbol,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$id('drawPolygonIcon'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$viewBox('0 0 100 100'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$preserveAspectRatio('xMidYMid'),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$svg$Svg$polygon,
+										{
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$fill('#1e1e1e'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$stroke('none'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$points('50 20, 80 45, 68 80, 32 80, 20 45'),
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
 				}
 			}
 		}

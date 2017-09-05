@@ -59,7 +59,7 @@ var _user$project$Main$view = function (model) {
 						}),
 					{
 						ctor: '::',
-						_0: A4(_user$project$Tool_Render$toolPallet, 50, 50, 130, model.activeTool),
+						_0: A4(_user$project$Tool_Render$toolPallet, 50, 50, 190, model.activeTool),
 						_1: {ctor: '[]'}
 					},
 					A2(
@@ -282,7 +282,7 @@ var _user$project$Main$initialModel = {
 	cursorPosition: _user$project$Main$NotTracking,
 	mouseDown: false,
 	currentAction: _user$project$Main$None,
-	activeTool: _user$project$Tool$DrawPolygon,
+	activeTool: _user$project$Tool$DrawRectangle,
 	propertyPalletState: _user$project$Main$initialPropertyPalletState,
 	graphics: {ctor: '[]'},
 	previewGraphic: _elm_lang$core$Maybe$Nothing
