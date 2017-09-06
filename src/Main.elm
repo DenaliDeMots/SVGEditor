@@ -28,6 +28,7 @@ import Events
 import Messages as Msg exposing (Msg)
 import Messages.ClickTarget as ClickTarget exposing (ClickTarget)
 import Messages.UpdatePropertyPallet as PPS
+import Pallet exposing (Pallet)
 
 
 --import DrawingTools exposing (Tool)
@@ -191,7 +192,7 @@ mouseDownEvent model clickTarget position =
                 , []
                 )
 
-            ClickTarget.ToolPalletHandle ->
+            ClickTarget.ToolPalletHandle pallet ->
                 Debug.crash "TODO implement tool pallet dragging"
 
             _ ->
@@ -256,6 +257,9 @@ mouseUpEvent model clickTarget position =
               }
             , []
             )
+
+        MovePallet pallet ->
+            Debug.crash "TODO implement tool pallet dragging"
 
         Draw drawAction ->
             case drawAction of
@@ -335,6 +339,9 @@ mouseMoveEvent model position =
         case model2.currentAction of
             None ->
                 ( model2, [] )
+
+            MovePallet pallet ->
+                Debug.crash "TODO implement tool pallet dragging"
 
             Draw drawAction ->
                 ( updatePreviewGraphic drawAction position model2, [] )
@@ -531,6 +538,7 @@ type alias Position =
 type Action
     = None
     | Draw DrawAction
+    | MovePallet Pallet
 
 
 type DrawAction

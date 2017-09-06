@@ -153,8 +153,8 @@ var _user$project$Tool_Render$toolPallet = F4(
 					return _elm_lang$core$Native_Utils.crashCase(
 						'Tool.Render',
 						{
-							start: {line: 111, column: 13},
-							end: {line: 122, column: 34}
+							start: {line: 112, column: 13},
+							end: {line: 123, column: 34}
 						},
 						_p0)('TODO implement select button');
 				case 'DrawRectangle':
@@ -371,10 +371,12 @@ var _user$project$Tool_Render$toolPallet = F4(
 											_0: _elm_lang$svg$Svg_Attributes$fill('#0254d8'),
 											_1: {
 												ctor: '::',
-												_0: _user$project$Events$mouseUpWithClickTarget(_user$project$Messages_ClickTarget$ToolPalletHandle),
+												_0: _user$project$Events$mouseUpWithClickTarget(
+													_user$project$Messages_ClickTarget$ToolPalletHandle(_user$project$Pallet$ToolPallet)),
 												_1: {
 													ctor: '::',
-													_0: _user$project$Events$mouseDownWithClickTarget(_user$project$Messages_ClickTarget$ToolPalletHandle),
+													_0: _user$project$Events$mouseDownWithClickTarget(
+														_user$project$Messages_ClickTarget$ToolPalletHandle(_user$project$Pallet$ToolPallet)),
 													_1: {ctor: '[]'}
 												}
 											}

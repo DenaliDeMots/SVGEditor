@@ -1,7 +1,9 @@
 var _user$project$Messages_ClickTarget$PropertiesPallet = function (a) {
 	return {ctor: 'PropertiesPallet', _0: a};
 };
-var _user$project$Messages_ClickTarget$ToolPalletHandle = {ctor: 'ToolPalletHandle'};
+var _user$project$Messages_ClickTarget$ToolPalletHandle = function (a) {
+	return {ctor: 'ToolPalletHandle', _0: a};
+};
 var _user$project$Messages_ClickTarget$ToolPallet = function (a) {
 	return {ctor: 'ToolPallet', _0: a};
 };
