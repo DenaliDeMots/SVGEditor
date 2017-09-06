@@ -509,6 +509,18 @@ view model =
 
         wWidth =
             model.windowSize.width
+
+        toolPalletPosition =
+            model.toolPalletPosition
+
+        propertyPalletPosition =
+            model.propertyPalletPosition
+
+        activeTool =
+            model.activeTool
+
+        propertyPalletState =
+            model.propertyPalletState
     in
         Svg.svg
             [ SvgA.width <| toString wWidth
@@ -529,8 +541,8 @@ view model =
                                     ]
                                     graphic
                             )
-                        |> flip (++) [ Tool.Render.toolPallet 50 50 190 model.activeTool ]
-                        |> flip (++) [ Properties.Render.propertiesPallet 400 50 170 model.propertyPalletState ]
+                        |> flip (++) [ Tool.Render.toolPallet toolPalletPosition.x toolPalletPosition.y toolPalletPosition.height activeTool ]
+                        |> flip (++) [ Properties.Render.propertiesPallet propertyPalletPosition.x propertyPalletPosition.y propertyPalletPosition.height propertyPalletState ]
                    )
 
 

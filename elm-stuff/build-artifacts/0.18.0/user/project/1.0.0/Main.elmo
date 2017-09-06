@@ -1,5 +1,9 @@
 var _user$project$Main$symbols = _user$project$Tool_Render$symbols;
 var _user$project$Main$view = function (model) {
+	var propertyPalletState = model.propertyPalletState;
+	var activeTool = model.activeTool;
+	var propertyPalletPosition = model.propertyPalletPosition;
+	var toolPalletPosition = model.toolPalletPosition;
 	var wWidth = model.windowSize.width;
 	var wHeight = model.windowSize.height;
 	return A2(
@@ -48,7 +52,7 @@ var _user$project$Main$view = function (model) {
 					}),
 				{
 					ctor: '::',
-					_0: A4(_user$project$Properties_Render$propertiesPallet, 400, 50, 170, model.propertyPalletState),
+					_0: A4(_user$project$Properties_Render$propertiesPallet, propertyPalletPosition.x, propertyPalletPosition.y, propertyPalletPosition.height, propertyPalletState),
 					_1: {ctor: '[]'}
 				},
 				A3(
@@ -59,7 +63,7 @@ var _user$project$Main$view = function (model) {
 						}),
 					{
 						ctor: '::',
-						_0: A4(_user$project$Tool_Render$toolPallet, 50, 50, 190, model.activeTool),
+						_0: A4(_user$project$Tool_Render$toolPallet, toolPalletPosition.x, toolPalletPosition.y, toolPalletPosition.height, activeTool),
 						_1: {ctor: '[]'}
 					},
 					A2(
