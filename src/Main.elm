@@ -55,6 +55,8 @@ type alias Model =
     , mouseDown : Bool
     , currentAction : Action
     , activeTool : Tool
+    , toolPalletPosition : PalletPosition
+    , propertyPalletPosition : PalletPosition
     , propertyPalletState : PropertyPalletState
     , graphics : List Graphic.Graphic -- The svg elements on the canvas
     , previewGraphic : Maybe Graphic
@@ -72,7 +74,11 @@ type alias Model =
 
 init : Window.Size -> ( Model, Cmd Msg )
 init size =
-    setWindowSize initialModel size ! []
+    (initialModel
+        |> setWindowSize size
+        |> setPalletLocations size
+    )
+        ! []
 
 
 initialModel =
@@ -81,15 +87,32 @@ initialModel =
     , mouseDown = False
     , currentAction = None
     , activeTool = Tool.DrawRectangle
+    , toolPalletPosition = { x = 0, y = 0, height = 0 }
+    , propertyPalletPosition = { x = 0, y = 0, height = 0 }
     , propertyPalletState = initialPropertyPalletState
     , graphics = []
     , previewGraphic = Maybe.Nothing
     }
 
 
-setWindowSize model size =
+setWindowSize size model =
     { model
         | windowSize = size
+    }
+
+
+setPalletLocations size model =
+    { model
+        | toolPalletPosition =
+            { x = toFloat size.width * 0.1 |> round
+            , y = toFloat size.height * 0.1 |> round
+            , height = 190
+            }
+        , propertyPalletPosition =
+            { x = toFloat size.width * 0.9 - 85 |> round
+            , y = toFloat size.height * 0.1 |> round
+            , height = 170
+            }
     }
 
 
@@ -533,6 +556,10 @@ type CursorPosition
 
 type alias Position =
     { x : Int, y : Int }
+
+
+type alias PalletPosition =
+    { x : Int, y : Int, height : Float }
 
 
 type Action

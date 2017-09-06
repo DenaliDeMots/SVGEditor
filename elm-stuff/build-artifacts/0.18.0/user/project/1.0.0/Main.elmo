@@ -233,19 +233,61 @@ var _user$project$Main$updatePreviewGraphic = F3(
 		}
 	});
 var _user$project$Main$initialPropertyPalletState = {fillColor: _elm_lang$core$Color$green, strokeColor: _elm_lang$core$Color$blue, strokeWidth: 4};
+var _user$project$Main$setPalletLocations = F2(
+	function (size, model) {
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				toolPalletPosition: {
+					x: _elm_lang$core$Basics$round(
+						_elm_lang$core$Basics$toFloat(size.width) * 0.1),
+					y: _elm_lang$core$Basics$round(
+						_elm_lang$core$Basics$toFloat(size.height) * 0.1),
+					height: 190
+				},
+				propertyPalletPosition: {
+					x: _elm_lang$core$Basics$round(
+						(_elm_lang$core$Basics$toFloat(size.width) * 0.9) - 85),
+					y: _elm_lang$core$Basics$round(
+						_elm_lang$core$Basics$toFloat(size.height) * 0.1),
+					height: 170
+				}
+			});
+	});
 var _user$project$Main$setWindowSize = F2(
-	function (model, size) {
+	function (size, model) {
 		return _elm_lang$core$Native_Utils.update(
 			model,
 			{windowSize: size});
 	});
-var _user$project$Main$Model = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {windowSize: a, cursorPosition: b, mouseDown: c, currentAction: d, activeTool: e, propertyPalletState: f, graphics: g, previewGraphic: h};
-	});
+var _user$project$Main$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {windowSize: a, cursorPosition: b, mouseDown: c, currentAction: d, activeTool: e, toolPalletPosition: f, propertyPalletPosition: g, propertyPalletState: h, graphics: i, previewGraphic: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var _user$project$Main$Position = F2(
 	function (a, b) {
 		return {x: a, y: b};
+	});
+var _user$project$Main$PalletPosition = F3(
+	function (a, b, c) {
+		return {x: a, y: b, height: c};
 	});
 var _user$project$Main$Pos = function (a) {
 	return {ctor: 'Pos', _0: a};
@@ -270,8 +312,8 @@ var _user$project$Main$mouseMoveEvent = F2(
 				return _elm_lang$core$Native_Utils.crashCase(
 					'Main',
 					{
-						start: {line: 339, column: 9},
-						end: {line: 347, column: 72}
+						start: {line: 362, column: 9},
+						end: {line: 370, column: 72}
 					},
 					_p4)('TODO implement tool pallet dragging');
 			default:
@@ -295,6 +337,8 @@ var _user$project$Main$initialModel = {
 	mouseDown: false,
 	currentAction: _user$project$Main$None,
 	activeTool: _user$project$Tool$DrawRectangle,
+	toolPalletPosition: {x: 0, y: 0, height: 0},
+	propertyPalletPosition: {x: 0, y: 0, height: 0},
 	propertyPalletState: _user$project$Main$initialPropertyPalletState,
 	graphics: {ctor: '[]'},
 	previewGraphic: _elm_lang$core$Maybe$Nothing
@@ -302,7 +346,10 @@ var _user$project$Main$initialModel = {
 var _user$project$Main$init = function (size) {
 	return A2(
 		_elm_lang$core$Platform_Cmd_ops['!'],
-		A2(_user$project$Main$setWindowSize, _user$project$Main$initialModel, size),
+		A2(
+			_user$project$Main$setPalletLocations,
+			size,
+			A2(_user$project$Main$setWindowSize, size, _user$project$Main$initialModel)),
 		{ctor: '[]'});
 };
 var _user$project$Main$DrawPolygon = F2(
@@ -325,8 +372,8 @@ var _user$project$Main$mouseUpEvent = F3(
 				return _elm_lang$core$Native_Utils.crashCase(
 					'Main',
 					{
-						start: {line: 253, column: 5},
-						end: {line: 325, column: 30}
+						start: {line: 276, column: 5},
+						end: {line: 348, column: 30}
 					},
 					_p6)('TODO implement tool pallet dragging');
 			default:
@@ -429,8 +476,8 @@ var _user$project$Main$mouseDownEvent = F3(
 				return _elm_lang$core$Native_Utils.crashCase(
 					'Main',
 					{
-						start: {line: 185, column: 9},
-						end: {line: 248, column: 30}
+						start: {line: 208, column: 9},
+						end: {line: 271, column: 30}
 					},
 					_p11)('TODO implement tool pallet dragging');
 			default:
@@ -451,8 +498,8 @@ var _user$project$Main$mouseDownEvent = F3(
 								return _elm_lang$core$Native_Utils.crashCase(
 									'Main',
 									{
-										start: {line: 201, column: 25},
-										end: {line: 214, column: 88}
+										start: {line: 224, column: 25},
+										end: {line: 237, column: 88}
 									},
 									_p14)('TODO - Selected a Graphic for editing');
 							default:
