@@ -191,6 +191,9 @@ mouseDownEvent model clickTarget position =
                 , []
                 )
 
+            ClickTarget.ToolPalletHandle ->
+                Debug.crash "TODO implement tool pallet dragging"
+
             _ ->
                 case model.activeTool of
                     Tool.Select ->
@@ -242,9 +245,6 @@ mouseDownEvent model clickTarget position =
                               }
                             , []
                             )
-
-                    Tool.ToolPalletHandle ->
-                        Debug.crash "TODO - Moving Tool Pallet"
 
 
 mouseUpEvent : Model -> ClickTarget -> Position -> ( Model, List (Cmd Msg) )

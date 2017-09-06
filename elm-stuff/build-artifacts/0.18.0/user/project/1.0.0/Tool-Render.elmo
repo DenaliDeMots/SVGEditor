@@ -154,23 +154,15 @@ var _user$project$Tool_Render$toolPallet = F4(
 						'Tool.Render',
 						{
 							start: {line: 111, column: 13},
-							end: {line: 125, column: 71}
+							end: {line: 122, column: 34}
 						},
 						_p0)('TODO implement select button');
 				case 'DrawRectangle':
 					return rectangleButton;
 				case 'DrawElipse':
 					return elipseButton;
-				case 'DrawPolygon':
-					return polygonButton;
 				default:
-					return _elm_lang$core$Native_Utils.crashCase(
-						'Tool.Render',
-						{
-							start: {line: 111, column: 13},
-							end: {line: 125, column: 71}
-						},
-						_p0)('TODO implement draggable tool pallet');
+					return polygonButton;
 			}
 		};
 		var selectionBox = function (index) {
@@ -326,25 +318,25 @@ var _user$project$Tool_Render$toolPallet = F4(
 		};
 		var positionButtons = F2(
 			function (buttonList, index) {
-				var _p3 = buttonList;
-				if (_p3.ctor === '[]') {
+				var _p2 = buttonList;
+				if (_p2.ctor === '[]') {
 					return {ctor: '[]'};
 				} else {
-					var _p5 = _p3._1;
-					var _p4 = _p3._0;
-					var f = getToolFunction(_p4);
-					return _elm_lang$core$Native_Utils.eq(_p4, activeTool) ? {
+					var _p4 = _p2._1;
+					var _p3 = _p2._0;
+					var f = getToolFunction(_p3);
+					return _elm_lang$core$Native_Utils.eq(_p3, activeTool) ? {
 						ctor: '::',
 						_0: f(index),
 						_1: {
 							ctor: '::',
 							_0: selectionBox(index),
-							_1: A2(positionButtons, _p5, index + 1)
+							_1: A2(positionButtons, _p4, index + 1)
 						}
 					} : {
 						ctor: '::',
 						_0: f(index),
-						_1: A2(positionButtons, _p5, index + 1)
+						_1: A2(positionButtons, _p4, index + 1)
 					};
 				}
 			});
@@ -379,12 +371,10 @@ var _user$project$Tool_Render$toolPallet = F4(
 											_0: _elm_lang$svg$Svg_Attributes$fill('#0254d8'),
 											_1: {
 												ctor: '::',
-												_0: _user$project$Events$mouseUpWithClickTarget(
-													_user$project$Messages_ClickTarget$ToolPallet(_user$project$Tool$ToolPalletHandle)),
+												_0: _user$project$Events$mouseUpWithClickTarget(_user$project$Messages_ClickTarget$ToolPalletHandle),
 												_1: {
 													ctor: '::',
-													_0: _user$project$Events$mouseDownWithClickTarget(
-														_user$project$Messages_ClickTarget$ToolPallet(_user$project$Tool$DrawElipse)),
+													_0: _user$project$Events$mouseDownWithClickTarget(_user$project$Messages_ClickTarget$ToolPalletHandle),
 													_1: {ctor: '[]'}
 												}
 											}

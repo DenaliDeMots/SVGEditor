@@ -6,4 +6,3 @@ type Tool
     | DrawRectangle
     | DrawElipse
     | DrawPolygon
-    | ToolPalletHandle

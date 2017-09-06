@@ -9,4 +9,5 @@ type ClickTarget
     = Graphic Graphic.Graphic
     | Screen
     | ToolPallet Tool
+    | ToolPalletHandle
     | PropertiesPallet PropertyWidget

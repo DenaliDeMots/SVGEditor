@@ -121,9 +121,6 @@ toolPallet x y height activeTool =
                 DrawPolygon ->
                     polygonButton
 
-                ToolPalletHandle ->
-                    Debug.crash "TODO implement draggable tool pallet"
-
         positionedButtons =
             positionButtons buttonList 0
 
@@ -233,8 +230,8 @@ toolPallet x y height activeTool =
                 , SvgA.width <| toString width
                 , SvgA.height <| toString height
                 , SvgA.fill "#0254d8"
-                , Events.mouseUpWithClickTarget <| ClickTarget.ToolPallet ToolPalletHandle
-                , Events.mouseDownWithClickTarget <| ClickTarget.ToolPallet DrawElipse
+                , Events.mouseUpWithClickTarget ClickTarget.ToolPalletHandle
+                , Events.mouseDownWithClickTarget ClickTarget.ToolPalletHandle
                 ]
                 []
             ]

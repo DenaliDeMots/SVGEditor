@@ -395,107 +395,108 @@ var _user$project$Main$mouseDownEvent = F3(
 			model,
 			{mouseDown: true});
 		var _p9 = clickTarget;
-		if (_p9.ctor === 'ToolPallet') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model2,
-					{currentAction: _user$project$Main$None, activeTool: _p9._0, cursorPosition: _user$project$Main$NotTracking}),
-				_1: {ctor: '[]'}
-			};
-		} else {
-			var _p10 = model.activeTool;
-			switch (_p10.ctor) {
-				case 'Select':
-					var _p11 = clickTarget;
-					switch (_p11.ctor) {
-						case 'Screen':
-							return {
-								ctor: '_Tuple2',
-								_0: _elm_lang$core$Native_Utils.update(
-									model2,
-									{cursorPosition: _user$project$Main$NotTracking, currentAction: _user$project$Main$None}),
-								_1: {ctor: '[]'}
-							};
-						case 'Graphic':
-							return _elm_lang$core$Native_Utils.crashCase(
-								'Main',
-								{
-									start: {line: 197, column: 25},
-									end: {line: 210, column: 88}
-								},
-								_p11)('TODO - Selected a Graphic for editing');
-						default:
-							return A2(
-								_elm_lang$core$Debug$log,
-								'Evaluated unreachable branch',
-								{
+		switch (_p9.ctor) {
+			case 'ToolPallet':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model2,
+						{currentAction: _user$project$Main$None, activeTool: _p9._0, cursorPosition: _user$project$Main$NotTracking}),
+					_1: {ctor: '[]'}
+				};
+			case 'ToolPalletHandle':
+				return _elm_lang$core$Native_Utils.crashCase(
+					'Main',
+					{
+						start: {line: 184, column: 9},
+						end: {line: 247, column: 30}
+					},
+					_p9)('TODO implement tool pallet dragging');
+			default:
+				var _p11 = model.activeTool;
+				switch (_p11.ctor) {
+					case 'Select':
+						var _p12 = clickTarget;
+						switch (_p12.ctor) {
+							case 'Screen':
+								return {
 									ctor: '_Tuple2',
-									_0: model2,
+									_0: _elm_lang$core$Native_Utils.update(
+										model2,
+										{cursorPosition: _user$project$Main$NotTracking, currentAction: _user$project$Main$None}),
 									_1: {ctor: '[]'}
-								});
-					}
-				case 'DrawRectangle':
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model2,
-							{
-								cursorPosition: _user$project$Main$Pos(position),
-								currentAction: _user$project$Main$Draw(
-									_user$project$Main$DrawRect(position))
-							}),
-						_1: {ctor: '[]'}
-					};
-				case 'DrawElipse':
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model2,
-							{
-								cursorPosition: _user$project$Main$Pos(position),
-								currentAction: _user$project$Main$Draw(
-									_user$project$Main$DrawElipse(position))
-							}),
-						_1: {ctor: '[]'}
-					};
-				case 'DrawPolygon':
-					var _p13 = function () {
-						var _p14 = model2.currentAction;
-						if ((_p14.ctor === 'Draw') && (_p14._0.ctor === 'DrawPolygon')) {
-							return {ctor: '_Tuple2', _0: _p14._0._0, _1: _p14._0._1};
-						} else {
-							return {
-								ctor: '_Tuple2',
-								_0: _user$project$Utilities$intPositionToFloat(position),
-								_1: {ctor: '[]'}
-							};
+								};
+							case 'Graphic':
+								return _elm_lang$core$Native_Utils.crashCase(
+									'Main',
+									{
+										start: {line: 200, column: 25},
+										end: {line: 213, column: 88}
+									},
+									_p12)('TODO - Selected a Graphic for editing');
+							default:
+								return A2(
+									_elm_lang$core$Debug$log,
+									'Evaluated unreachable branch',
+									{
+										ctor: '_Tuple2',
+										_0: model2,
+										_1: {ctor: '[]'}
+									});
 						}
-					}();
-					var startPoint = _p13._0;
-					var posList = _p13._1;
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model2,
-							{
-								cursorPosition: _user$project$Main$Pos(position),
-								currentAction: _user$project$Main$Draw(
-									A2(_user$project$Main$DrawPolygon, startPoint, posList)),
-								previewGraphic: _elm_lang$core$List$head(
-									A3(_user$project$Main$createPolygon, startPoint, posList, model))
-							}),
-						_1: {ctor: '[]'}
-					};
-				default:
-					return _elm_lang$core$Native_Utils.crashCase(
-						'Main',
-						{
-							start: {line: 195, column: 17},
-							end: {line: 247, column: 64}
-						},
-						_p10)('TODO - Moving Tool Pallet');
-			}
+					case 'DrawRectangle':
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model2,
+								{
+									cursorPosition: _user$project$Main$Pos(position),
+									currentAction: _user$project$Main$Draw(
+										_user$project$Main$DrawRect(position))
+								}),
+							_1: {ctor: '[]'}
+						};
+					case 'DrawElipse':
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model2,
+								{
+									cursorPosition: _user$project$Main$Pos(position),
+									currentAction: _user$project$Main$Draw(
+										_user$project$Main$DrawElipse(position))
+								}),
+							_1: {ctor: '[]'}
+						};
+					default:
+						var _p14 = function () {
+							var _p15 = model2.currentAction;
+							if ((_p15.ctor === 'Draw') && (_p15._0.ctor === 'DrawPolygon')) {
+								return {ctor: '_Tuple2', _0: _p15._0._0, _1: _p15._0._1};
+							} else {
+								return {
+									ctor: '_Tuple2',
+									_0: _user$project$Utilities$intPositionToFloat(position),
+									_1: {ctor: '[]'}
+								};
+							}
+						}();
+						var startPoint = _p14._0;
+						var posList = _p14._1;
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model2,
+								{
+									cursorPosition: _user$project$Main$Pos(position),
+									currentAction: _user$project$Main$Draw(
+										A2(_user$project$Main$DrawPolygon, startPoint, posList)),
+									previewGraphic: _elm_lang$core$List$head(
+										A3(_user$project$Main$createPolygon, startPoint, posList, model))
+								}),
+							_1: {ctor: '[]'}
+						};
+				}
 		}
 	});
 var _user$project$Main$update = F2(
