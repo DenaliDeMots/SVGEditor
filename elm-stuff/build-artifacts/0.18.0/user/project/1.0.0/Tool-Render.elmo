@@ -372,11 +372,11 @@ var _user$project$Tool_Render$toolPallet = F4(
 											_1: {
 												ctor: '::',
 												_0: _user$project$Events$mouseUpWithClickTarget(
-													_user$project$Messages_ClickTarget$ToolPalletHandle(_user$project$Pallet$ToolPallet)),
+													_user$project$Messages_ClickTarget$PalletHandle(_user$project$Pallet$ToolPallet)),
 												_1: {
 													ctor: '::',
 													_0: _user$project$Events$mouseDownWithClickTarget(
-														_user$project$Messages_ClickTarget$ToolPalletHandle(_user$project$Pallet$ToolPallet)),
+														_user$project$Messages_ClickTarget$PalletHandle(_user$project$Pallet$ToolPallet)),
 													_1: {ctor: '[]'}
 												}
 											}

@@ -1,3 +1,11 @@
+var _user$project$Utilities$applyOffset = F2(
+	function (offset, position) {
+		return {x: position.x + offset.x, y: position.y + offset.y};
+	});
+var _user$project$Utilities$getOffset = F2(
+	function (position1, position2) {
+		return {x: position2.x - position1.x, y: position2.y - position1.y};
+	});
 var _user$project$Utilities$distance = F2(
 	function (start, end) {
 		return _elm_lang$core$Basics$sqrt(
@@ -46,15 +54,6 @@ var _user$project$Utilities$maybeToList = function (a) {
 		};
 	}
 };
-var _user$project$Utilities$until_A = F3(
-	function (predicate, update, state) {
-		return predicate(
-			A2(_elm_lang$core$Debug$log, 'state', state)) ? _elm_lang$core$Task$succeed(state) : A2(
-			_elm_lang$core$Task$andThen,
-			A2(_user$project$Utilities$until_A, predicate, update),
-			_elm_lang$core$Task$succeed(
-				update(state)));
-	});
 var _user$project$Utilities$until = F3(
 	function (predicate, update, state) {
 		until:

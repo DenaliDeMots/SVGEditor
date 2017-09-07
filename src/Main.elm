@@ -104,13 +104,13 @@ setWindowSize size model =
 setPalletLocations size model =
     { model
         | toolPalletPosition =
-            { x = toFloat size.width * 0.1 |> round
-            , y = toFloat size.height * 0.1 |> round
+            { x = toFloat size.width * 0.05 |> round
+            , y = toFloat size.height * 0.05 |> round
             , height = 190
             }
         , propertyPalletPosition =
-            { x = toFloat size.width * 0.9 - 85 |> round
-            , y = toFloat size.height * 0.1 |> round
+            { x = toFloat size.width * 0.95 - 85 |> round
+            , y = toFloat size.height * 0.05 |> round
             , height = 170
             }
     }
@@ -193,9 +193,8 @@ update msg model =
                 { model
                     | cursorPosition = modelUpdates.cursorPosition
                     , previewGraphic = modelUpdates.previewGraphic
-
-                    -- , currentAction = modelUpdates.currentAction
-                    -- , graphics = modelUpdates.graphics
+                    , propertyPalletPosition = modelUpdates.propertyPalletPosition
+                    , toolPalletPosition = modelUpdates.toolPalletPosition
                 }
                     ! commands
 
@@ -205,7 +204,7 @@ mouseDownEvent model clickTarget position =
         model2 =
             { model | mouseDown = True }
     in
-        case clickTarget of
+        case Debug.log "Click Target " clickTarget of
             ClickTarget.ToolPallet tool ->
                 ( { model2
                     | currentAction = None
@@ -215,8 +214,24 @@ mouseDownEvent model clickTarget position =
                 , []
                 )
 
-            ClickTarget.ToolPalletHandle pallet ->
-                Debug.crash "TODO implement tool pallet dragging"
+            ClickTarget.PalletHandle pallet ->
+                let
+                    offset =
+                        Utilities.getOffset position
+                            (case pallet of
+                                Pallet.ToolPallet ->
+                                    { x = model.toolPalletPosition.x, y = model.toolPalletPosition.y }
+
+                                Pallet.PropertiesPallet ->
+                                    { x = model.propertyPalletPosition.x, y = model.propertyPalletPosition.y }
+                            )
+                in
+                    ( { model2
+                        | currentAction = MovePallet pallet offset
+                        , cursorPosition = Pos position
+                      }
+                    , []
+                    )
 
             _ ->
                 case model.activeTool of
@@ -281,8 +296,13 @@ mouseUpEvent model clickTarget position =
             , []
             )
 
-        MovePallet pallet ->
-            Debug.crash "TODO implement tool pallet dragging"
+        MovePallet pallet offset ->
+            ( { model
+                | currentAction = None
+                , cursorPosition = NotTracking
+              }
+            , []
+            )
 
         Draw drawAction ->
             case drawAction of
@@ -363,8 +383,27 @@ mouseMoveEvent model position =
             None ->
                 ( model2, [] )
 
-            MovePallet pallet ->
-                Debug.crash "TODO implement tool pallet dragging"
+            MovePallet pallet offset ->
+                let
+                    newPosition =
+                        Utilities.applyOffset offset position
+                in
+                    ( { model2
+                        | currentAction = MovePallet Pallet.ToolPallet offset
+                        , cursorPosition = Pos position
+                        , toolPalletPosition =
+                            if pallet == Pallet.ToolPallet then
+                                { x = newPosition.x, y = newPosition.y, height = model2.toolPalletPosition.height }
+                            else
+                                model2.toolPalletPosition
+                        , propertyPalletPosition =
+                            if pallet == Pallet.PropertiesPallet then
+                                { x = newPosition.x, y = newPosition.y, height = model2.propertyPalletPosition.height }
+                            else
+                                model2.propertyPalletPosition
+                      }
+                    , []
+                    )
 
             Draw drawAction ->
                 ( updatePreviewGraphic drawAction position model2, [] )
@@ -570,6 +609,10 @@ type alias Position =
     { x : Int, y : Int }
 
 
+type alias Offset =
+    { x : Int, y : Int }
+
+
 type alias PalletPosition =
     { x : Int, y : Int, height : Float }
 
@@ -577,7 +620,7 @@ type alias PalletPosition =
 type Action
     = None
     | Draw DrawAction
-    | MovePallet Pallet
+    | MovePallet Pallet Offset
 
 
 type DrawAction

@@ -18,6 +18,7 @@ import Messages.ClickTarget
 import Messages.UpdatePropertyPallet as PPS
 import Events
 import Messages exposing (Msg)
+import Pallet
 
 
 propertiesPallet : Int -> Int -> Float -> PropertyPalletState -> Svg Msg
@@ -73,9 +74,6 @@ propertiesPallet x y height palletState =
 
                 StrokeWidth ->
                     strokeWidthWidget
-
-                PropertyPalletHandle ->
-                    (\_ -> Svg.g [] [])
 
         yPosFromIndex index =
             toFloat index * (widgetHeight + borderSize) + toFloat y + borderSize
@@ -193,8 +191,8 @@ propertiesPallet x y height palletState =
                 , SvgA.width <| toString width
                 , SvgA.height <| toString height
                 , SvgA.fill "#0254d8"
-                , Events.mouseUpWithClickTarget <| Messages.ClickTarget.PropertiesPallet PropertyPalletHandle
-                , Events.mouseDownWithClickTarget <| Messages.ClickTarget.PropertiesPallet PropertyPalletHandle
+                , Events.mouseUpWithClickTarget <| Messages.ClickTarget.PalletHandle Pallet.PropertiesPallet
+                , Events.mouseDownWithClickTarget <| Messages.ClickTarget.PalletHandle Pallet.PropertiesPallet
                 ]
                 []
             ]

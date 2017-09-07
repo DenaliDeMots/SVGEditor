@@ -9,7 +9,6 @@ var _user$project$Properties$PropertyPalletState = F3(
 	function (a, b, c) {
 		return {fillColor: a, strokeColor: b, strokeWidth: c};
 	});
-var _user$project$Properties$PropertyPalletHandle = {ctor: 'PropertyPalletHandle'};
 var _user$project$Properties$StrokeWidth = {ctor: 'StrokeWidth'};
 var _user$project$Properties$StrokeColorPicker = {ctor: 'StrokeColorPicker'};
 var _user$project$Properties$FillColorPicker = {ctor: 'FillColorPicker'};

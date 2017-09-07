@@ -9,7 +9,6 @@ type PropertyWidget
     = FillColorPicker
     | StrokeColorPicker
     | StrokeWidth
-    | PropertyPalletHandle
 
 
 type alias PropertyPalletState =

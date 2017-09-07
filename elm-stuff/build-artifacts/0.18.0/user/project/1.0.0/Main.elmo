@@ -244,16 +244,16 @@ var _user$project$Main$setPalletLocations = F2(
 			{
 				toolPalletPosition: {
 					x: _elm_lang$core$Basics$round(
-						_elm_lang$core$Basics$toFloat(size.width) * 0.1),
+						_elm_lang$core$Basics$toFloat(size.width) * 5.0e-2),
 					y: _elm_lang$core$Basics$round(
-						_elm_lang$core$Basics$toFloat(size.height) * 0.1),
+						_elm_lang$core$Basics$toFloat(size.height) * 5.0e-2),
 					height: 190
 				},
 				propertyPalletPosition: {
 					x: _elm_lang$core$Basics$round(
-						(_elm_lang$core$Basics$toFloat(size.width) * 0.9) - 85),
+						(_elm_lang$core$Basics$toFloat(size.width) * 0.95) - 85),
 					y: _elm_lang$core$Basics$round(
-						_elm_lang$core$Basics$toFloat(size.height) * 0.1),
+						_elm_lang$core$Basics$toFloat(size.height) * 5.0e-2),
 					height: 170
 				}
 			});
@@ -289,6 +289,10 @@ var _user$project$Main$Position = F2(
 	function (a, b) {
 		return {x: a, y: b};
 	});
+var _user$project$Main$Offset = F2(
+	function (a, b) {
+		return {x: a, y: b};
+	});
 var _user$project$Main$PalletPosition = F3(
 	function (a, b, c) {
 		return {x: a, y: b, height: c};
@@ -297,6 +301,10 @@ var _user$project$Main$Pos = function (a) {
 	return {ctor: 'Pos', _0: a};
 };
 var _user$project$Main$NotTracking = {ctor: 'NotTracking'};
+var _user$project$Main$MovePallet = F2(
+	function (a, b) {
+		return {ctor: 'MovePallet', _0: a, _1: b};
+	});
 var _user$project$Main$mouseMoveEvent = F2(
 	function (model, position) {
 		var model2 = _elm_lang$core$Native_Utils.update(
@@ -313,13 +321,21 @@ var _user$project$Main$mouseMoveEvent = F2(
 					_1: {ctor: '[]'}
 				};
 			case 'MovePallet':
-				return _elm_lang$core$Native_Utils.crashCase(
-					'Main',
-					{
-						start: {line: 362, column: 9},
-						end: {line: 370, column: 72}
-					},
-					_p4)('TODO implement tool pallet dragging');
+				var _p6 = _p4._0;
+				var _p5 = _p4._1;
+				var newPosition = A2(_user$project$Utilities$applyOffset, _p5, position);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model2,
+						{
+							currentAction: A2(_user$project$Main$MovePallet, _user$project$Pallet$ToolPallet, _p5),
+							cursorPosition: _user$project$Main$Pos(position),
+							toolPalletPosition: _elm_lang$core$Native_Utils.eq(_p6, _user$project$Pallet$ToolPallet) ? {x: newPosition.x, y: newPosition.y, height: model2.toolPalletPosition.height} : model2.toolPalletPosition,
+							propertyPalletPosition: _elm_lang$core$Native_Utils.eq(_p6, _user$project$Pallet$PropertiesPallet) ? {x: newPosition.x, y: newPosition.y, height: model2.propertyPalletPosition.height} : model2.propertyPalletPosition
+						}),
+					_1: {ctor: '[]'}
+				};
 			default:
 				return {
 					ctor: '_Tuple2',
@@ -328,9 +344,6 @@ var _user$project$Main$mouseMoveEvent = F2(
 				};
 		}
 	});
-var _user$project$Main$MovePallet = function (a) {
-	return {ctor: 'MovePallet', _0: a};
-};
 var _user$project$Main$Draw = function (a) {
 	return {ctor: 'Draw', _0: a};
 };
@@ -362,8 +375,8 @@ var _user$project$Main$DrawPolygon = F2(
 	});
 var _user$project$Main$mouseUpEvent = F3(
 	function (model, clickTarget, position) {
-		var _p6 = model.currentAction;
-		switch (_p6.ctor) {
+		var _p7 = model.currentAction;
+		switch (_p7.ctor) {
 			case 'None':
 				return {
 					ctor: '_Tuple2',
@@ -373,15 +386,15 @@ var _user$project$Main$mouseUpEvent = F3(
 					_1: {ctor: '[]'}
 				};
 			case 'MovePallet':
-				return _elm_lang$core$Native_Utils.crashCase(
-					'Main',
-					{
-						start: {line: 276, column: 5},
-						end: {line: 348, column: 30}
-					},
-					_p6)('TODO implement tool pallet dragging');
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{currentAction: _user$project$Main$None, cursorPosition: _user$project$Main$NotTracking}),
+					_1: {ctor: '[]'}
+				};
 			default:
-				var _p8 = _p6._0;
+				var _p8 = _p7._0;
 				switch (_p8.ctor) {
 					case 'DrawRect':
 						return {
@@ -466,7 +479,7 @@ var _user$project$Main$mouseDownEvent = F3(
 		var model2 = _elm_lang$core$Native_Utils.update(
 			model,
 			{mouseDown: true});
-		var _p11 = clickTarget;
+		var _p11 = A2(_elm_lang$core$Debug$log, 'Click Target ', clickTarget);
 		switch (_p11.ctor) {
 			case 'ToolPallet':
 				return {
@@ -476,20 +489,35 @@ var _user$project$Main$mouseDownEvent = F3(
 						{currentAction: _user$project$Main$None, activeTool: _p11._0, cursorPosition: _user$project$Main$NotTracking}),
 					_1: {ctor: '[]'}
 				};
-			case 'ToolPalletHandle':
-				return _elm_lang$core$Native_Utils.crashCase(
-					'Main',
-					{
-						start: {line: 208, column: 9},
-						end: {line: 271, column: 30}
-					},
-					_p11)('TODO implement tool pallet dragging');
+			case 'PalletHandle':
+				var _p13 = _p11._0;
+				var offset = A2(
+					_user$project$Utilities$getOffset,
+					position,
+					function () {
+						var _p12 = _p13;
+						if (_p12.ctor === 'ToolPallet') {
+							return {x: model.toolPalletPosition.x, y: model.toolPalletPosition.y};
+						} else {
+							return {x: model.propertyPalletPosition.x, y: model.propertyPalletPosition.y};
+						}
+					}());
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model2,
+						{
+							currentAction: A2(_user$project$Main$MovePallet, _p13, offset),
+							cursorPosition: _user$project$Main$Pos(position)
+						}),
+					_1: {ctor: '[]'}
+				};
 			default:
-				var _p13 = model.activeTool;
-				switch (_p13.ctor) {
+				var _p14 = model.activeTool;
+				switch (_p14.ctor) {
 					case 'Select':
-						var _p14 = clickTarget;
-						switch (_p14.ctor) {
+						var _p15 = clickTarget;
+						switch (_p15.ctor) {
 							case 'Screen':
 								return {
 									ctor: '_Tuple2',
@@ -502,10 +530,10 @@ var _user$project$Main$mouseDownEvent = F3(
 								return _elm_lang$core$Native_Utils.crashCase(
 									'Main',
 									{
-										start: {line: 224, column: 25},
-										end: {line: 237, column: 88}
+										start: {line: 239, column: 25},
+										end: {line: 252, column: 88}
 									},
-									_p14)('TODO - Selected a Graphic for editing');
+									_p15)('TODO - Selected a Graphic for editing');
 							default:
 								return A2(
 									_elm_lang$core$Debug$log,
@@ -541,10 +569,10 @@ var _user$project$Main$mouseDownEvent = F3(
 							_1: {ctor: '[]'}
 						};
 					default:
-						var _p16 = function () {
-							var _p17 = model2.currentAction;
-							if ((_p17.ctor === 'Draw') && (_p17._0.ctor === 'DrawPolygon')) {
-								return {ctor: '_Tuple2', _0: _p17._0._0, _1: _p17._0._1};
+						var _p17 = function () {
+							var _p18 = model2.currentAction;
+							if ((_p18.ctor === 'Draw') && (_p18._0.ctor === 'DrawPolygon')) {
+								return {ctor: '_Tuple2', _0: _p18._0._0, _1: _p18._0._1};
 							} else {
 								return {
 									ctor: '_Tuple2',
@@ -553,8 +581,8 @@ var _user$project$Main$mouseDownEvent = F3(
 								};
 							}
 						}();
-						var startPoint = _p16._0;
-						var posList = _p16._1;
+						var startPoint = _p17._0;
+						var posList = _p17._1;
 						return {
 							ctor: '_Tuple2',
 							_0: _elm_lang$core$Native_Utils.update(
@@ -573,14 +601,14 @@ var _user$project$Main$mouseDownEvent = F3(
 	});
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p18 = msg;
-		switch (_p18.ctor) {
+		var _p19 = msg;
+		switch (_p19.ctor) {
 			case 'Resize':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{windowSize: _p18._0}),
+						{windowSize: _p19._0}),
 					{ctor: '[]'});
 			case 'UpdatePropertyPalletState':
 				var nextModel = function (state) {
@@ -589,15 +617,15 @@ var _user$project$Main$update = F2(
 						{propertyPalletState: state});
 				};
 				var palletState = model.propertyPalletState;
-				var _p19 = _p18._0;
-				switch (_p19.ctor) {
+				var _p20 = _p19._0;
+				switch (_p20.ctor) {
 					case 'FillColor':
 						return A2(
 							_elm_lang$core$Platform_Cmd_ops['!'],
 							nextModel(
 								_elm_lang$core$Native_Utils.update(
 									palletState,
-									{fillColor: _p19._0})),
+									{fillColor: _p20._0})),
 							{
 								ctor: '::',
 								_0: _elm_lang$core$Platform_Cmd$none,
@@ -609,7 +637,7 @@ var _user$project$Main$update = F2(
 							nextModel(
 								_elm_lang$core$Native_Utils.update(
 									palletState,
-									{strokeColor: _p19._0})),
+									{strokeColor: _p20._0})),
 							{
 								ctor: '::',
 								_0: _elm_lang$core$Platform_Cmd$none,
@@ -622,7 +650,7 @@ var _user$project$Main$update = F2(
 								_elm_lang$core$Native_Utils.update(
 									palletState,
 									{
-										strokeWidth: A2(_elm_lang$core$Result$withDefault, palletState.strokeWidth, _p19._0)
+										strokeWidth: A2(_elm_lang$core$Result$withDefault, palletState.strokeWidth, _p20._0)
 									})),
 							{
 								ctor: '::',
@@ -631,9 +659,9 @@ var _user$project$Main$update = F2(
 							});
 				}
 			case 'MouseDown':
-				var _p20 = A3(_user$project$Main$mouseDownEvent, model, _p18._0, _p18._1);
-				var modelUpdates = _p20._0;
-				var commands = _p20._1;
+				var _p21 = A3(_user$project$Main$mouseDownEvent, model, _p19._0, _p19._1);
+				var modelUpdates = _p21._0;
+				var commands = _p21._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -641,9 +669,9 @@ var _user$project$Main$update = F2(
 						{mouseDown: true, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, activeTool: modelUpdates.activeTool}),
 					commands);
 			case 'MouseUp':
-				var _p21 = A3(_user$project$Main$mouseUpEvent, model, _p18._0, _p18._1);
-				var modelUpdates = _p21._0;
-				var commands = _p21._1;
+				var _p22 = A3(_user$project$Main$mouseUpEvent, model, _p19._0, _p19._1);
+				var modelUpdates = _p22._0;
+				var commands = _p22._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
@@ -651,14 +679,14 @@ var _user$project$Main$update = F2(
 						{mouseDown: false, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, graphics: modelUpdates.graphics, previewGraphic: modelUpdates.previewGraphic}),
 					commands);
 			default:
-				var _p22 = A2(_user$project$Main$mouseMoveEvent, model, _p18._0);
-				var modelUpdates = _p22._0;
-				var commands = _p22._1;
+				var _p23 = A2(_user$project$Main$mouseMoveEvent, model, _p19._0);
+				var modelUpdates = _p23._0;
+				var commands = _p23._1;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{cursorPosition: modelUpdates.cursorPosition, previewGraphic: modelUpdates.previewGraphic}),
+						{cursorPosition: modelUpdates.cursorPosition, previewGraphic: modelUpdates.previewGraphic, propertyPalletPosition: modelUpdates.propertyPalletPosition, toolPalletPosition: modelUpdates.toolPalletPosition}),
 					commands);
 		}
 	});

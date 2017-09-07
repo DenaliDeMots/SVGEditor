@@ -1,4 +1,4 @@
-module Utilities exposing (until, maybeToList, lastInList, intPositionToFloat, distance)
+module Utilities exposing (until, maybeToList, lastInList, intPositionToFloat, distance, getOffset, applyOffset)
 
 import Task exposing (Task)
 
@@ -8,14 +8,6 @@ until predicate update state =
         state
     else
         until predicate update (update state)
-
-
-until_A : (state -> Bool) -> (state -> state) -> state -> Task Never state
-until_A predicate update state =
-    if predicate (Debug.log "state" state) then
-        Task.succeed state
-    else
-        Task.andThen (until_A predicate update) (Task.succeed <| update state)
 
 
 maybeToList : Maybe a -> List a
@@ -53,3 +45,17 @@ distance start end =
             ^ 2
             + (abs <| start.y - end.y)
             ^ 2
+
+
+getOffset : { x : Int, y : Int } -> { x : Int, y : Int } -> { x : Int, y : Int }
+getOffset position1 position2 =
+    { x = position2.x - position1.x, y = position2.y - position1.y }
+
+
+applyOffset : { x : Int, y : Int } -> { x : Int, y : Int } -> { x : Int, y : Int }
+applyOffset offset position =
+    { x = position.x + offset.x, y = position.y + offset.y }
+
+
+
+-- applyOffset (getOffset pos1 pos2)  pos1 == pos2

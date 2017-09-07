@@ -347,27 +347,20 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 					return fillColorWidget;
 				case 'StrokeColorPicker':
 					return strokeColorWidget;
-				case 'StrokeWidth':
-					return strokeWidthWidget;
 				default:
-					return function (_p1) {
-						return A2(
-							_elm_lang$svg$Svg$g,
-							{ctor: '[]'},
-							{ctor: '[]'});
-					};
+					return strokeWidthWidget;
 			}
 		};
 		var positionWidgets = F2(
 			function (widgetList, index) {
-				var _p2 = widgetList;
-				if (_p2.ctor === '[]') {
+				var _p1 = widgetList;
+				if (_p1.ctor === '[]') {
 					return {ctor: '[]'};
 				} else {
 					return {
 						ctor: '::',
-						_0: A2(getWidgetFunction, _p2._0, index),
-						_1: A2(positionWidgets, _p2._1, index + 1)
+						_0: A2(getWidgetFunction, _p1._0, index),
+						_1: A2(positionWidgets, _p1._1, index + 1)
 					};
 				}
 			});
@@ -403,11 +396,11 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 											_1: {
 												ctor: '::',
 												_0: _user$project$Events$mouseUpWithClickTarget(
-													_user$project$Messages_ClickTarget$PropertiesPallet(_user$project$Properties$PropertyPalletHandle)),
+													_user$project$Messages_ClickTarget$PalletHandle(_user$project$Pallet$PropertiesPallet)),
 												_1: {
 													ctor: '::',
 													_0: _user$project$Events$mouseDownWithClickTarget(
-														_user$project$Messages_ClickTarget$PropertiesPallet(_user$project$Properties$PropertyPalletHandle)),
+														_user$project$Messages_ClickTarget$PalletHandle(_user$project$Pallet$PropertiesPallet)),
 													_1: {ctor: '[]'}
 												}
 											}

@@ -231,8 +231,8 @@ toolPallet x y height activeTool =
                 , SvgA.width <| toString width
                 , SvgA.height <| toString height
                 , SvgA.fill "#0254d8"
-                , Events.mouseUpWithClickTarget <| ClickTarget.ToolPalletHandle Pallet.ToolPallet
-                , Events.mouseDownWithClickTarget <| ClickTarget.ToolPalletHandle Pallet.ToolPallet
+                , Events.mouseUpWithClickTarget <| ClickTarget.PalletHandle Pallet.ToolPallet
+                , Events.mouseDownWithClickTarget <| ClickTarget.PalletHandle Pallet.ToolPallet
                 ]
                 []
             ]
