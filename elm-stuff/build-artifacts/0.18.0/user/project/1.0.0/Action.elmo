@@ -1,0 +1,28 @@
+var _user$project$Action$Position = F2(
+	function (a, b) {
+		return {x: a, y: b};
+	});
+var _user$project$Action$Offset = F2(
+	function (a, b) {
+		return {x: a, y: b};
+	});
+var _user$project$Action$MovePallet = F2(
+	function (a, b) {
+		return {ctor: 'MovePallet', _0: a, _1: b};
+	});
+var _user$project$Action$SelectStrokeColor = {ctor: 'SelectStrokeColor'};
+var _user$project$Action$SelectFillColor = {ctor: 'SelectFillColor'};
+var _user$project$Action$Draw = function (a) {
+	return {ctor: 'Draw', _0: a};
+};
+var _user$project$Action$None = {ctor: 'None'};
+var _user$project$Action$DrawPolygon = F2(
+	function (a, b) {
+		return {ctor: 'DrawPolygon', _0: a, _1: b};
+	});
+var _user$project$Action$DrawElipse = function (a) {
+	return {ctor: 'DrawElipse', _0: a};
+};
+var _user$project$Action$DrawRect = function (a) {
+	return {ctor: 'DrawRect', _0: a};
+};

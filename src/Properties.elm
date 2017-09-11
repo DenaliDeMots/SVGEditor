@@ -1,20 +1,28 @@
-module Properties exposing (PropertyWidget(..), PropertyPalletState, toCommonProperties)
+module Properties exposing (PropertyWidget(..), Button(..), PropertyPalletState, toCommonProperties)
 
 import Color.Convert as CC
+import ColorPicker
 import Graphic
 import Color exposing (Color)
+import ColorPickerState exposing (ColorPickerState)
 
 
 type PropertyWidget
     = FillColorPicker
     | StrokeColorPicker
-    | StrokeWidth
+    | StrokeWidth Button
+
+
+type Button
+    = Increment
+    | Decrement
 
 
 type alias PropertyPalletState =
     { fillColor : Color
     , strokeColor : Color
     , strokeWidth : Float
+    , colorPickerState : ColorPickerState
     }
 
 

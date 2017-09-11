@@ -9,6 +9,7 @@ import Html.Events as HtmlE
 import Svg.Attributes as SvgA
 import Color exposing (Color)
 import Color.Convert as CC
+import ColorPicker
 
 
 --internal modules
@@ -19,6 +20,8 @@ import Messages.UpdatePropertyPallet as PPS
 import Events
 import Messages exposing (Msg)
 import Pallet
+import Utilities
+import ColorPickerState as CPS
 
 
 propertiesPallet : Int -> Int -> Float -> PropertyPalletState -> Svg Msg
@@ -26,7 +29,7 @@ propertiesPallet x y height palletState =
     --All widgets have a width 50% larger then their height
     let
         widgetList =
-            [ StrokeColorPicker, FillColorPicker, StrokeWidth ]
+            [ StrokeColorPicker, FillColorPicker, StrokeWidth Properties.Increment ]
 
         widgetHeight =
             List.length widgetList
@@ -72,18 +75,30 @@ propertiesPallet x y height palletState =
                 StrokeColorPicker ->
                     strokeColorWidget
 
-                StrokeWidth ->
+                StrokeWidth _ ->
                     strokeWidthWidget
 
         yPosFromIndex index =
             toFloat index * (widgetHeight + borderSize) + toFloat y + borderSize
 
+        positionedColorPicker =
+            case palletState.colorPickerState of
+                CPS.SelectingStrokeColor state ->
+                    colorPicker (Utilities.indexOf FillColorPicker widgetList |> abs) palletState.fillColor state
+
+                CPS.SelectingFillColor state ->
+                    colorPicker (Utilities.indexOf StrokeColorPicker widgetList |> abs) palletState.strokeColor state
+
+                CPS.Hidden ->
+                    Svg.g [] []
+
+        --widget functions
         strokeColorWidget : Int -> Svg Msg
         strokeColorWidget index =
             Svg.g []
                 [ widgetBackgroundBox index
                 , label "Stroke" index
-                , colorBox index palletState.strokeColor
+                , colorBox index palletState.strokeColor Properties.StrokeColorPicker
                 ]
 
         fillColorWidget : Int -> Svg Msg
@@ -91,7 +106,7 @@ propertiesPallet x y height palletState =
             Svg.g []
                 [ widgetBackgroundBox index
                 , label "Fill" index
-                , colorBox index palletState.fillColor
+                , colorBox index palletState.fillColor Properties.FillColorPicker
                 ]
 
         strokeWidthWidget : Int -> Svg Msg
@@ -126,6 +141,8 @@ propertiesPallet x y height palletState =
                 , SvgA.y <| toString (yPosFromIndex index + labelFontSize + borderSize)
                 , SvgA.width <| toString (widgetWidth * 0.3)
                 , SvgA.height <| toString (widgetHeight - labelFontSize - borderSize * 2)
+                , Events.mouseDownWithClickTarget <|
+                    Messages.ClickTarget.PropertiesPallet (Properties.StrokeWidth Properties.Decrement)
                 ]
                 [ Svg.polygon
                     [ SvgA.points "0 50, 100 0, 100 100"
@@ -141,6 +158,8 @@ propertiesPallet x y height palletState =
                 , SvgA.y <| toString (yPosFromIndex index + labelFontSize + borderSize)
                 , SvgA.width <| toString (widgetWidth * 0.3)
                 , SvgA.height <| toString (widgetHeight - labelFontSize - borderSize * 2)
+                , Events.mouseDownWithClickTarget <|
+                    Messages.ClickTarget.PropertiesPallet (Properties.StrokeWidth Properties.Decrement)
                 ]
                 [ Svg.polygon
                     [ SvgA.points "0 0, 100 50, 0 100"
@@ -158,8 +177,8 @@ propertiesPallet x y height palletState =
                 ]
                 [ Svg.text <| toString palletState.strokeWidth ]
 
-        colorBox : Int -> Color -> Svg Msg
-        colorBox index color =
+        colorBox : Int -> Color -> Properties.PropertyWidget -> Svg Msg
+        colorBox index color widget =
             Svg.rect
                 [ SvgA.x <| toString (widgetX + widgetWidth * 0.1)
                 , SvgA.width <| toString (widgetWidth * 0.8)
@@ -168,8 +187,31 @@ propertiesPallet x y height palletState =
                 , SvgA.fill <| CC.colorToHex color
                 , SvgA.stroke "#000000"
                 , SvgA.strokeWidth <| toString (borderSize / 2)
+                , Events.mouseDownWithClickTarget <| Messages.ClickTarget.PropertiesPallet widget
                 ]
                 []
+
+        colorPicker : Int -> Color -> ColorPicker.State -> Svg Msg
+        colorPicker index color state =
+            let
+                pickerHeight =
+                    200
+
+                pickerWidth =
+                    200
+            in
+                Svg.foreignObject
+                    [ SvgA.x <| toString (widgetX - 20 - pickerWidth)
+                    , SvgA.y <| toString <| (yPosFromIndex index + widgetHeight / 2) - pickerHeight / 2
+                    , SvgA.width <| toString pickerWidth
+                    , SvgA.height <| toString pickerHeight
+                    , SvgA.viewBox <| "0 0 " ++ toString pickerWidth ++ " " ++ toString pickerHeight
+                    ]
+                    [ Html.div []
+                        [ ColorPicker.view color state
+                            |> Html.map (Messages.UpdatePropertyPalletState << PPS.UpdateColor)
+                        ]
+                    ]
 
         widgetBackgroundBox : Int -> Svg Msg
         widgetBackgroundBox index =
@@ -183,7 +225,11 @@ propertiesPallet x y height palletState =
                 ]
                 []
     in
-        Svg.g [] <|
+        Svg.g
+            [ Events.mouseUpWithClickTarget <| Messages.ClickTarget.PalletHandle Pallet.PropertiesPallet
+            , Events.mouseDownWithClickTarget <| Messages.ClickTarget.PalletHandle Pallet.PropertiesPallet
+            ]
+        <|
             [ Svg.rect
                 --background
                 [ SvgA.x <| toString x
@@ -191,9 +237,7 @@ propertiesPallet x y height palletState =
                 , SvgA.width <| toString width
                 , SvgA.height <| toString height
                 , SvgA.fill "#0254d8"
-                , Events.mouseUpWithClickTarget <| Messages.ClickTarget.PalletHandle Pallet.PropertiesPallet
-                , Events.mouseDownWithClickTarget <| Messages.ClickTarget.PalletHandle Pallet.PropertiesPallet
                 ]
                 []
             ]
-                ++ positionedWidgets
+                ++ (positionedColorPicker :: positionedWidgets)

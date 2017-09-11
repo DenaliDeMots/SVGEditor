@@ -12,7 +12,7 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 				_0: _user$project$Properties$FillColorPicker,
 				_1: {
 					ctor: '::',
-					_0: _user$project$Properties$StrokeWidth,
+					_0: _user$project$Properties$StrokeWidth(_user$project$Properties$Increment),
 					_1: {ctor: '[]'}
 				}
 			}
@@ -91,7 +91,13 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$height(
 										_elm_lang$core$Basics$toString((widgetHeight - labelFontSize) - (borderSize * 2))),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: _user$project$Events$mouseDownWithClickTarget(
+											_user$project$Messages_ClickTarget$PropertiesPallet(
+												_user$project$Properties$StrokeWidth(_user$project$Properties$Decrement))),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}
@@ -137,7 +143,13 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$height(
 										_elm_lang$core$Basics$toString((widgetHeight - labelFontSize) - (borderSize * 2))),
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: _user$project$Events$mouseDownWithClickTarget(
+											_user$project$Messages_ClickTarget$PropertiesPallet(
+												_user$project$Properties$StrokeWidth(_user$project$Properties$Decrement))),
+										_1: {ctor: '[]'}
+									}
 								}
 							}
 						}
@@ -209,8 +221,8 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 					}
 				});
 		};
-		var colorBox = F2(
-			function (index, color) {
+		var colorBox = F3(
+			function (index, color, widget) {
 				return A2(
 					_elm_lang$svg$Svg$rect,
 					{
@@ -241,7 +253,12 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 												ctor: '::',
 												_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
 													_elm_lang$core$Basics$toString(borderSize / 2)),
-												_1: {ctor: '[]'}
+												_1: {
+													ctor: '::',
+													_0: _user$project$Events$mouseDownWithClickTarget(
+														_user$project$Messages_ClickTarget$PropertiesPallet(widget)),
+													_1: {ctor: '[]'}
+												}
 											}
 										}
 									}
@@ -250,6 +267,67 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 						}
 					},
 					{ctor: '[]'});
+			});
+		var colorPicker = F3(
+			function (index, color, state) {
+				var pickerWidth = 200;
+				var pickerHeight = 200;
+				return A2(
+					_elm_lang$svg$Svg$foreignObject,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString((widgetX - 20) - pickerWidth)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(
+									(yPosFromIndex(index) + (widgetHeight / 2)) - (pickerHeight / 2))),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(pickerWidth)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString(pickerHeight)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$viewBox(
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												'0 0 ',
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													_elm_lang$core$Basics$toString(pickerWidth),
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														' ',
+														_elm_lang$core$Basics$toString(pickerHeight))))),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$map,
+									function (_p0) {
+										return _user$project$Messages$UpdatePropertyPalletState(
+											_user$project$Messages_UpdatePropertyPallet$UpdateColor(_p0));
+									},
+									A2(_simonh1000$elm_colorpicker$ColorPicker$view, color, state)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					});
 			});
 		var widgetBackgroundBox = function (index) {
 			return A2(
@@ -298,7 +376,7 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 						_0: A2(label, 'Stroke', index),
 						_1: {
 							ctor: '::',
-							_0: A2(colorBox, index, palletState.strokeColor),
+							_0: A3(colorBox, index, palletState.strokeColor, _user$project$Properties$StrokeColorPicker),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -316,7 +394,7 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 						_0: A2(label, 'Fill', index),
 						_1: {
 							ctor: '::',
-							_0: A2(colorBox, index, palletState.fillColor),
+							_0: A3(colorBox, index, palletState.fillColor, _user$project$Properties$FillColorPicker),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -341,8 +419,8 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 				});
 		};
 		var getWidgetFunction = function (widget) {
-			var _p0 = widget;
-			switch (_p0.ctor) {
+			var _p1 = widget;
+			switch (_p1.ctor) {
 				case 'FillColorPicker':
 					return fillColorWidget;
 				case 'StrokeColorPicker':
@@ -353,21 +431,55 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 		};
 		var positionWidgets = F2(
 			function (widgetList, index) {
-				var _p1 = widgetList;
-				if (_p1.ctor === '[]') {
+				var _p2 = widgetList;
+				if (_p2.ctor === '[]') {
 					return {ctor: '[]'};
 				} else {
 					return {
 						ctor: '::',
-						_0: A2(getWidgetFunction, _p1._0, index),
-						_1: A2(positionWidgets, _p1._1, index + 1)
+						_0: A2(getWidgetFunction, _p2._0, index),
+						_1: A2(positionWidgets, _p2._1, index + 1)
 					};
 				}
 			});
 		var positionedWidgets = A2(positionWidgets, widgetList, 0);
+		var positionedColorPicker = function () {
+			var _p3 = palletState.colorPickerState;
+			switch (_p3.ctor) {
+				case 'SelectingStrokeColor':
+					return A3(
+						colorPicker,
+						_elm_lang$core$Basics$abs(
+							A2(_user$project$Utilities$indexOf, _user$project$Properties$FillColorPicker, widgetList)),
+						palletState.fillColor,
+						_p3._0);
+				case 'SelectingFillColor':
+					return A3(
+						colorPicker,
+						_elm_lang$core$Basics$abs(
+							A2(_user$project$Utilities$indexOf, _user$project$Properties$StrokeColorPicker, widgetList)),
+						palletState.strokeColor,
+						_p3._0);
+				default:
+					return A2(
+						_elm_lang$svg$Svg$g,
+						{ctor: '[]'},
+						{ctor: '[]'});
+			}
+		}();
 		return A2(
 			_elm_lang$svg$Svg$g,
-			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _user$project$Events$mouseUpWithClickTarget(
+					_user$project$Messages_ClickTarget$PalletHandle(_user$project$Pallet$PropertiesPallet)),
+				_1: {
+					ctor: '::',
+					_0: _user$project$Events$mouseDownWithClickTarget(
+						_user$project$Messages_ClickTarget$PalletHandle(_user$project$Pallet$PropertiesPallet)),
+					_1: {ctor: '[]'}
+				}
+			},
 			A2(
 				_elm_lang$core$Basics_ops['++'],
 				{
@@ -393,17 +505,7 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 										_1: {
 											ctor: '::',
 											_0: _elm_lang$svg$Svg_Attributes$fill('#0254d8'),
-											_1: {
-												ctor: '::',
-												_0: _user$project$Events$mouseUpWithClickTarget(
-													_user$project$Messages_ClickTarget$PalletHandle(_user$project$Pallet$PropertiesPallet)),
-												_1: {
-													ctor: '::',
-													_0: _user$project$Events$mouseDownWithClickTarget(
-														_user$project$Messages_ClickTarget$PalletHandle(_user$project$Pallet$PropertiesPallet)),
-													_1: {ctor: '[]'}
-												}
-											}
+											_1: {ctor: '[]'}
 										}
 									}
 								}
@@ -412,5 +514,5 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 						{ctor: '[]'}),
 					_1: {ctor: '[]'}
 				},
-				positionedWidgets));
+				{ctor: '::', _0: positionedColorPicker, _1: positionedWidgets}));
 	});

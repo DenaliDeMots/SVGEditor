@@ -1,0 +1,30 @@
+var _user$project$Test$update = F2(
+	function (message, model) {
+		var _p0 = message;
+		var _p1 = A3(_simonh1000$elm_colorpicker$ColorPicker$update, _p0._0, model.colour, model.colorPicker);
+		var m = _p1._0;
+		var colour = _p1._1;
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				colorPicker: m,
+				colour: A2(_elm_lang$core$Maybe$withDefault, model.colour, colour)
+			});
+	});
+var _user$project$Test$init = {
+	colorPicker: _simonh1000$elm_colorpicker$ColorPicker$empty,
+	colour: A3(_elm_lang$core$Color$rgb, 255, 0, 0)
+};
+var _user$project$Test$Model = F2(
+	function (a, b) {
+		return {colorPicker: a, colour: b};
+	});
+var _user$project$Test$ColorPickerMsg = function (a) {
+	return {ctor: 'ColorPickerMsg', _0: a};
+};
+var _user$project$Test$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$map,
+		_user$project$Test$ColorPickerMsg,
+		A2(_simonh1000$elm_colorpicker$ColorPicker$view, model.colour, model.colorPicker));
+};

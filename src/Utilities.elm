@@ -1,4 +1,4 @@
-module Utilities exposing (until, maybeToList, lastInList, intPositionToFloat, distance, getOffset, applyOffset)
+module Utilities exposing (until, maybeToList, lastInList, intPositionToFloat, distance, getOffset, applyOffset, indexOf)
 
 import Task exposing (Task)
 
@@ -52,10 +52,27 @@ getOffset position1 position2 =
     { x = position2.x - position1.x, y = position2.y - position1.y }
 
 
+
+-- applyOffset (getOffset pos1 pos2)  pos1 == pos2
+
+
 applyOffset : { x : Int, y : Int } -> { x : Int, y : Int } -> { x : Int, y : Int }
 applyOffset offset position =
     { x = position.x + offset.x, y = position.y + offset.y }
 
 
+indexOf : a -> List a -> Int
+indexOf element list =
+    let
+        helper elem lis index =
+            case lis of
+                [] ->
+                    -1
 
--- applyOffset (getOffset pos1 pos2)  pos1 == pos2
+                e :: es ->
+                    if elem == e then
+                        index
+                    else
+                        helper elem es (index + 1)
+    in
+        helper element list 0

@@ -1,3 +1,29 @@
+var _user$project$Utilities$indexOf = F2(
+	function (element, list) {
+		var helper = F3(
+			function (elem, lis, index) {
+				helper:
+				while (true) {
+					var _p0 = lis;
+					if (_p0.ctor === '[]') {
+						return -1;
+					} else {
+						if (_elm_lang$core$Native_Utils.eq(elem, _p0._0)) {
+							return index;
+						} else {
+							var _v1 = elem,
+								_v2 = _p0._1,
+								_v3 = index + 1;
+							elem = _v1;
+							lis = _v2;
+							index = _v3;
+							continue helper;
+						}
+					}
+				}
+			});
+		return A3(helper, element, list, 0);
+	});
 var _user$project$Utilities$applyOffset = F2(
 	function (offset, position) {
 		return {x: position.x + offset.x, y: position.y + offset.y};
@@ -24,32 +50,32 @@ var _user$project$Utilities$intPositionToFloat = function (pos) {
 var _user$project$Utilities$lastInList = function (list) {
 	lastInList:
 	while (true) {
-		var _p0 = list;
-		if (_p0.ctor === '[]') {
+		var _p1 = list;
+		if (_p1.ctor === '[]') {
 			return {ctor: '[]'};
 		} else {
-			if (_p0._1.ctor === '[]') {
+			if (_p1._1.ctor === '[]') {
 				return {
 					ctor: '::',
-					_0: _p0._0,
+					_0: _p1._0,
 					_1: {ctor: '[]'}
 				};
 			} else {
-				var _v1 = _p0._1;
-				list = _v1;
+				var _v5 = _p1._1;
+				list = _v5;
 				continue lastInList;
 			}
 		}
 	}
 };
 var _user$project$Utilities$maybeToList = function (a) {
-	var _p1 = a;
-	if (_p1.ctor === 'Nothing') {
+	var _p2 = a;
+	if (_p2.ctor === 'Nothing') {
 		return {ctor: '[]'};
 	} else {
 		return {
 			ctor: '::',
-			_0: _p1._0,
+			_0: _p2._0,
 			_1: {ctor: '[]'}
 		};
 	}
@@ -61,12 +87,12 @@ var _user$project$Utilities$until = F3(
 			if (predicate(state)) {
 				return state;
 			} else {
-				var _v3 = predicate,
-					_v4 = update,
-					_v5 = update(state);
-				predicate = _v3;
-				update = _v4;
-				state = _v5;
+				var _v7 = predicate,
+					_v8 = update,
+					_v9 = update(state);
+				predicate = _v7;
+				update = _v8;
+				state = _v9;
 				continue until;
 			}
 		}

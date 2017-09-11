@@ -1,0 +1,7 @@
+var _user$project$ColorPickerState$Hidden = {ctor: 'Hidden'};
+var _user$project$ColorPickerState$SelectingFillColor = function (a) {
+	return {ctor: 'SelectingFillColor', _0: a};
+};
+var _user$project$ColorPickerState$SelectingStrokeColor = function (a) {
+	return {ctor: 'SelectingStrokeColor', _0: a};
+};

@@ -1,0 +1,197 @@
+var _user$project$App$sts = function (hex) {
+	return _elm_lang$html$Html_Attributes$style(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'width', _1: '50px'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'height', _1: '50px'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'background-color', _1: hex},
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+};
+var _user$project$App$update = F2(
+	function (message, model) {
+		var _p0 = A2(_elm_lang$core$Debug$log, '', message);
+		if (_p0.ctor === 'ColorPickerMsg') {
+			var _p1 = A2(
+				_elm_lang$core$Debug$log,
+				'',
+				A3(_simonh1000$elm_colorpicker$ColorPicker$update, _p0._0, model.colour, model.colorPicker));
+			var m = _p1._0;
+			var colour = _p1._1;
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					colorPicker: m,
+					colour: A2(_elm_lang$core$Maybe$withDefault, model.colour, colour)
+				});
+		} else {
+			var _p2 = _simonh1000$elm_colorpicker$ColorPicker$hex2Color(model.hex);
+			if (_p2.ctor === 'Just') {
+				var _p3 = A3(_simonh1000$elm_colorpicker$ColorPicker$update, _p0._0, model.colour, model.colorPicker);
+				var m = _p3._0;
+				var colour = _p3._1;
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						colorPickerHex: m,
+						hex: A2(
+							_elm_lang$core$Maybe$withDefault,
+							model.hex,
+							A2(_elm_lang$core$Maybe$map, _simonh1000$elm_colorpicker$ColorPicker$color2Hex, colour))
+					});
+			} else {
+				var _p4 = A2(_elm_lang$core$Debug$log, 'failed to convert', model.colour);
+				return model;
+			}
+		}
+	});
+var _user$project$App$init = {
+	colorPicker: _simonh1000$elm_colorpicker$ColorPicker$empty,
+	colorPickerHex: _simonh1000$elm_colorpicker$ColorPicker$empty,
+	hex: '#000000',
+	colour: A3(_elm_lang$core$Color$rgb, 0, 0, 0)
+};
+var _user$project$App$Model = F4(
+	function (a, b, c, d) {
+		return {colorPicker: a, colorPickerHex: b, hex: c, colour: d};
+	});
+var _user$project$App$CPHexMsg = function (a) {
+	return {ctor: 'CPHexMsg', _0: a};
+};
+var _user$project$App$viewAsHex = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h1,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Colour Picker - state as hex'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: function () {
+					var _p5 = _simonh1000$elm_colorpicker$ColorPicker$hex2Color(model.hex);
+					if (_p5.ctor === 'Just') {
+						return A2(
+							_elm_lang$html$Html$map,
+							_user$project$App$CPHexMsg,
+							A2(_simonh1000$elm_colorpicker$ColorPicker$view, _p5._0, model.colorPickerHex));
+					} else {
+						return _elm_lang$html$Html$text(
+							A2(_elm_lang$core$Basics_ops['++'], 'ColorPicker.hex2Color could not convert ', model.hex));
+					}
+				}(),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(model.hex),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _user$project$App$sts(model.hex),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+};
+var _user$project$App$ColorPickerMsg = function (a) {
+	return {ctor: 'ColorPickerMsg', _0: a};
+};
+var _user$project$App$viewAsColor = function (model) {
+	var hex = _simonh1000$elm_colorpicker$ColorPicker$color2Hex(model.colour);
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h1,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Colour Picker - state as Color'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$id('container'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$map,
+							_user$project$App$ColorPickerMsg,
+							A2(_simonh1000$elm_colorpicker$ColorPicker$view, model.colour, model.colorPicker)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(hex),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _user$project$App$sts(hex),
+								_1: {ctor: '[]'}
+							},
+							{ctor: '[]'}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+};
+var _user$project$App$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('container'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _user$project$App$viewAsColor(model),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$App$main = _elm_lang$html$Html$beginnerProgram(
+	{model: _user$project$App$init, update: _user$project$App$update, view: _user$project$App$view})();

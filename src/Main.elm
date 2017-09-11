@@ -13,12 +13,14 @@ import Platform
 import Json.Decode
 import Color
 import Color.Convert as CC
+import ColorPicker
 import Result
 
 
 --internal modules
 
 import Graphic exposing (Graphic)
+import Action exposing (..)
 import Tool exposing (Tool)
 import Tool.Render
 import Properties exposing (PropertyWidget, PropertyPalletState)
@@ -29,6 +31,7 @@ import Messages as Msg exposing (Msg)
 import Messages.ClickTarget as ClickTarget exposing (ClickTarget)
 import Messages.UpdatePropertyPallet as PPS
 import Pallet exposing (Pallet)
+import ColorPickerState
 
 
 --import DrawingTools exposing (Tool)
@@ -120,15 +123,12 @@ initialPropertyPalletState =
     { fillColor = Color.green
     , strokeColor = Color.blue
     , strokeWidth = 4
+    , colorPickerState = ColorPickerState.Hidden
     }
 
 
 
 --Initialization--
-----------------------------------------------------------------
----------------------------------------------------------------
---Messeges--
---Messeges--
 ----------------------------------------------------------------
 ----------------------------------------------------------------
 --Update--
@@ -149,11 +149,43 @@ update msg model =
                     { model | propertyPalletState = state }
             in
                 case stateMsg of
-                    PPS.FillColor color ->
-                        nextModel { palletState | fillColor = color } ! [ Cmd.none ]
+                    PPS.UpdateColor colorPickerMsg ->
+                        let
+                            updatePicker pickerState =
+                                ColorPicker.update colorPickerMsg palletState.fillColor pickerState
 
-                    PPS.StrokeColor color ->
-                        nextModel { palletState | strokeColor = color } ! [ Cmd.none ]
+                            ( newPickerState, newFillColor, newStrokeColor ) =
+                                case palletState.colorPickerState of
+                                    ColorPickerState.SelectingStrokeColor state ->
+                                        let
+                                            ( nextPickerState, nextColor ) =
+                                                updatePicker state
+                                        in
+                                            ( ColorPickerState.SelectingStrokeColor nextPickerState
+                                            , palletState.fillColor
+                                            , nextColor |> Maybe.withDefault palletState.strokeColor
+                                            )
+
+                                    ColorPickerState.SelectingFillColor state ->
+                                        let
+                                            ( nextPickerState, nextColor ) =
+                                                updatePicker state
+                                        in
+                                            ( ColorPickerState.SelectingFillColor nextPickerState
+                                            , nextColor |> Maybe.withDefault palletState.fillColor
+                                            , palletState.strokeColor
+                                            )
+
+                                    ColorPickerState.Hidden ->
+                                        ( ColorPickerState.Hidden, palletState.fillColor, palletState.strokeColor )
+                        in
+                            nextModel
+                                { palletState
+                                    | fillColor = newFillColor
+                                    , strokeColor = newStrokeColor
+                                    , colorPickerState = newPickerState
+                                }
+                                ! [ Cmd.none ]
 
                     PPS.StrokeWidth result ->
                         nextModel { palletState | strokeWidth = Result.withDefault palletState.strokeWidth result } ! [ Cmd.none ]
@@ -168,6 +200,7 @@ update msg model =
                     , cursorPosition = modelUpdates.cursorPosition
                     , currentAction = modelUpdates.currentAction
                     , activeTool = modelUpdates.activeTool
+                    , propertyPalletState = modelUpdates.propertyPalletState
                 }
                     ! commands
 
@@ -233,6 +266,53 @@ mouseDownEvent model clickTarget position =
                     , []
                     )
 
+            ClickTarget.PropertiesPallet widget ->
+                let
+                    propPalletState =
+                        model.propertyPalletState
+
+                    newPickerState state =
+                        { propPalletState | colorPickerState = state }
+                in
+                    case widget of
+                        Properties.FillColorPicker ->
+                            ( { model2
+                                | currentAction = SelectFillColor
+                                , propertyPalletState = newPickerState (ColorPickerState.SelectingFillColor <| ColorPicker.empty)
+                              }
+                            , []
+                            )
+
+                        Properties.StrokeColorPicker ->
+                            ( { model2
+                                | currentAction = SelectStrokeColor
+                                , propertyPalletState = newPickerState (ColorPickerState.SelectingStrokeColor <| ColorPicker.empty)
+                              }
+                            , []
+                            )
+
+                        Properties.StrokeWidth button ->
+                            case button of
+                                Properties.Increment ->
+                                    let
+                                        pPS =
+                                            model2.propertyPalletState
+
+                                        newPPS =
+                                            { pPS | strokeWidth = pPS.strokeWidth + 1 }
+                                    in
+                                        ( { model2 | propertyPalletState = newPPS }, [] )
+
+                                Properties.Decrement ->
+                                    let
+                                        pPS =
+                                            model2.propertyPalletState
+
+                                        newPPS =
+                                            { pPS | strokeWidth = pPS.strokeWidth - 1 }
+                                    in
+                                        ( { model2 | propertyPalletState = newPPS }, [] )
+
             _ ->
                 case model.activeTool of
                     Tool.Select ->
@@ -280,7 +360,7 @@ mouseDownEvent model clickTarget position =
                             ( { model2
                                 | cursorPosition = Pos position
                                 , currentAction = Draw (DrawPolygon startPoint posList)
-                                , previewGraphic = List.head <| createPolygon startPoint posList model
+                                , previewGraphic = List.head <| createPolygon startPoint posList model2
                               }
                             , []
                             )
@@ -300,6 +380,20 @@ mouseUpEvent model clickTarget position =
             ( { model
                 | currentAction = None
                 , cursorPosition = NotTracking
+              }
+            , []
+            )
+
+        SelectFillColor ->
+            ( { model
+                | cursorPosition = NotTracking
+              }
+            , []
+            )
+
+        SelectStrokeColor ->
+            ( { model
+                | cursorPosition = NotTracking
               }
             , []
             )
@@ -404,6 +498,12 @@ mouseMoveEvent model position =
                       }
                     , []
                     )
+
+            SelectFillColor ->
+                ( model2, [] )
+
+            SelectStrokeColor ->
+                ( model2, [] )
 
             Draw drawAction ->
                 ( updatePreviewGraphic drawAction position model2, [] )
@@ -580,8 +680,20 @@ view model =
                                     ]
                                     graphic
                             )
-                        |> flip (++) [ Tool.Render.toolPallet toolPalletPosition.x toolPalletPosition.y toolPalletPosition.height activeTool ]
-                        |> flip (++) [ Properties.Render.propertiesPallet propertyPalletPosition.x propertyPalletPosition.y propertyPalletPosition.height propertyPalletState ]
+                        |> flip (++)
+                            [ Tool.Render.toolPallet
+                                toolPalletPosition.x
+                                toolPalletPosition.y
+                                toolPalletPosition.height
+                                activeTool
+                            ]
+                        |> flip (++)
+                            [ Properties.Render.propertiesPallet
+                                propertyPalletPosition.x
+                                propertyPalletPosition.y
+                                propertyPalletPosition.height
+                                propertyPalletState
+                            ]
                    )
 
 
@@ -605,25 +717,5 @@ type CursorPosition
     | Pos Position
 
 
-type alias Position =
-    { x : Int, y : Int }
-
-
-type alias Offset =
-    { x : Int, y : Int }
-
-
 type alias PalletPosition =
     { x : Int, y : Int, height : Float }
-
-
-type Action
-    = None
-    | Draw DrawAction
-    | MovePallet Pallet Offset
-
-
-type DrawAction
-    = DrawRect Position
-    | DrawElipse Position
-    | DrawPolygon { x : Float, y : Float } (List { x : Float, y : Float })
