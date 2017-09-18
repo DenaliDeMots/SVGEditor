@@ -1,9 +1,9 @@
 module Messages.UpdatePropertyPallet exposing (..)
 
 import Color exposing (Color)
-import ColorPicker
 
 
 type UpdatePropertyPalletState
-    = UpdateColor ColorPicker.Msg
+    = UpdateFillColor Color
+    | UpdateStrokeColor Color
     | StrokeWidth (Result String Float)

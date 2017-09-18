@@ -1,6 +1,9 @@
 var _user$project$Messages$UpdatePropertyPalletState = function (a) {
 	return {ctor: 'UpdatePropertyPalletState', _0: a};
 };
+var _user$project$Messages$MouseOut = function (a) {
+	return {ctor: 'MouseOut', _0: a};
+};
 var _user$project$Messages$MouseMove = function (a) {
 	return {ctor: 'MouseMove', _0: a};
 };

@@ -8,7 +8,6 @@
     "elm-lang/window": "1.0.1",
     "elm-lang/core": "5.1.1",
     "elm-lang/animation-frame": "1.0.1",
-    "simonh1000/elm-colorpicker": "1.1.1",
     "mdgriffith/elm-style-animation": "3.5.5",
     "elm-lang/virtual-dom": "2.0.4",
     "elm-lang/mouse": "1.0.1"

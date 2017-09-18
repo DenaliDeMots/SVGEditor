@@ -1,4 +1,4 @@
-module Events exposing (mouseDownWithClickTarget, mouseUpWithClickTarget)
+module Events exposing (mouseDownWithClickTarget, mouseUpWithClickTarget, mouseOutWithClickTarget)
 
 import Html.Events
 import Json.Decode
@@ -14,6 +14,10 @@ mouseUpWithClickTarget clickTarget =
     onMouseUpIsolated (Msg.MouseUp clickTarget)
 
 
+mouseOutWithClickTarget clickTarget =
+    onMouseOutIsolated (Msg.MouseOut clickTarget)
+
+
 onMouseDownIsolated tagger =
     Html.Events.onWithOptions
         "mousedown"
@@ -26,3 +30,10 @@ onMouseUpIsolated tagger =
         "mouseup"
         { stopPropagation = True, preventDefault = True }
         (Json.Decode.map tagger Mouse.position)
+
+
+onMouseOutIsolated tagger =
+    Html.Events.onWithOptions
+        "mouseout"
+        { stopPropagation = True, preventDefault = True }
+        (Json.Decode.succeed tagger)

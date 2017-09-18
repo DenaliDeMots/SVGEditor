@@ -1,6 +1,9 @@
 var _user$project$Messages_UpdatePropertyPallet$StrokeWidth = function (a) {
 	return {ctor: 'StrokeWidth', _0: a};
 };
-var _user$project$Messages_UpdatePropertyPallet$UpdateColor = function (a) {
-	return {ctor: 'UpdateColor', _0: a};
+var _user$project$Messages_UpdatePropertyPallet$UpdateStrokeColor = function (a) {
+	return {ctor: 'UpdateStrokeColor', _0: a};
+};
+var _user$project$Messages_UpdatePropertyPallet$UpdateFillColor = function (a) {
+	return {ctor: 'UpdateFillColor', _0: a};
 };

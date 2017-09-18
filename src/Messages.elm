@@ -17,4 +17,5 @@ type Msg
     | MouseDown ClickTarget Mouse.Position --Sent by Svg
     | MouseUp ClickTarget Mouse.Position --Sent by Svg
     | MouseMove Mouse.Position --Sent by Mouse subscription
+    | MouseOut ClickTarget
     | UpdatePropertyPalletState PPS.UpdatePropertyPalletState

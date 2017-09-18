@@ -1,4 +1,4 @@
-module Utilities exposing (until, maybeToList, lastInList, intPositionToFloat, distance, getOffset, applyOffset, indexOf)
+module Utilities exposing (until, maybeToList, lastInList, intPositionToFloat, distance, getOffset, applyOffset, indexOf, replaceNaNWith)
 
 import Task exposing (Task)
 
@@ -76,3 +76,10 @@ indexOf element list =
                         helper elem es (index + 1)
     in
         helper element list 0
+
+
+replaceNaNWith default num =
+    if isNaN num then
+        default
+    else
+        num

@@ -1,0 +1,10 @@
+var _user$project$ColorPicker$Hidden = {ctor: 'Hidden'};
+var _user$project$ColorPicker$PickingFill = function (a) {
+	return {ctor: 'PickingFill', _0: a};
+};
+var _user$project$ColorPicker$PickingStroke = function (a) {
+	return {ctor: 'PickingStroke', _0: a};
+};
+var _user$project$ColorPicker$NotDragging = {ctor: 'NotDragging'};
+var _user$project$ColorPicker$DraggingHue = {ctor: 'DraggingHue'};
+var _user$project$ColorPicker$DraggingSatLight = {ctor: 'DraggingSatLight'};

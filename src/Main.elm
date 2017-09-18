@@ -13,7 +13,6 @@ import Platform
 import Json.Decode
 import Color
 import Color.Convert as CC
-import ColorPicker
 import Result
 
 
@@ -31,7 +30,6 @@ import Messages as Msg exposing (Msg)
 import Messages.ClickTarget as ClickTarget exposing (ClickTarget)
 import Messages.UpdatePropertyPallet as PPS
 import Pallet exposing (Pallet)
-import ColorPickerState
 
 
 --import DrawingTools exposing (Tool)
@@ -123,7 +121,6 @@ initialPropertyPalletState =
     { fillColor = Color.green
     , strokeColor = Color.blue
     , strokeWidth = 4
-    , colorPickerState = ColorPickerState.Hidden
     }
 
 
@@ -149,46 +146,22 @@ update msg model =
                     { model | propertyPalletState = state }
             in
                 case stateMsg of
-                    PPS.UpdateColor colorPickerMsg ->
+                    PPS.UpdateFillColor color ->
                         let
-                            updatePicker pickerState =
-                                ColorPicker.update colorPickerMsg palletState.fillColor pickerState
-
-                            ( newPickerState, newFillColor, newStrokeColor ) =
-                                case palletState.colorPickerState of
-                                    ColorPickerState.SelectingStrokeColor state ->
-                                        let
-                                            ( nextPickerState, nextColor ) =
-                                                updatePicker state
-                                        in
-                                            ( ColorPickerState.SelectingStrokeColor nextPickerState
-                                            , palletState.fillColor
-                                            , nextColor |> Maybe.withDefault palletState.strokeColor
-                                            )
-
-                                    ColorPickerState.SelectingFillColor state ->
-                                        let
-                                            ( nextPickerState, nextColor ) =
-                                                updatePicker state
-                                        in
-                                            ( ColorPickerState.SelectingFillColor nextPickerState
-                                            , nextColor |> Maybe.withDefault palletState.fillColor
-                                            , palletState.strokeColor
-                                            )
-
-                                    ColorPickerState.Hidden ->
-                                        ( ColorPickerState.Hidden, palletState.fillColor, palletState.strokeColor )
+                            nextPalletState =
+                                { palletState | fillColor = color }
                         in
-                            nextModel
-                                { palletState
-                                    | fillColor = newFillColor
-                                    , strokeColor = newStrokeColor
-                                    , colorPickerState = newPickerState
-                                }
-                                ! [ Cmd.none ]
+                            nextModel nextPalletState ! []
+
+                    PPS.UpdateStrokeColor color ->
+                        let
+                            nextPalletState =
+                                { palletState | fillColor = color }
+                        in
+                            nextModel nextPalletState ! []
 
                     PPS.StrokeWidth result ->
-                        nextModel { palletState | strokeWidth = Result.withDefault palletState.strokeWidth result } ! [ Cmd.none ]
+                        nextModel { palletState | strokeWidth = Result.withDefault palletState.strokeWidth result } ! []
 
         Msg.MouseDown clickTarget position ->
             let
@@ -231,7 +204,18 @@ update msg model =
                 }
                     ! commands
 
+        Msg.MouseOut clickTarget ->
+            let
+                ( modelUpdates, commands ) =
+                    mouseOutEvent model clickTarget
+            in
+                { model
+                    | cursorPosition = modelUpdates.cursorPosition
+                }
+                    ! commands
 
+
+mouseDownEvent : Model -> ClickTarget -> Position -> ( Model, List (Cmd Msg) )
 mouseDownEvent model clickTarget position =
     let
         model2 =
@@ -270,26 +254,85 @@ mouseDownEvent model clickTarget position =
                 let
                     propPalletState =
                         model.propertyPalletState
-
-                    newPickerState state =
-                        { propPalletState | colorPickerState = state }
                 in
                     case widget of
-                        Properties.FillColorPicker ->
-                            ( { model2
-                                | currentAction = SelectFillColor
-                                , propertyPalletState = newPickerState (ColorPickerState.SelectingFillColor <| ColorPicker.empty)
-                              }
-                            , []
-                            )
+                        Properties.FillColor pickerWidget ->
+                            let
+                                newFillColor color =
+                                    { propPalletState | fillColor = color }
+                            in
+                                case pickerWidget of
+                                    Properties.SaturationLightness posToColor ->
+                                        ( { model2
+                                            | currentAction = SelectFillColor DraggingSatLight
+                                            , propertyPalletState = newFillColor (posToColor position)
+                                            , cursorPosition = Pos position
+                                          }
+                                        , []
+                                        )
 
-                        Properties.StrokeColorPicker ->
-                            ( { model2
-                                | currentAction = SelectStrokeColor
-                                , propertyPalletState = newPickerState (ColorPickerState.SelectingStrokeColor <| ColorPicker.empty)
-                              }
-                            , []
-                            )
+                                    Properties.Hue posToColor ->
+                                        ( { model2
+                                            | currentAction = SelectFillColor DraggingHue
+                                            , propertyPalletState = newFillColor (posToColor position)
+                                            , cursorPosition = Pos position
+                                          }
+                                        , []
+                                        )
+
+                                    Properties.Background ->
+                                        ( model2, [] )
+
+                                    Properties.ColorBox ->
+                                        ( { model2
+                                            | currentAction =
+                                                case model2.currentAction of
+                                                    SelectFillColor _ ->
+                                                        None
+
+                                                    _ ->
+                                                        SelectFillColor NotDragging
+                                          }
+                                        , []
+                                        )
+
+                        Properties.StrokeColor pickerWidget ->
+                            let
+                                newStrokeColor color =
+                                    { propPalletState | strokeColor = color }
+                            in
+                                case pickerWidget of
+                                    Properties.SaturationLightness posToColor ->
+                                        ( { model2
+                                            | currentAction = SelectStrokeColor DraggingSatLight
+                                            , propertyPalletState = newStrokeColor (posToColor position)
+                                          }
+                                        , []
+                                        )
+
+                                    Properties.Hue posToColor ->
+                                        ( { model2
+                                            | currentAction = SelectStrokeColor DraggingHue
+                                            , propertyPalletState = newStrokeColor (posToColor position)
+                                          }
+                                        , []
+                                        )
+
+                                    Properties.Background ->
+                                        ( model2, [] )
+
+                                    Properties.ColorBox ->
+                                        ( { model2
+                                            | currentAction =
+                                                case model2.currentAction of
+                                                    SelectStrokeColor _ ->
+                                                        None
+
+                                                    _ ->
+                                                        SelectStrokeColor NotDragging
+                                          }
+                                        , []
+                                        )
 
                         Properties.StrokeWidth button ->
                             case button of
@@ -309,7 +352,7 @@ mouseDownEvent model clickTarget position =
                                             model2.propertyPalletState
 
                                         newPPS =
-                                            { pPS | strokeWidth = pPS.strokeWidth - 1 }
+                                            { pPS | strokeWidth = pPS.strokeWidth - 1 |> clamp 0 200 }
                                     in
                                         ( { model2 | propertyPalletState = newPPS }, [] )
 
@@ -384,16 +427,18 @@ mouseUpEvent model clickTarget position =
             , []
             )
 
-        SelectFillColor ->
+        SelectFillColor pickerAction ->
             ( { model
                 | cursorPosition = NotTracking
+                , currentAction = SelectFillColor NotDragging
               }
             , []
             )
 
-        SelectStrokeColor ->
+        SelectStrokeColor pickerAction ->
             ( { model
                 | cursorPosition = NotTracking
+                , currentAction = SelectStrokeColor NotDragging
               }
             , []
             )
@@ -499,14 +544,47 @@ mouseMoveEvent model position =
                     , []
                     )
 
-            SelectFillColor ->
+            SelectFillColor pickerAction ->
                 ( model2, [] )
 
-            SelectStrokeColor ->
+            SelectStrokeColor pickerAction ->
                 ( model2, [] )
 
             Draw drawAction ->
                 ( updatePreviewGraphic drawAction position model2, [] )
+
+
+mouseOutEvent : Model -> ClickTarget -> ( Model, List (Cmd Msg) )
+mouseOutEvent model clickTarget =
+    case clickTarget of
+        PropertiesPallet widget ->
+            let
+                stopTracking rec =
+                    { rec | cursorPosition = NotTracking }
+
+                mouseOutPickerWidget widget model =
+                    case widget of
+                        SaturationLightness _ ->
+                            stopTracking model
+
+                        Hue _ ->
+                            stopTracking model
+
+                        _ ->
+                            model
+            in
+                case widget of
+                    FillColor pickerWidget ->
+                        ( mouseOutPickerWidget pickerWidget model, [] )
+
+                    StrokeColor pickerWidget ->
+                        ( mouseOutPickerWidget pickerWidget model, [] )
+
+                    _ ->
+                        ( model, [] )
+
+        _ ->
+            ( model, [] )
 
 
 updatePreviewGraphic drawAction currentPosition model =
@@ -693,6 +771,7 @@ view model =
                                 propertyPalletPosition.y
                                 propertyPalletPosition.height
                                 propertyPalletState
+                                model.currentAction
                             ]
                    )
 

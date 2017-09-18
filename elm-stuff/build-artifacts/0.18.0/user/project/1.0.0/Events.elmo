@@ -1,3 +1,10 @@
+var _user$project$Events$onMouseOutIsolated = function (tagger) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'mouseout',
+		{stopPropagation: true, preventDefault: true},
+		_elm_lang$core$Json_Decode$succeed(tagger));
+};
 var _user$project$Events$onMouseUpIsolated = function (tagger) {
 	return A3(
 		_elm_lang$html$Html_Events$onWithOptions,
@@ -11,6 +18,10 @@ var _user$project$Events$onMouseDownIsolated = function (tagger) {
 		'mousedown',
 		{stopPropagation: true, preventDefault: true},
 		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$mouse$Mouse$position));
+};
+var _user$project$Events$mouseOutWithClickTarget = function (clickTarget) {
+	return _user$project$Events$onMouseOutIsolated(
+		_user$project$Messages$MouseOut(clickTarget));
 };
 var _user$project$Events$mouseUpWithClickTarget = function (clickTarget) {
 	return _user$project$Events$onMouseUpIsolated(

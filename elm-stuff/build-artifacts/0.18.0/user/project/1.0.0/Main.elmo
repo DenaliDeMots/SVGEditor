@@ -52,7 +52,7 @@ var _user$project$Main$view = function (model) {
 					}),
 				{
 					ctor: '::',
-					_0: A4(_user$project$Properties_Render$propertiesPallet, propertyPalletPosition.x, propertyPalletPosition.y, propertyPalletPosition.height, propertyPalletState),
+					_0: A5(_user$project$Properties_Render$propertiesPallet, propertyPalletPosition.x, propertyPalletPosition.y, propertyPalletPosition.height, propertyPalletState, model.currentAction),
 					_1: {ctor: '[]'}
 				},
 				A3(
@@ -236,7 +236,7 @@ var _user$project$Main$updatePreviewGraphic = F3(
 					});
 		}
 	});
-var _user$project$Main$initialPropertyPalletState = {fillColor: _elm_lang$core$Color$green, strokeColor: _elm_lang$core$Color$blue, strokeWidth: 4, colorPickerState: _user$project$ColorPickerState$Hidden};
+var _user$project$Main$initialPropertyPalletState = {fillColor: _elm_lang$core$Color$green, strokeColor: _elm_lang$core$Color$blue, strokeWidth: 4};
 var _user$project$Main$setPalletLocations = F2(
 	function (size, model) {
 		return _elm_lang$core$Native_Utils.update(
@@ -354,40 +354,123 @@ var _user$project$Main$mouseDownEvent = F3(
 				};
 			case 'PropertiesPallet':
 				var propPalletState = model.propertyPalletState;
-				var newPickerState = function (state) {
-					return _elm_lang$core$Native_Utils.update(
-						propPalletState,
-						{colorPickerState: state});
-				};
 				var _p7 = _p4._0;
 				switch (_p7.ctor) {
-					case 'FillColorPicker':
-						return {
-							ctor: '_Tuple2',
-							_0: _elm_lang$core$Native_Utils.update(
-								model2,
-								{
-									currentAction: _user$project$Action$SelectFillColor,
-									propertyPalletState: newPickerState(
-										_user$project$ColorPickerState$SelectingFillColor(_simonh1000$elm_colorpicker$ColorPicker$empty))
-								}),
-							_1: {ctor: '[]'}
+					case 'FillColor':
+						var newFillColor = function (color) {
+							return _elm_lang$core$Native_Utils.update(
+								propPalletState,
+								{fillColor: color});
 						};
-					case 'StrokeColorPicker':
-						return {
-							ctor: '_Tuple2',
-							_0: _elm_lang$core$Native_Utils.update(
-								model2,
-								{
-									currentAction: _user$project$Action$SelectStrokeColor,
-									propertyPalletState: newPickerState(
-										_user$project$ColorPickerState$SelectingStrokeColor(_simonh1000$elm_colorpicker$ColorPicker$empty))
-								}),
-							_1: {ctor: '[]'}
-						};
-					default:
 						var _p8 = _p7._0;
-						if (_p8.ctor === 'Increment') {
+						switch (_p8.ctor) {
+							case 'SaturationLightness':
+								return {
+									ctor: '_Tuple2',
+									_0: _elm_lang$core$Native_Utils.update(
+										model2,
+										{
+											currentAction: _user$project$Action$SelectFillColor(_user$project$Action$DraggingSatLight),
+											propertyPalletState: newFillColor(
+												_p8._0(position))
+										}),
+									_1: {ctor: '[]'}
+								};
+							case 'Hue':
+								return {
+									ctor: '_Tuple2',
+									_0: _elm_lang$core$Native_Utils.update(
+										model2,
+										{
+											currentAction: _user$project$Action$SelectFillColor(_user$project$Action$DraggingHue),
+											propertyPalletState: newFillColor(
+												_p8._0(position))
+										}),
+									_1: {ctor: '[]'}
+								};
+							case 'Background':
+								return {
+									ctor: '_Tuple2',
+									_0: model2,
+									_1: {ctor: '[]'}
+								};
+							default:
+								return {
+									ctor: '_Tuple2',
+									_0: _elm_lang$core$Native_Utils.update(
+										model2,
+										{
+											currentAction: function () {
+												var _p9 = model2.currentAction;
+												if (_p9.ctor === 'SelectFillColor') {
+													return _user$project$Action$None;
+												} else {
+													return _user$project$Action$SelectFillColor(_user$project$Action$NotDragging);
+												}
+											}()
+										}),
+									_1: {ctor: '[]'}
+								};
+						}
+					case 'StrokeColor':
+						var newStrokeColor = function (color) {
+							return _elm_lang$core$Native_Utils.update(
+								propPalletState,
+								{strokeColor: color});
+						};
+						var _p10 = _p7._0;
+						switch (_p10.ctor) {
+							case 'SaturationLightness':
+								return {
+									ctor: '_Tuple2',
+									_0: _elm_lang$core$Native_Utils.update(
+										model2,
+										{
+											currentAction: _user$project$Action$SelectStrokeColor(_user$project$Action$DraggingSatLight),
+											propertyPalletState: newStrokeColor(
+												_p10._0(position))
+										}),
+									_1: {ctor: '[]'}
+								};
+							case 'Hue':
+								return {
+									ctor: '_Tuple2',
+									_0: _elm_lang$core$Native_Utils.update(
+										model2,
+										{
+											currentAction: _user$project$Action$SelectStrokeColor(_user$project$Action$DraggingHue),
+											propertyPalletState: newStrokeColor(
+												_p10._0(position))
+										}),
+									_1: {ctor: '[]'}
+								};
+							case 'Background':
+								return {
+									ctor: '_Tuple2',
+									_0: model2,
+									_1: {ctor: '[]'}
+								};
+							default:
+								return {
+									ctor: '_Tuple2',
+									_0: _elm_lang$core$Native_Utils.update(
+										model2,
+										{
+											currentAction: function () {
+												var _p11 = model2.currentAction;
+												if (_p11.ctor === 'SelectStrokeColor') {
+													return _user$project$Action$None;
+												} else {
+													return _user$project$Action$SelectStrokeColor(_user$project$Action$NotDragging);
+												}
+											}()
+										}),
+									_1: {ctor: '[]'}
+								};
+						}
+					default:
+						var _p12 = _p7._0;
+						if (_p12.ctor === 'Increment') {
 							var pPS = model2.propertyPalletState;
 							var newPPS = _elm_lang$core$Native_Utils.update(
 								pPS,
@@ -403,7 +486,9 @@ var _user$project$Main$mouseDownEvent = F3(
 							var pPS = model2.propertyPalletState;
 							var newPPS = _elm_lang$core$Native_Utils.update(
 								pPS,
-								{strokeWidth: pPS.strokeWidth - 1});
+								{
+									strokeWidth: A3(_elm_lang$core$Basics$clamp, 0, 200, pPS.strokeWidth - 1)
+								});
 							return {
 								ctor: '_Tuple2',
 								_0: _elm_lang$core$Native_Utils.update(
@@ -414,11 +499,11 @@ var _user$project$Main$mouseDownEvent = F3(
 						}
 				}
 			default:
-				var _p9 = model.activeTool;
-				switch (_p9.ctor) {
+				var _p13 = model.activeTool;
+				switch (_p13.ctor) {
 					case 'Select':
-						var _p10 = clickTarget;
-						switch (_p10.ctor) {
+						var _p14 = clickTarget;
+						switch (_p14.ctor) {
 							case 'Screen':
 								return {
 									ctor: '_Tuple2',
@@ -431,10 +516,10 @@ var _user$project$Main$mouseDownEvent = F3(
 								return _elm_lang$core$Native_Utils.crashCase(
 									'Main',
 									{
-										start: {line: 319, column: 25},
-										end: {line: 332, column: 88}
+										start: {line: 350, column: 25},
+										end: {line: 363, column: 88}
 									},
-									_p10)('TODO - Selected a Graphic for editing');
+									_p14)('TODO - Selected a Graphic for editing');
 							default:
 								return A2(
 									_elm_lang$core$Debug$log,
@@ -470,10 +555,10 @@ var _user$project$Main$mouseDownEvent = F3(
 							_1: {ctor: '[]'}
 						};
 					default:
-						var _p12 = function () {
-							var _p13 = model2.currentAction;
-							if ((_p13.ctor === 'Draw') && (_p13._0.ctor === 'DrawPolygon')) {
-								return {ctor: '_Tuple2', _0: _p13._0._0, _1: _p13._0._1};
+						var _p16 = function () {
+							var _p17 = model2.currentAction;
+							if ((_p17.ctor === 'Draw') && (_p17._0.ctor === 'DrawPolygon')) {
+								return {ctor: '_Tuple2', _0: _p17._0._0, _1: _p17._0._1};
 							} else {
 								return {
 									ctor: '_Tuple2',
@@ -482,8 +567,8 @@ var _user$project$Main$mouseDownEvent = F3(
 								};
 							}
 						}();
-						var startPoint = _p12._0;
-						var posList = _p12._1;
+						var startPoint = _p16._0;
+						var posList = _p16._1;
 						return {
 							ctor: '_Tuple2',
 							_0: _elm_lang$core$Native_Utils.update(
@@ -502,8 +587,8 @@ var _user$project$Main$mouseDownEvent = F3(
 	});
 var _user$project$Main$mouseUpEvent = F3(
 	function (model, clickTarget, position) {
-		var _p14 = model.currentAction;
-		switch (_p14.ctor) {
+		var _p18 = model.currentAction;
+		switch (_p18.ctor) {
 			case 'None':
 				return {
 					ctor: '_Tuple2',
@@ -537,8 +622,8 @@ var _user$project$Main$mouseUpEvent = F3(
 					_1: {ctor: '[]'}
 				};
 			default:
-				var _p15 = _p14._0;
-				switch (_p15.ctor) {
+				var _p19 = _p18._0;
+				switch (_p19.ctor) {
 					case 'DrawRect':
 						return {
 							ctor: '_Tuple2',
@@ -572,14 +657,14 @@ var _user$project$Main$mouseUpEvent = F3(
 							_1: {ctor: '[]'}
 						};
 					default:
-						var _p17 = _p15._0;
-						var _p16 = _p15._1;
-						var numberOfPoints = _elm_lang$core$List$length(_p16);
+						var _p21 = _p19._0;
+						var _p20 = _p19._1;
+						var numberOfPoints = _elm_lang$core$List$length(_p20);
 						var floatPosition = _user$project$Utilities$intPositionToFloat(position);
-						var distanceFromStartPoint = A2(_user$project$Utilities$distance, _p17, floatPosition);
+						var distanceFromStartPoint = A2(_user$project$Utilities$distance, _p21, floatPosition);
 						var completedPolygon = (_elm_lang$core$Native_Utils.cmp(numberOfPoints, 2) > -1) && (_elm_lang$core$Native_Utils.cmp(distanceFromStartPoint, _user$project$Graphic$polygonSnapDistance) < 1);
-						var firstPoint = _elm_lang$core$Native_Utils.eq(floatPosition, _p17) && _elm_lang$core$Native_Utils.eq(
-							_p16,
+						var firstPoint = _elm_lang$core$Native_Utils.eq(floatPosition, _p21) && _elm_lang$core$Native_Utils.eq(
+							_p20,
 							{ctor: '[]'});
 						return completedPolygon ? {
 							ctor: '_Tuple2',
@@ -591,7 +676,7 @@ var _user$project$Main$mouseUpEvent = F3(
 									graphics: A2(
 										_elm_lang$core$Basics_ops['++'],
 										model.graphics,
-										A3(_user$project$Main$createPolygon, _p17, _p16, model)),
+										A3(_user$project$Main$createPolygon, _p21, _p20, model)),
 									previewGraphic: _elm_lang$core$Maybe$Nothing
 								}),
 							_1: {ctor: '[]'}
@@ -603,8 +688,8 @@ var _user$project$Main$mouseUpEvent = F3(
 									currentAction: _user$project$Action$Draw(
 										A2(
 											_user$project$Action$DrawPolygon,
-											_p17,
-											firstPoint ? _p16 : {ctor: '::', _0: floatPosition, _1: _p16}))
+											_p21,
+											firstPoint ? _p20 : {ctor: '::', _0: floatPosition, _1: _p20}))
 								}),
 							_1: {ctor: '[]'}
 						};
@@ -618,8 +703,8 @@ var _user$project$Main$mouseMoveEvent = F2(
 			{
 				cursorPosition: _elm_lang$core$Native_Utils.eq(model.cursorPosition, _user$project$Main$NotTracking) ? _user$project$Main$NotTracking : _user$project$Main$Pos(position)
 			});
-		var _p18 = model2.currentAction;
-		switch (_p18.ctor) {
+		var _p22 = model2.currentAction;
+		switch (_p22.ctor) {
 			case 'None':
 				return {
 					ctor: '_Tuple2',
@@ -627,18 +712,18 @@ var _user$project$Main$mouseMoveEvent = F2(
 					_1: {ctor: '[]'}
 				};
 			case 'MovePallet':
-				var _p20 = _p18._0;
-				var _p19 = _p18._1;
-				var newPosition = A2(_user$project$Utilities$applyOffset, _p19, position);
+				var _p24 = _p22._0;
+				var _p23 = _p22._1;
+				var newPosition = A2(_user$project$Utilities$applyOffset, _p23, position);
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model2,
 						{
-							currentAction: A2(_user$project$Action$MovePallet, _user$project$Pallet$ToolPallet, _p19),
+							currentAction: A2(_user$project$Action$MovePallet, _user$project$Pallet$ToolPallet, _p23),
 							cursorPosition: _user$project$Main$Pos(position),
-							toolPalletPosition: _elm_lang$core$Native_Utils.eq(_p20, _user$project$Pallet$ToolPallet) ? {x: newPosition.x, y: newPosition.y, height: model2.toolPalletPosition.height} : model2.toolPalletPosition,
-							propertyPalletPosition: _elm_lang$core$Native_Utils.eq(_p20, _user$project$Pallet$PropertiesPallet) ? {x: newPosition.x, y: newPosition.y, height: model2.propertyPalletPosition.height} : model2.propertyPalletPosition
+							toolPalletPosition: _elm_lang$core$Native_Utils.eq(_p24, _user$project$Pallet$ToolPallet) ? {x: newPosition.x, y: newPosition.y, height: model2.toolPalletPosition.height} : model2.toolPalletPosition,
+							propertyPalletPosition: _elm_lang$core$Native_Utils.eq(_p24, _user$project$Pallet$PropertiesPallet) ? {x: newPosition.x, y: newPosition.y, height: model2.propertyPalletPosition.height} : model2.propertyPalletPosition
 						}),
 					_1: {ctor: '[]'}
 				};
@@ -657,21 +742,21 @@ var _user$project$Main$mouseMoveEvent = F2(
 			default:
 				return {
 					ctor: '_Tuple2',
-					_0: A3(_user$project$Main$updatePreviewGraphic, _p18._0, position, model2),
+					_0: A3(_user$project$Main$updatePreviewGraphic, _p22._0, position, model2),
 					_1: {ctor: '[]'}
 				};
 		}
 	});
 var _user$project$Main$update = F2(
 	function (msg, model) {
-		var _p21 = msg;
-		switch (_p21.ctor) {
+		var _p25 = msg;
+		switch (_p25.ctor) {
 			case 'Resize':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{windowSize: _p21._0}),
+						{windowSize: _p25._0}),
 					{ctor: '[]'});
 			case 'UpdatePropertyPalletState':
 				var nextModel = function (state) {
@@ -680,69 +765,37 @@ var _user$project$Main$update = F2(
 						{propertyPalletState: state});
 				};
 				var palletState = model.propertyPalletState;
-				var _p22 = _p21._0;
-				if (_p22.ctor === 'UpdateColor') {
-					var updatePicker = function (pickerState) {
-						return A3(_simonh1000$elm_colorpicker$ColorPicker$update, _p22._0, palletState.fillColor, pickerState);
-					};
-					var _p23 = function () {
-						var _p24 = palletState.colorPickerState;
-						switch (_p24.ctor) {
-							case 'SelectingStrokeColor':
-								var _p25 = updatePicker(_p24._0);
-								var nextPickerState = _p25._0;
-								var nextColor = _p25._1;
-								return {
-									ctor: '_Tuple3',
-									_0: _user$project$ColorPickerState$SelectingStrokeColor(nextPickerState),
-									_1: palletState.fillColor,
-									_2: A2(_elm_lang$core$Maybe$withDefault, palletState.strokeColor, nextColor)
-								};
-							case 'SelectingFillColor':
-								var _p26 = updatePicker(_p24._0);
-								var nextPickerState = _p26._0;
-								var nextColor = _p26._1;
-								return {
-									ctor: '_Tuple3',
-									_0: _user$project$ColorPickerState$SelectingFillColor(nextPickerState),
-									_1: A2(_elm_lang$core$Maybe$withDefault, palletState.fillColor, nextColor),
-									_2: palletState.strokeColor
-								};
-							default:
-								return {ctor: '_Tuple3', _0: _user$project$ColorPickerState$Hidden, _1: palletState.fillColor, _2: palletState.strokeColor};
-						}
-					}();
-					var newPickerState = _p23._0;
-					var newFillColor = _p23._1;
-					var newStrokeColor = _p23._2;
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						nextModel(
-							_elm_lang$core$Native_Utils.update(
-								palletState,
-								{fillColor: newFillColor, strokeColor: newStrokeColor, colorPickerState: newPickerState})),
-						{
-							ctor: '::',
-							_0: _elm_lang$core$Platform_Cmd$none,
-							_1: {ctor: '[]'}
-						});
-				} else {
-					return A2(
-						_elm_lang$core$Platform_Cmd_ops['!'],
-						nextModel(
-							_elm_lang$core$Native_Utils.update(
-								palletState,
-								{
-									strokeWidth: A2(_elm_lang$core$Result$withDefault, palletState.strokeWidth, _p22._0)
-								})),
-						{
-							ctor: '::',
-							_0: _elm_lang$core$Platform_Cmd$none,
-							_1: {ctor: '[]'}
-						});
+				var _p26 = _p25._0;
+				switch (_p26.ctor) {
+					case 'UpdateFillColor':
+						var nextPalletState = _elm_lang$core$Native_Utils.update(
+							palletState,
+							{fillColor: _p26._0});
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							nextModel(nextPalletState),
+							{ctor: '[]'});
+					case 'UpdateStrokeColor':
+						var nextPalletState = _elm_lang$core$Native_Utils.update(
+							palletState,
+							{fillColor: _p26._0});
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							nextModel(nextPalletState),
+							{ctor: '[]'});
+					default:
+						return A2(
+							_elm_lang$core$Platform_Cmd_ops['!'],
+							nextModel(
+								_elm_lang$core$Native_Utils.update(
+									palletState,
+									{
+										strokeWidth: A2(_elm_lang$core$Result$withDefault, palletState.strokeWidth, _p26._0)
+									})),
+							{ctor: '[]'});
 				}
 			case 'MouseDown':
-				var _p27 = A3(_user$project$Main$mouseDownEvent, model, _p21._0, _p21._1);
+				var _p27 = A3(_user$project$Main$mouseDownEvent, model, _p25._0, _p25._1);
 				var modelUpdates = _p27._0;
 				var commands = _p27._1;
 				return A2(
@@ -752,7 +805,7 @@ var _user$project$Main$update = F2(
 						{mouseDown: true, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, activeTool: modelUpdates.activeTool, propertyPalletState: modelUpdates.propertyPalletState}),
 					commands);
 			case 'MouseUp':
-				var _p28 = A3(_user$project$Main$mouseUpEvent, model, _p21._0, _p21._1);
+				var _p28 = A3(_user$project$Main$mouseUpEvent, model, _p25._0, _p25._1);
 				var modelUpdates = _p28._0;
 				var commands = _p28._1;
 				return A2(
@@ -762,7 +815,7 @@ var _user$project$Main$update = F2(
 						{mouseDown: false, cursorPosition: modelUpdates.cursorPosition, currentAction: modelUpdates.currentAction, graphics: modelUpdates.graphics, previewGraphic: modelUpdates.previewGraphic}),
 					commands);
 			default:
-				var _p29 = A2(_user$project$Main$mouseMoveEvent, model, _p21._0);
+				var _p29 = A2(_user$project$Main$mouseMoveEvent, model, _p25._0);
 				var modelUpdates = _p29._0;
 				var commands = _p29._1;
 				return A2(
