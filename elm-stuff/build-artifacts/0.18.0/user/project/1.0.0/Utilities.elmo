@@ -1,3 +1,7 @@
+var _user$project$Utilities$replaceNaNWith = F2(
+	function ($default, num) {
+		return _elm_lang$core$Basics$isNaN(num) ? $default : num;
+	});
 var _user$project$Utilities$indexOf = F2(
 	function (element, list) {
 		var helper = F3(

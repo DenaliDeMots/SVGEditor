@@ -10,8 +10,12 @@ var _user$project$Action$MovePallet = F2(
 	function (a, b) {
 		return {ctor: 'MovePallet', _0: a, _1: b};
 	});
-var _user$project$Action$SelectStrokeColor = {ctor: 'SelectStrokeColor'};
-var _user$project$Action$SelectFillColor = {ctor: 'SelectFillColor'};
+var _user$project$Action$SelectStrokeColor = function (a) {
+	return {ctor: 'SelectStrokeColor', _0: a};
+};
+var _user$project$Action$SelectFillColor = function (a) {
+	return {ctor: 'SelectFillColor', _0: a};
+};
 var _user$project$Action$Draw = function (a) {
 	return {ctor: 'Draw', _0: a};
 };
@@ -26,3 +30,6 @@ var _user$project$Action$DrawElipse = function (a) {
 var _user$project$Action$DrawRect = function (a) {
 	return {ctor: 'DrawRect', _0: a};
 };
+var _user$project$Action$NotDragging = {ctor: 'NotDragging'};
+var _user$project$Action$DraggingHue = {ctor: 'DraggingHue'};
+var _user$project$Action$DraggingSatLight = {ctor: 'DraggingSatLight'};

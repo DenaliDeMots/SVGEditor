@@ -5,14 +5,26 @@ var _user$project$Properties$toCommonProperties = function (properties) {
 		fill: _eskimoblood$elm_color_extra$Color_Convert$colorToHex(properties.fillColor)
 	};
 };
-var _user$project$Properties$PropertyPalletState = F4(
-	function (a, b, c, d) {
-		return {fillColor: a, strokeColor: b, strokeWidth: c, colorPickerState: d};
+var _user$project$Properties$PropertyPalletState = F3(
+	function (a, b, c) {
+		return {fillColor: a, strokeColor: b, strokeWidth: c};
 	});
 var _user$project$Properties$StrokeWidth = function (a) {
 	return {ctor: 'StrokeWidth', _0: a};
 };
-var _user$project$Properties$StrokeColorPicker = {ctor: 'StrokeColorPicker'};
-var _user$project$Properties$FillColorPicker = {ctor: 'FillColorPicker'};
+var _user$project$Properties$StrokeColor = function (a) {
+	return {ctor: 'StrokeColor', _0: a};
+};
+var _user$project$Properties$FillColor = function (a) {
+	return {ctor: 'FillColor', _0: a};
+};
+var _user$project$Properties$ColorBox = {ctor: 'ColorBox'};
+var _user$project$Properties$Background = {ctor: 'Background'};
+var _user$project$Properties$Hue = function (a) {
+	return {ctor: 'Hue', _0: a};
+};
+var _user$project$Properties$SaturationLightness = function (a) {
+	return {ctor: 'SaturationLightness', _0: a};
+};
 var _user$project$Properties$Decrement = {ctor: 'Decrement'};
 var _user$project$Properties$Increment = {ctor: 'Increment'};

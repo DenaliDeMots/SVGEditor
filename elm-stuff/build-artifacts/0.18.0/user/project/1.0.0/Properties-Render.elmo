@@ -1,15 +1,17 @@
-var _user$project$Properties_Render$propertiesPallet = F4(
-	function (x, y, height, palletState) {
+var _user$project$Properties_Render$Fill = {ctor: 'Fill'};
+var _user$project$Properties_Render$Stroke = {ctor: 'Stroke'};
+var _user$project$Properties_Render$propertiesPallet = F5(
+	function (x, y, height, palletState, currentAction) {
 		var labelFontColor = '#000000';
 		var labelFontSize = 18;
 		var borderSize = 5;
 		var widgetX = _elm_lang$core$Basics$toFloat(x + borderSize);
 		var widgetList = {
 			ctor: '::',
-			_0: _user$project$Properties$StrokeColorPicker,
+			_0: _user$project$Properties$StrokeColor(_user$project$Properties$ColorBox),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Properties$FillColorPicker,
+				_0: _user$project$Properties$FillColor(_user$project$Properties$ColorBox),
 				_1: {
 					ctor: '::',
 					_0: _user$project$Properties$StrokeWidth(_user$project$Properties$Increment),
@@ -147,7 +149,7 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 										ctor: '::',
 										_0: _user$project$Events$mouseDownWithClickTarget(
 											_user$project$Messages_ClickTarget$PropertiesPallet(
-												_user$project$Properties$StrokeWidth(_user$project$Properties$Decrement))),
+												_user$project$Properties$StrokeWidth(_user$project$Properties$Increment))),
 										_1: {ctor: '[]'}
 									}
 								}
@@ -268,67 +270,6 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 					},
 					{ctor: '[]'});
 			});
-		var colorPicker = F3(
-			function (index, color, state) {
-				var pickerWidth = 200;
-				var pickerHeight = 200;
-				return A2(
-					_elm_lang$svg$Svg$foreignObject,
-					{
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$x(
-							_elm_lang$core$Basics$toString((widgetX - 20) - pickerWidth)),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$y(
-								_elm_lang$core$Basics$toString(
-									(yPosFromIndex(index) + (widgetHeight / 2)) - (pickerHeight / 2))),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$width(
-									_elm_lang$core$Basics$toString(pickerWidth)),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$height(
-										_elm_lang$core$Basics$toString(pickerHeight)),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$viewBox(
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												'0 0 ',
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(pickerWidth),
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														' ',
-														_elm_lang$core$Basics$toString(pickerHeight))))),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{ctor: '[]'},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$map,
-									function (_p0) {
-										return _user$project$Messages$UpdatePropertyPalletState(
-											_user$project$Messages_UpdatePropertyPallet$UpdateColor(_p0));
-									},
-									A2(_simonh1000$elm_colorpicker$ColorPicker$view, color, state)),
-								_1: {ctor: '[]'}
-							}),
-						_1: {ctor: '[]'}
-					});
-			});
 		var widgetBackgroundBox = function (index) {
 			return A2(
 				_elm_lang$svg$Svg$rect,
@@ -376,7 +317,11 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 						_0: A2(label, 'Stroke', index),
 						_1: {
 							ctor: '::',
-							_0: A3(colorBox, index, palletState.strokeColor, _user$project$Properties$StrokeColorPicker),
+							_0: A3(
+								colorBox,
+								index,
+								palletState.strokeColor,
+								_user$project$Properties$StrokeColor(_user$project$Properties$ColorBox)),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -394,7 +339,11 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 						_0: A2(label, 'Fill', index),
 						_1: {
 							ctor: '::',
-							_0: A3(colorBox, index, palletState.fillColor, _user$project$Properties$FillColorPicker),
+							_0: A3(
+								colorBox,
+								index,
+								palletState.fillColor,
+								_user$project$Properties$FillColor(_user$project$Properties$ColorBox)),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -419,11 +368,11 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 				});
 		};
 		var getWidgetFunction = function (widget) {
-			var _p1 = widget;
-			switch (_p1.ctor) {
-				case 'FillColorPicker':
+			var _p0 = widget;
+			switch (_p0.ctor) {
+				case 'FillColor':
 					return fillColorWidget;
-				case 'StrokeColorPicker':
+				case 'StrokeColor':
 					return strokeColorWidget;
 				default:
 					return strokeWidthWidget;
@@ -431,35 +380,691 @@ var _user$project$Properties_Render$propertiesPallet = F4(
 		};
 		var positionWidgets = F2(
 			function (widgetList, index) {
-				var _p2 = widgetList;
-				if (_p2.ctor === '[]') {
+				var _p1 = widgetList;
+				if (_p1.ctor === '[]') {
 					return {ctor: '[]'};
 				} else {
 					return {
 						ctor: '::',
-						_0: A2(getWidgetFunction, _p2._0, index),
-						_1: A2(positionWidgets, _p2._1, index + 1)
+						_0: A2(getWidgetFunction, _p1._0, index),
+						_1: A2(positionWidgets, _p1._1, index + 1)
 					};
 				}
 			});
+		var colorPicker = F3(
+			function (index, color, target) {
+				var events = function () {
+					var _p2 = target;
+					if (_p2.ctor === 'Fill') {
+						return {
+							mouseUp: function (pickerWidget) {
+								return _user$project$Events$mouseUpWithClickTarget(
+									_user$project$Messages_ClickTarget$PropertiesPallet(
+										_user$project$Properties$FillColor(pickerWidget)));
+							},
+							mouseDown: function (pickerWidget) {
+								return _user$project$Events$mouseDownWithClickTarget(
+									_user$project$Messages_ClickTarget$PropertiesPallet(
+										_user$project$Properties$FillColor(pickerWidget)));
+							}
+						};
+					} else {
+						return {
+							mouseUp: function (pickerWidget) {
+								return _user$project$Events$mouseUpWithClickTarget(
+									_user$project$Messages_ClickTarget$PropertiesPallet(
+										_user$project$Properties$StrokeColor(pickerWidget)));
+							},
+							mouseDown: function (pickerWidget) {
+								return _user$project$Events$mouseDownWithClickTarget(
+									_user$project$Messages_ClickTarget$PropertiesPallet(
+										_user$project$Properties$StrokeColor(pickerWidget)));
+							}
+						};
+					}
+				}();
+				var _p3 = function () {
+					var hsl = _elm_lang$core$Color$toHsl(color);
+					var hueFloat = A2(_user$project$Utilities$replaceNaNWith, 0, hsl.hue);
+					var saturationFloat = A2(_user$project$Utilities$replaceNaNWith, 1, hsl.saturation);
+					var lightnessFloat = A2(_user$project$Utilities$replaceNaNWith, 1, hsl.lightness);
+					return {
+						ctor: '_Tuple4',
+						_0: A3(_elm_lang$core$Color$hsl, hueFloat, 1, 0.5),
+						_1: hueFloat,
+						_2: saturationFloat,
+						_3: lightnessFloat
+					};
+				}();
+				var hue = _p3._0;
+				var hueFloat = _p3._1;
+				var saturationFloat = _p3._2;
+				var lightnessFloat = _p3._3;
+				var padding = 10;
+				var arrowWidth = 40;
+				var pickerHeightRatio = 1.2;
+				var pickerRectWidth = 180;
+				var pickerWidth = pickerRectWidth + arrowWidth;
+				var pickerHeight = pickerRectWidth * pickerHeightRatio;
+				var pickerOrigin = {
+					x: widgetX - pickerWidth,
+					y: (((yPosFromIndex(index) + labelFontSize) + borderSize) + (((widgetHeight - labelFontSize) - (borderSize * 2)) / 2)) - (pickerHeight / 2)
+				};
+				var saturationBoxOrigin = {x: pickerOrigin.x + padding, y: pickerOrigin.y + padding};
+				var saturationBoxSize = pickerRectWidth - (padding * 2);
+				var saturationBoxDimensions = {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$x(
+						_elm_lang$core$Basics$toString(padding)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$y(
+							_elm_lang$core$Basics$toString(padding)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$width(
+								_elm_lang$core$Basics$toString(saturationBoxSize)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$height(
+									_elm_lang$core$Basics$toString(saturationBoxSize)),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				};
+				var hueBoxHeight = (pickerHeight - saturationBoxSize) - (padding * 3);
+				var hueBoxDimensions = {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$x(
+						_elm_lang$core$Basics$toString(padding)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$y(
+							_elm_lang$core$Basics$toString(saturationBoxSize + (padding * 2))),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$height(
+								_elm_lang$core$Basics$toString(hueBoxHeight)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(saturationBoxSize)),
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				};
+				var hueBoxOrigin = {x: pickerOrigin.x + padding, y: (pickerOrigin.y + saturationBoxSize) + (padding * 2)};
+				var selectSatLight = function (pos) {
+					var relativeY = _elm_lang$core$Basics$toFloat(pos.y) - saturationBoxOrigin.y;
+					var relativeX = _elm_lang$core$Basics$toFloat(pos.x) - saturationBoxOrigin.x;
+					return A3(_elm_lang$core$Color$hsl, hueFloat, relativeY / saturationBoxSize, (saturationBoxSize - relativeX) / saturationBoxSize);
+				};
+				var selectHue = function (pos) {
+					var offset = 0;
+					var relativeX = _elm_lang$core$Basics$toFloat(pos.x) - hueBoxOrigin.x;
+					var xPercentage = relativeX / saturationBoxSize;
+					return A3(
+						_elm_lang$core$Color$hsl,
+						_elm_lang$core$Basics$degrees(xPercentage * 360),
+						saturationFloat,
+						lightnessFloat);
+				};
+				return A2(
+					_elm_lang$svg$Svg$svg,
+					{
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$x(
+							_elm_lang$core$Basics$toString(pickerOrigin.x)),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(pickerOrigin.y)),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$width(
+									_elm_lang$core$Basics$toString(pickerWidth)),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$height(
+										_elm_lang$core$Basics$toString(pickerHeight)),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$viewBox(
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												'0 0 ',
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													_elm_lang$core$Basics$toString(pickerWidth),
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														' ',
+														_elm_lang$core$Basics$toString(pickerHeight))))),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$svg$Svg$defs,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$svg$Svg$linearGradient,
+									{
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$id('saturation'),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$x1('0'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$y1('1'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$x2('0'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$y2('0'),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$svg$Svg$stop,
+											{
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$offset('0'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$stopColor('#808080'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$stopOpacity('0'),
+														_1: {ctor: '[]'}
+													}
+												}
+											},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$svg$Svg$stop,
+												{
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$offset('1'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$stopColor('#808080'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$stopOpacity('1'),
+															_1: {ctor: '[]'}
+														}
+													}
+												},
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$svg$Svg$linearGradient,
+										{
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$id('lightness'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$svg$Svg$stop,
+												{
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$offset('0'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$stopColor('#fff'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$stopOpacity('1'),
+															_1: {ctor: '[]'}
+														}
+													}
+												},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$svg$Svg$stop,
+													{
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$offset('0.499'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$stopColor('#fff'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$stopOpacity('0'),
+																_1: {ctor: '[]'}
+															}
+														}
+													},
+													{ctor: '[]'}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$svg$Svg$stop,
+														{
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$offset('0.5'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$stopColor('#000'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$stopOpacity('0'),
+																	_1: {ctor: '[]'}
+																}
+															}
+														},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$svg$Svg$stop,
+															{
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$offset('1'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$stopColor('#000'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$stopOpacity('1'),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {ctor: '[]'}
+													}
+												}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$svg$Svg$linearGradient,
+											{
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$id('hue'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$svg$Svg$stop,
+													{
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$offset('0'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$stopColor('#FF0000'),
+															_1: {ctor: '[]'}
+														}
+													},
+													{ctor: '[]'}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$svg$Svg$stop,
+														{
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$offset('0.17'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$stopColor('#FFFF00'),
+																_1: {ctor: '[]'}
+															}
+														},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$svg$Svg$stop,
+															{
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$offset('0.33'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$stopColor('#00FF00'),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$svg$Svg$stop,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$offset('0.5'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$stopColor('#00FFFF'),
+																		_1: {ctor: '[]'}
+																	}
+																},
+																{ctor: '[]'}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$svg$Svg$stop,
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$offset('0.66'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$svg$Svg_Attributes$stopColor('#0000FF'),
+																			_1: {ctor: '[]'}
+																		}
+																	},
+																	{ctor: '[]'}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$svg$Svg$stop,
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$svg$Svg_Attributes$offset('0.83'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$svg$Svg_Attributes$stopColor('#FF00FF'),
+																				_1: {ctor: '[]'}
+																			}
+																		},
+																		{ctor: '[]'}),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_elm_lang$svg$Svg$stop,
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$svg$Svg_Attributes$offset('1'),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$svg$Svg_Attributes$stopColor('#FF0000'),
+																					_1: {ctor: '[]'}
+																				}
+																			},
+																			{ctor: '[]'}),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$svg$Svg$polygon,
+								{
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$fill('#ededed'),
+									_1: {
+										ctor: '::',
+										_0: events.mouseUp(_user$project$Properties$Background),
+										_1: {
+											ctor: '::',
+											_0: events.mouseDown(_user$project$Properties$Background),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$points(
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														'0 0, ',
+														A2(
+															_elm_lang$core$Basics_ops['++'],
+															A2(
+																_elm_lang$core$Basics_ops['++'],
+																_elm_lang$core$Basics$toString(pickerRectWidth),
+																' 0, '),
+															A2(
+																_elm_lang$core$Basics_ops['++'],
+																A2(
+																	_elm_lang$core$Basics_ops['++'],
+																	_elm_lang$core$Basics$toString(pickerWidth),
+																	A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		' ',
+																		A2(
+																			_elm_lang$core$Basics_ops['++'],
+																			_elm_lang$core$Basics$toString(pickerHeight / 2),
+																			', '))),
+																A2(
+																	_elm_lang$core$Basics_ops['++'],
+																	A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		_elm_lang$core$Basics$toString(pickerRectWidth),
+																		A2(
+																			_elm_lang$core$Basics_ops['++'],
+																			' ',
+																			A2(
+																				_elm_lang$core$Basics_ops['++'],
+																				_elm_lang$core$Basics$toString(pickerHeight),
+																				', '))),
+																	A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		'0 ',
+																		_elm_lang$core$Basics$toString(pickerHeight))))))),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$svg$Svg$rect,
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										{
+											ctor: '::',
+											_0: _elm_lang$svg$Svg_Attributes$fill(
+												_eskimoblood$elm_color_extra$Color_Convert$colorToHex(hue)),
+											_1: {ctor: '[]'}
+										},
+										saturationBoxDimensions),
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$svg$Svg$rect,
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											{
+												ctor: '::',
+												_0: _elm_lang$svg$Svg_Attributes$fill('url(#saturation)'),
+												_1: {ctor: '[]'}
+											},
+											saturationBoxDimensions),
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$svg$Svg$rect,
+											A2(
+												_elm_lang$core$Basics_ops['++'],
+												{
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$fill('url(#lightness)'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$style('cursor: crosshair'),
+														_1: {
+															ctor: '::',
+															_0: events.mouseUp(
+																_user$project$Properties$SaturationLightness(selectSatLight)),
+															_1: {
+																ctor: '::',
+																_0: events.mouseDown(
+																	_user$project$Properties$SaturationLightness(selectSatLight)),
+																_1: {ctor: '[]'}
+															}
+														}
+													}
+												},
+												saturationBoxDimensions),
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$svg$Svg$circle,
+												{
+													ctor: '::',
+													_0: _elm_lang$svg$Svg_Attributes$cx(
+														_elm_lang$core$Basics$toString(padding + ((1 - lightnessFloat) * saturationBoxSize))),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$svg$Svg_Attributes$cy(
+															_elm_lang$core$Basics$toString(padding + (saturationFloat * saturationBoxSize))),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$r('3'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$fill('none'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$stroke('#808080'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$strokeWidth('3'),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															}
+														}
+													}
+												},
+												{ctor: '[]'}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$svg$Svg$rect,
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														hueBoxDimensions,
+														{
+															ctor: '::',
+															_0: _elm_lang$svg$Svg_Attributes$fill('url(#hue)'),
+															_1: {
+																ctor: '::',
+																_0: events.mouseUp(
+																	_user$project$Properties$Hue(selectHue)),
+																_1: {
+																	ctor: '::',
+																	_0: events.mouseDown(
+																		_user$project$Properties$Hue(selectHue)),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}),
+													{ctor: '[]'}),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$svg$Svg$rect,
+														function () {
+															var thickness = 4;
+															return {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$x(
+																	_elm_lang$core$Basics$toString(padding + ((hueFloat / (2 * _elm_lang$core$Basics$pi)) * saturationBoxSize))),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$y(
+																		_elm_lang$core$Basics$toString((saturationBoxSize - (thickness / 2)) + (padding * 2))),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$width('10'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$svg$Svg_Attributes$height(
+																				_elm_lang$core$Basics$toString(hueBoxHeight + thickness)),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$svg$Svg_Attributes$fill('none'),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$svg$Svg_Attributes$stroke('#808080'),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$svg$Svg_Attributes$strokeWidth(
+																							_elm_lang$core$Basics$toString(thickness)),
+																						_1: {ctor: '[]'}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															};
+														}(),
+														{ctor: '[]'}),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					});
+			});
 		var positionedWidgets = A2(positionWidgets, widgetList, 0);
 		var positionedColorPicker = function () {
-			var _p3 = palletState.colorPickerState;
-			switch (_p3.ctor) {
-				case 'SelectingStrokeColor':
+			var _p4 = currentAction;
+			switch (_p4.ctor) {
+				case 'SelectFillColor':
 					return A3(
 						colorPicker,
 						_elm_lang$core$Basics$abs(
-							A2(_user$project$Utilities$indexOf, _user$project$Properties$FillColorPicker, widgetList)),
+							A2(
+								_user$project$Utilities$indexOf,
+								_user$project$Properties$FillColor(_user$project$Properties$ColorBox),
+								widgetList)),
 						palletState.fillColor,
-						_p3._0);
-				case 'SelectingFillColor':
+						_user$project$Properties_Render$Fill);
+				case 'SelectStrokeColor':
 					return A3(
 						colorPicker,
 						_elm_lang$core$Basics$abs(
-							A2(_user$project$Utilities$indexOf, _user$project$Properties$StrokeColorPicker, widgetList)),
+							A2(
+								_user$project$Utilities$indexOf,
+								_user$project$Properties$StrokeColor(_user$project$Properties$ColorBox),
+								widgetList)),
 						palletState.strokeColor,
-						_p3._0);
+						_user$project$Properties_Render$Stroke);
 				default:
 					return A2(
 						_elm_lang$svg$Svg$g,
