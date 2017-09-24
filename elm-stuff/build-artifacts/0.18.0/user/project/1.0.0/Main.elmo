@@ -246,14 +246,14 @@ var _user$project$Main$setPalletLocations = F2(
 					x: _elm_lang$core$Basics$round(
 						_elm_lang$core$Basics$toFloat(size.width) * 5.0e-2),
 					y: _elm_lang$core$Basics$round(
-						_elm_lang$core$Basics$toFloat(size.height) * 5.0e-2),
+						_elm_lang$core$Basics$toFloat(size.height) * 0.1),
 					height: 190
 				},
 				propertyPalletPosition: {
 					x: _elm_lang$core$Basics$round(
 						(_elm_lang$core$Basics$toFloat(size.width) * 0.95) - 85),
 					y: _elm_lang$core$Basics$round(
-						_elm_lang$core$Basics$toFloat(size.height) * 5.0e-2),
+						_elm_lang$core$Basics$toFloat(size.height) * 0.1),
 					height: 170
 				}
 			});
@@ -319,7 +319,7 @@ var _user$project$Main$mouseDownEvent = F3(
 		var model2 = _elm_lang$core$Native_Utils.update(
 			model,
 			{mouseDown: true});
-		var _p4 = A2(_elm_lang$core$Debug$log, 'Click Target ', clickTarget);
+		var _p4 = clickTarget;
 		switch (_p4.ctor) {
 			case 'ToolPallet':
 				return {
@@ -518,8 +518,8 @@ var _user$project$Main$mouseDownEvent = F3(
 								return _elm_lang$core$Native_Utils.crashCase(
 									'Main',
 									{
-										start: {line: 352, column: 25},
-										end: {line: 365, column: 88}
+										start: {line: 381, column: 25},
+										end: {line: 394, column: 88}
 									},
 									_p14)('TODO - Selected a Graphic for editing');
 							default:
@@ -729,7 +729,6 @@ var _user$project$Main$mouseMoveEvent = F2(
 						model2,
 						{
 							currentAction: A2(_user$project$Action$MovePallet, _user$project$Pallet$ToolPallet, _p23),
-							cursorPosition: _user$project$Main$Pos(position),
 							toolPalletPosition: _elm_lang$core$Native_Utils.eq(_p24, _user$project$Pallet$ToolPallet) ? {x: newPosition.x, y: newPosition.y, height: model2.toolPalletPosition.height} : model2.toolPalletPosition,
 							propertyPalletPosition: _elm_lang$core$Native_Utils.eq(_p24, _user$project$Pallet$PropertiesPallet) ? {x: newPosition.x, y: newPosition.y, height: model2.propertyPalletPosition.height} : model2.propertyPalletPosition
 						}),

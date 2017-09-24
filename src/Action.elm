@@ -1,5 +1,7 @@
 module Action exposing (..)
 
+--This module describes the action states that a user might be performing
+
 import Pallet exposing (Pallet)
 
 

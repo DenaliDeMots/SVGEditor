@@ -1,5 +1,7 @@
 module Graphic exposing (Graphic, toSvg, createRectangle, createElipse, createPolygon, polygonSnapDistance, CommonAttributes)
 
+--This module defines the Graphic data type which is used to represent the drawn graphics in the model
+
 import Svg
 import Svg.Attributes as SvgA
 import Svg.Events as SvgE
@@ -23,6 +25,10 @@ polygonSnapDistance =
     4
 
 
+
+--Information required to create a Svg rectangle
+
+
 type alias RectangleAttributes =
     { x : Float
     , y : Float
@@ -33,12 +39,20 @@ type alias RectangleAttributes =
     }
 
 
+
+--Information required to create a Svg Elipse
+
+
 type alias ElipseAttributes =
     { cx : Float
     , cy : Float
     , rx : Float
     , ry : Float
     }
+
+
+
+--Attribute information shared by different Svg shape types
 
 
 type alias CommonAttributes =
@@ -48,6 +62,10 @@ type alias CommonAttributes =
 
     --, transform : Transform
     }
+
+
+
+--System for applying transform info for shape editing
 
 
 type Transform
@@ -64,6 +82,12 @@ type Transform
 
 
 toSvg : List (Svg.Attribute msg) -> Graphic -> Svg.Svg msg
+
+
+
+--converts Graphic type data to Svg Msg type data
+
+
 toSvg extraAttributes graphic =
     case graphic of
         Rectangle rec common ->
@@ -101,7 +125,8 @@ pointListToString pList =
         [] ->
             ""
 
-        --unreachable unless the list is empty
+        --this branch is for safety (covers all cases) in case the function is used incorrectly
+        --Since the Polygon Graphic type requires a start point, this list should never be empty
         { x, y } :: [] ->
             toString x ++ " " ++ toString y
 
@@ -117,6 +142,10 @@ commonToSvgA common =
 
     --   , SvgA.transform <| toString common.transform
     ]
+
+
+
+--Constructor functions for the opaque Graphic type
 
 
 createRectangle : RectangleAttributes -> CommonAttributes -> Graphic

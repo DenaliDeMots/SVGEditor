@@ -1,5 +1,8 @@
 module Reactor exposing (..)
 
+--This is an alternative version of Main that gives predefined values for the start flags
+--This is the module that runs the program in Elm Reactor
+
 import Html
 import Main
 

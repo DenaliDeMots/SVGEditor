@@ -1,5 +1,7 @@
 module Utilities exposing (until, maybeToList, lastInList, intPositionToFloat, distance, getOffset, applyOffset, indexOf, replaceNaNWith)
 
+--This module provides helper functions used throughout the project
+
 import Task exposing (Task)
 
 

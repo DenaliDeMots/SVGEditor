@@ -1,5 +1,7 @@
 module Messages.UpdatePropertyPallet exposing (..)
 
+--Message suptype for Property Pallet update messages
+
 import Color exposing (Color)
 
 

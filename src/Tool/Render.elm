@@ -1,5 +1,6 @@
 module Tool.Render exposing (..)
 
+--Defines the toolPallet function which renders the Tool Pallet as Svg
 --external modules
 
 import Svg exposing (Svg)
@@ -18,17 +19,22 @@ import Messages.ClickTarget as ClickTarget exposing (ClickTarget)
 symbols =
     [ --Tool Pallet Symbols
       Svg.symbol [ SvgA.id "drawRectangle", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "none" ]
+        --Draw Rectangle button
         [ Svg.use [ SvgA.xlinkHref "#buttonBackground" ] []
         , Svg.use [ SvgA.xlinkHref "#drawRectangleIcon" ] []
         ]
     , Svg.symbol [ SvgA.id "drawElipse", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "none" ]
+        --Draw Elipse button
         [ Svg.use [ SvgA.xlinkHref "#buttonBackground" ] []
         , Svg.use [ SvgA.xlinkHref "#drawElipseIcon" ] []
         ]
     , Svg.symbol [ SvgA.id "drawPolygon", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "none" ]
+        --Draw Polygon button
         [ Svg.use [ SvgA.xlinkHref "#buttonBackground" ] []
         , Svg.use [ SvgA.xlinkHref "#drawPolygonIcon" ] []
         ]
+
+    --Componant symbols--
     , Svg.symbol [ SvgA.id "buttonBackground", SvgA.viewBox "0 0 100 100", SvgA.preserveAspectRatio "none" ]
         [ Svg.rect
             [ SvgA.fill "#ddeaff"
@@ -84,11 +90,18 @@ toolPallet x y height activeTool =
             --Determines which buttons appear and in what order
             [ DrawRectangle, DrawElipse, DrawPolygon ]
 
-        numberOfButtons =
-            List.length buttonList
-
         borderSize =
             5
+
+        selectionBoxThickness =
+            7
+
+        selectionColor =
+            "#ff5e5e"
+
+        --Derived values--
+        numberOfButtons =
+            List.length buttonList
 
         heightPerButton =
             (height - borderSize) / toFloat numberOfButtons - borderSize
@@ -102,30 +115,12 @@ toolPallet x y height activeTool =
         buttonWidth =
             heightPerButton
 
-        selectionBoxThickness =
-            7
-
-        selectionColor =
-            "#ff5e5e"
-
-        getToolFunction tool =
-            case tool of
-                Select ->
-                    Debug.crash "TODO implement select button"
-
-                DrawRectangle ->
-                    rectangleButton
-
-                DrawElipse ->
-                    elipseButton
-
-                DrawPolygon ->
-                    polygonButton
-
         positionedButtons =
+            --Takes the buttonList and converts into as list of Svg Msg
             positionButtons buttonList 0
 
         positionButtons buttonList index =
+            --calls the button helper functions with the index of the button in the buttonList
             case buttonList of
                 [] ->
                     []
@@ -142,9 +137,24 @@ toolPallet x y height activeTool =
                         else
                             f index :: (positionButtons tools <| index + 1)
 
+        getToolFunction tool =
+            --maps the buttons in the buttonList to their corrosponding helper functions
+            case tool of
+                Select ->
+                    Debug.crash "TODO implement select button"
+
+                DrawRectangle ->
+                    rectangleButton
+
+                DrawElipse ->
+                    elipseButton
+
+                DrawPolygon ->
+                    polygonButton
+
         rectangleButton index =
             Svg.use
-                [ SvgA.xlinkHref "#drawRectangle"
+                [ SvgA.xlinkHref "#drawRectangle" --use the drawRectangle symbol
                 , SvgA.x <| toString (x + borderSize)
                 , SvgA.y <| toString (yPosition index)
                 , SvgA.width <| toString buttonWidth
@@ -156,7 +166,7 @@ toolPallet x y height activeTool =
 
         elipseButton index =
             Svg.use
-                [ SvgA.xlinkHref "#drawElipse"
+                [ SvgA.xlinkHref "#drawElipse" --use the drawElipse symbol
                 , SvgA.x <| toString (x + borderSize)
                 , SvgA.y <| toString (yPosition index)
                 , SvgA.width <| toString buttonWidth
@@ -168,7 +178,7 @@ toolPallet x y height activeTool =
 
         polygonButton index =
             Svg.use
-                [ SvgA.xlinkHref "#drawPolygon"
+                [ SvgA.xlinkHref "#drawPolygon" --use the drawPolygon symbol
                 , SvgA.x <| toString (x + borderSize)
                 , SvgA.y <| toString (yPosition index)
                 , SvgA.width <| toString buttonWidth
@@ -179,8 +189,8 @@ toolPallet x y height activeTool =
                 []
 
         selectionBox index =
+            --This function takes the index of the selected tool and draws a selection icon above it
             Svg.g []
-                --Selection icon to draw on top of selected tool button
                 [ Svg.rect
                     --Top Line
                     [ SvgA.x <| toString (x + borderSize)

@@ -1,5 +1,6 @@
 module Messages exposing (..)
 
+--Defines the Msg type that the view code emits and the update code consumes
 --Exernal modules
 
 import Window

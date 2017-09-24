@@ -1,5 +1,6 @@
 module Properties.Render exposing (propertiesPallet)
 
+--This module defines the propertiesPallet function which renders the Property Pallet as Svg
 --external modules
 
 import Svg exposing (Svg)
@@ -28,8 +29,19 @@ propertiesPallet x y height palletState currentAction =
     --All widgets have a width 50% larger then their height
     let
         widgetList =
+            --Defines which controls appear in the Property Pallet and their order
             [ StrokeColor ColorBox, FillColor ColorBox, StrokeWidth Properties.Increment ]
 
+        borderSize =
+            5
+
+        labelFontSize =
+            18
+
+        labelFontColor =
+            "#000000"
+
+        --Derived values
         widgetHeight =
             List.length widgetList
                 |> toFloat
@@ -42,22 +54,15 @@ propertiesPallet x y height palletState currentAction =
         width =
             widgetWidth + borderSize * 2
 
-        borderSize =
-            5
-
-        labelFontSize =
-            18
-
-        labelFontColor =
-            "#000000"
-
         widgetX =
             toFloat <| x + borderSize
 
         positionedWidgets =
+            --Convert the widgetList into a list of Svg Msg data
             positionWidgets widgetList 0
 
         positionWidgets widgetList index =
+            --calls the widget helper functions with the index of the widget in the widgetList
             case widgetList of
                 [] ->
                     []
@@ -67,6 +72,7 @@ propertiesPallet x y height palletState currentAction =
 
         getWidgetFunction : PropertyWidget -> (Int -> Svg Msg)
         getWidgetFunction widget =
+            --maps the widgets in the widgetList to their corrosponding helper functions
             case widget of
                 FillColor _ ->
                     fillColorWidget
@@ -81,6 +87,7 @@ propertiesPallet x y height palletState currentAction =
             toFloat index * (widgetHeight + borderSize) + toFloat y + borderSize
 
         positionedColorPicker =
+            --Create Svg Msg data representing the color picker
             case currentAction of
                 Action.SelectFillColor pickerAction ->
                     colorPicker (Utilities.indexOf (FillColor ColorBox) widgetList |> abs) palletState.fillColor Fill
@@ -91,7 +98,7 @@ propertiesPallet x y height palletState currentAction =
                 _ ->
                     Svg.g [] []
 
-        --widget functions
+        --widget functions--
         strokeColorWidget : Int -> Svg Msg
         strokeColorWidget index =
             Svg.g []
@@ -116,7 +123,7 @@ propertiesPallet x y height palletState currentAction =
                 , numberControls index
                 ]
 
-        --helper functions
+        --helper widget functions--
         label labelText index =
             Svg.text_
                 [ SvgA.x <| toString (widgetX + widgetWidth / 2)
@@ -231,6 +238,7 @@ propertiesPallet x y height palletState currentAction =
                     pickerRectWidth - (padding * 2)
 
                 ( hue, hueFloat, saturationFloat, lightnessFloat ) =
+                    --Break appart the current color into its compnents
                     let
                         hsl =
                             Color.toHsl color
@@ -272,6 +280,7 @@ propertiesPallet x y height palletState currentAction =
                             + borderSize
                             + (widgetHeight - labelFontSize - borderSize * 2)
                             / 2
+                         --calculates the y value of the middle of the color box
                         )
                             - pickerHeight
                             / 2
@@ -285,6 +294,10 @@ propertiesPallet x y height palletState currentAction =
 
                 selectSatLight : { x : Int, y : Int } -> Color
                 selectSatLight pos =
+                    --Conversion function that gets bundled into the Messages that the color picker emits
+                    --This function captures the relative position information of the Saturation/Lightness box
+                    --so that the main update function can use the absolute position of a mouse click to calculate
+                    --the new color
                     let
                         relativeX =
                             toFloat pos.x - saturationBoxOrigin.x
@@ -298,6 +311,10 @@ propertiesPallet x y height palletState currentAction =
 
                 selectHue : { x : Int, y : Int } -> Color
                 selectHue pos =
+                    --Conversion function that gets bundled into the Messages that the color picker emits
+                    --This function captures the relative position information of the Hue box so that
+                    --the main update function can use the absolute position of a mouse click to calculate
+                    --the new color
                     let
                         relativeX =
                             toFloat pos.x - hueBoxOrigin.x
@@ -314,6 +331,8 @@ propertiesPallet x y height palletState currentAction =
                             lightnessFloat
 
                 events =
+                    --defines mouseUp and mouseDown events to be used by the color picker components based whether the
+                    --color picker is targeted to the fill or stroke color
                     case target of
                         Fill ->
                             { mouseUp =
@@ -345,8 +364,10 @@ propertiesPallet x y height palletState currentAction =
                     , SvgA.viewBox <| "0 0 " ++ toString (pickerWidth) ++ " " ++ toString pickerHeight
                     ]
                     [ Svg.defs
+                        --Defines the gradients used in the color picker
                         []
                         [ Svg.linearGradient
+                            --Goes from transparent at the bottom to middle grey at the top
                             [ SvgA.id "saturation"
                             , SvgA.x1 "0"
                             , SvgA.y1 "1"
@@ -357,12 +378,14 @@ propertiesPallet x y height palletState currentAction =
                             , Svg.stop [ SvgA.offset "1", SvgA.stopColor "#808080", SvgA.stopOpacity "1" ] []
                             ]
                         , Svg.linearGradient [ SvgA.id "lightness" ]
+                            --Goes from white at the left to transparent in the center to black at the right
                             [ Svg.stop [ SvgA.offset "0", SvgA.stopColor "#fff", SvgA.stopOpacity "1" ] []
                             , Svg.stop [ SvgA.offset "0.499", SvgA.stopColor "#fff", SvgA.stopOpacity "0" ] []
                             , Svg.stop [ SvgA.offset "0.5", SvgA.stopColor "#000", SvgA.stopOpacity "0" ] []
                             , Svg.stop [ SvgA.offset "1", SvgA.stopColor "#000", SvgA.stopOpacity "1" ] []
                             ]
                         , Svg.linearGradient
+                            --Creates a rainbow from left to right
                             [ SvgA.id "hue" ]
                             [ Svg.stop [ SvgA.offset "0", SvgA.stopColor "#FF0000" ] []
                             , Svg.stop [ SvgA.offset "0.17", SvgA.stopColor "#FFFF00" ] []
@@ -442,6 +465,7 @@ propertiesPallet x y height palletState currentAction =
                     ]
     in
         Svg.g
+            --Defines the background and gives it the PalletHandle click target for pallet dragging
             [ Events.mouseUpWithClickTarget <| Messages.ClickTarget.PalletHandle Pallet.PropertiesPallet
             , Events.mouseDownWithClickTarget <| Messages.ClickTarget.PalletHandle Pallet.PropertiesPallet
             ]
@@ -457,6 +481,10 @@ propertiesPallet x y height palletState currentAction =
                 []
             ]
                 ++ (positionedColorPicker :: positionedWidgets)
+
+
+
+--helper data type for deciding whether the color picker is selecting the Stroke or Fill color
 
 
 type ColorPickerTarget
